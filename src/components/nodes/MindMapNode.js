@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { Handle, Position } from 'reactflow';
 import { 
   Typography, 
@@ -77,6 +77,7 @@ const MindMapNode = ({ data, isConnectable, id }) => {
   const pasteNode = useMindMapStore(state => state.pasteNode);
   const setEdgeStyle = useMindMapStore(state => state.setEdgeStyle);
   const edges = useMindMapStore(state => state.edges);
+  const textInputRef = useRef(null);
 
   const handleClick = (event, direction) => {
     event.stopPropagation?.();
@@ -209,12 +210,13 @@ const MindMapNode = ({ data, isConnectable, id }) => {
   const shouldShowLeftButton = data.isRoot || data.direction === 'left';
   const shouldShowRightButton = data.isRoot || data.direction === 'right';
 
-  const handleDoubleClick = () => {
+  const handleDoubleClick = (event) => {
+    event.stopPropagation();
     setIsEditing(true);
   };
 
-  const handleTextChange = (e) => {
-    setEditText(e.target.value);
+  const handleTextChange = (event) => {
+    setEditText(event.target.value);
   };
 
   const handleTextBlur = () => {
@@ -314,6 +316,23 @@ const MindMapNode = ({ data, isConnectable, id }) => {
     pasteNode(id);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleTextBlur();
+    }
+    if (event.key === 'Escape') {
+      setIsEditing(false);
+      setEditText(data.label || '');
+    }
+  };
+
+  useEffect(() => {
+    if (isEditing && textInputRef.current) {
+      textInputRef.current.focus();
+    }
+  }, [isEditing]);
+
   return (
     <div 
       className="mindmap-node" 
@@ -328,6 +347,7 @@ const MindMapNode = ({ data, isConnectable, id }) => {
       }}
       onMouseEnter={() => setShowButtons(true)}
       onMouseLeave={() => setShowButtons(false)}
+      onDoubleClick={handleDoubleClick}
     >
       <Handle
         type="target"
@@ -390,6 +410,9 @@ const MindMapNode = ({ data, isConnectable, id }) => {
         handleImageClick={handleImageClick}
         fileInputRef={fileInputRef}
         handleImageSelect={handleImageSelect}
+        onCut={handleCut}
+        onPaste={handlePaste}
+        hasCutNode={Boolean(cutNode)}
       />
 
       <NodePopover

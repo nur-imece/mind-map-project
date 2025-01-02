@@ -17,8 +17,21 @@ const NodeMenu = ({
   handleImageClick,
   fileInputRef,
   handleImageSelect,
+  onCut,
+  onPaste,
+  hasCutNode,
 }) => {
   const cutNode = useMindMapStore(state => state.cutNode);
+
+  const handleCutClick = () => {
+    handleClose();
+    onCut();
+  };
+
+  const handlePasteClick = () => {
+    handleClose();
+    onPaste();
+  };
 
   return (
     <Menu
@@ -52,6 +65,24 @@ const NodeMenu = ({
         </ListItemIcon>
         <ListItemText>Resim Ekle</ListItemText>
       </MenuItem>
+
+      <Divider />
+
+      <MenuItem onClick={handleCutClick}>
+        <ListItemIcon>
+          <ContentCut fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Kes</ListItemText>
+      </MenuItem>
+      {hasCutNode && (
+        <MenuItem onClick={handlePasteClick}>
+          <ListItemIcon>
+            <ContentPaste fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Yapıştır</ListItemText>
+        </MenuItem>
+      )}
+
       <input
         type="file"
         accept="image/*"
