@@ -11,6 +11,11 @@ export const createCutPasteSlice = (set, get) => ({
 
     const descendants = get().getAllDescendants(nodeId);
     
+    // Find and remove the parent edge
+    const parentEdge = state.edges.find(edge => 
+      (edge.target === nodeId && !descendants.includes(edge.source))
+    );
+
     set(state => ({
       nodes: state.nodes.map(node => {
         if (node.id === nodeId || descendants.includes(node.id)) {
@@ -24,18 +29,20 @@ export const createCutPasteSlice = (set, get) => ({
         }
         return node;
       }),
-      edges: state.edges.map(edge => {
-        if (descendants.includes(edge.source) || descendants.includes(edge.target)) {
-          return {
-            ...edge,
-            style: {
-              ...edge.style,
-              strokeDasharray: '5 5'
-            }
-          };
-        }
-        return edge;
-      }),
+      edges: state.edges
+        .filter(edge => edge.id !== parentEdge?.id) // Remove parent edge
+        .map(edge => {
+          if (descendants.includes(edge.source) || descendants.includes(edge.target)) {
+            return {
+              ...edge,
+              style: {
+                ...edge.style,
+                strokeDasharray: '5 5'
+              }
+            };
+          }
+          return edge;
+        }),
       cutNode: {
         nodeId,
         descendants
@@ -55,18 +62,14 @@ export const createCutPasteSlice = (set, get) => ({
 
     const newPosition = calculateNewNodePosition(targetNode, state.nodes, state.edges, targetNode.data.direction);
 
-    const oldParentEdge = state.edges.find(edge => 
-      (edge.source === cutNodeId && !descendants.includes(edge.target)) ||
-      (edge.target === cutNodeId && !descendants.includes(edge.source))
-    );
-
+    // Create new edge from target to cut node
     const newParentEdge = {
-      id: `e${targetNode.id}-${cutNodeId}`,
-      source: targetNode.data.direction === 'left' ? cutNodeId : targetNode.id,
-      target: targetNode.data.direction === 'left' ? targetNode.id : cutNodeId,
+      id: `e${targetNodeId}-${cutNodeId}`,
+      source: targetNodeId,
+      target: cutNodeId,
       type: 'smoothstep',
-      sourceHandle: targetNode.data.direction === 'left' ? 'left' : 'right',
-      targetHandle: null,
+      sourceHandle: targetNode.data.direction === 'left' ? 'leftSource' : 'rightSource',
+      targetHandle: targetNode.data.direction === 'left' ? 'rightTarget' : 'leftTarget',
       style: {
         stroke: targetNode.data.color,
         strokeWidth: 2
@@ -93,22 +96,31 @@ export const createCutPasteSlice = (set, get) => ({
         return node;
       }),
       edges: [
-        ...state.edges.filter(edge => edge.id !== oldParentEdge?.id),
-        newParentEdge
-      ].map(edge => {
-        if (edge.source === cutNodeId || edge.target === cutNodeId ||
-            descendants.includes(edge.source) || descendants.includes(edge.target)) {
-          return {
+        // Keep edges that are not connected to cut node or its descendants
+        ...state.edges.filter(edge => 
+          !descendants.includes(edge.source) && 
+          !descendants.includes(edge.target) &&
+          edge.source !== cutNodeId &&
+          edge.target !== cutNodeId
+        ),
+        // Add the new parent edge
+        newParentEdge,
+        // Update all descendant edges with new color and style
+        ...state.edges
+          .filter(edge => 
+            (descendants.includes(edge.source) || descendants.includes(edge.target) ||
+             edge.source === cutNodeId || edge.target === cutNodeId) &&
+            edge.target !== cutNodeId // exclude old parent edge
+          )
+          .map(edge => ({
             ...edge,
             style: {
               ...edge.style,
               stroke: targetNode.data.color,
               strokeDasharray: null
             }
-          };
-        }
-        return edge;
-      }),
+          }))
+      ],
       cutNode: null
     }));
 
