@@ -1,5 +1,5 @@
 import useCollaborationStore from '../collaborationStore';
-import { calculateNewNodePosition } from '../utils/position';
+import { calculateNewNodePosition, calculateEdgeThickness } from '../utils/position';
 
 export const createCutPasteSlice = (set, get) => ({
   cutNode: null,
@@ -62,23 +62,33 @@ export const createCutPasteSlice = (set, get) => ({
 
     const newPosition = calculateNewNodePosition(targetNode, state.nodes, state.edges, targetNode.data.direction);
 
+    // Calculate new generation based on target node
+    const newGeneration = targetNode.data.generation + 1;
+    const generationDiff = newGeneration - cutNode.data.generation;
+
     // Create new edge from target to cut node
     const newParentEdge = {
       id: `e${targetNodeId}-${cutNodeId}`,
       source: targetNodeId,
       target: cutNodeId,
-      type: 'smoothstep',
-      sourceHandle: targetNode.data.direction === 'left' ? 'leftSource' : 'rightSource',
-      targetHandle: targetNode.data.direction === 'left' ? 'rightTarget' : 'leftTarget',
+      type: 'default',
       style: {
         stroke: targetNode.data.color,
-        strokeWidth: 2
+        strokeWidth: calculateEdgeThickness(cutNode, state.nodes, []),
+        strokeDasharray: null,
+        endArrow: false,
+        startArrow: false,
+        borderRadius: 20,
       }
     };
 
     set(state => ({
       nodes: state.nodes.map(node => {
         if (node.id === cutNodeId || descendants.includes(node.id)) {
+          const nodeGeneration = node.id === cutNodeId ? 
+            newGeneration : 
+            node.data.generation + generationDiff;
+
           return {
             ...node,
             position: {
@@ -89,7 +99,8 @@ export const createCutPasteSlice = (set, get) => ({
               ...node.data,
               isCut: false,
               direction: targetNode.data.direction,
-              color: targetNode.data.color
+              color: targetNode.data.color,
+              generation: nodeGeneration
             }
           };
         }
@@ -112,14 +123,24 @@ export const createCutPasteSlice = (set, get) => ({
              edge.source === cutNodeId || edge.target === cutNodeId) &&
             edge.target !== cutNodeId // exclude old parent edge
           )
-          .map(edge => ({
-            ...edge,
-            style: {
-              ...edge.style,
-              stroke: targetNode.data.color,
-              strokeDasharray: null
-            }
-          }))
+          .map(edge => {
+            const targetNode = state.nodes.find(n => n.id === edge.target);
+            const thickness = calculateEdgeThickness(targetNode, state.nodes, []);
+            
+            return {
+              ...edge,
+              type: 'default',
+              style: {
+                ...edge.style,
+                stroke: targetNode.data.color,
+                strokeDasharray: null,
+                strokeWidth: thickness,
+                endArrow: false,
+                startArrow: false,
+                borderRadius: 20,
+              }
+            };
+          })
       ],
       cutNode: null
     }));

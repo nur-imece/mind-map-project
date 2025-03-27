@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { calculateEdgeThickness } from '../utils/position';
 
 export const createEdgeSlice = (set, get) => ({
   edges: [],
@@ -25,21 +26,23 @@ export const createEdgeSlice = (set, get) => ({
           break;
       }
 
-      newEdges.push({
-        id: `e${source}-${target}`,
-        source,
-        target,
-        style: { 
-          stroke: state.nodes.find(n => n.id === source)?.data.color,
-          strokeWidth: 2,
-          strokeDasharray: dashArray
-        }
-      });
-
       const sourceNode = state.nodes.find(n => n.id === source);
       const targetNode = state.nodes.find(n => n.id === target);
-      
+
       if (sourceNode && targetNode) {
+        const thickness = calculateEdgeThickness(targetNode, state.nodes, state.edges);
+
+        newEdges.push({
+          id: `e${source}-${target}`,
+          source,
+          target,
+          style: { 
+            stroke: sourceNode.data.color,
+            strokeWidth: thickness,
+            strokeDasharray: dashArray
+          }
+        });
+
         const newNodes = state.nodes.map(node => {
           if (node.id === target) {
             const newColor = sourceNode.data.color;

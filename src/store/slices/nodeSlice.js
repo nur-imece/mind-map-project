@@ -67,7 +67,7 @@ export const createNodeSlice = (set, get) => ({
         label,
         isRoot: !parentNode,
         generation,
-        direction, // NodeButtons'tan gelen direction'ı koru
+        direction,
         color,
         type,
         style: {
@@ -82,7 +82,6 @@ export const createNodeSlice = (set, get) => ({
           boxSize: 'Auto',
           color: '#666',
         },
-        // Bu node üstünden yeni dal ekleme vb. fonksiyonlar
         onAdd: (dir) => {
           console.log('onAdd called with direction:', dir);
           return get().addNode(newNode, 'Yeni Dal', 'branch', dir);
@@ -92,7 +91,7 @@ export const createNodeSlice = (set, get) => ({
         onDelete: () => get().deleteNode(newNode.id),
         onUpdateLabel: (newLabel) => get().updateNodeLabel(newNode.id, newLabel),
         onUpdateStyle: (newStyle) => get().updateNodeStyle(newNode.id, newStyle),
-        parentNode: parentNode ? parentNode.id : null, // Parent ID'yi sakla
+        parentNode: parentNode ? parentNode.id : null,
       },
       position: calculateNewNodePosition(parentNode, get().nodes, get().edges, direction),
     };
@@ -103,15 +102,16 @@ export const createNodeSlice = (set, get) => ({
           id: nanoid(),
           source: parentNode.id,
           target: newNode.id,
-          type: 'smoothstep',
-          // Sol taraf için parent'ın sol source handle'ından çıkıp child'ın sağ target handle'ına
-          // Sağ taraf için parent'ın sağ source handle'ından çıkıp child'ın sol target handle'ına
+          type: 'default',
           sourceHandle: direction === 'left' ? 'leftSource' : 'rightSource',
           targetHandle: direction === 'left' ? 'rightTarget' : 'leftTarget',
           animated: false,
           style: {
             stroke: color,
-            strokeWidth: 2,
+            strokeWidth: Math.max(4 - generation, 1),
+            endArrow: false,
+            startArrow: false,
+            borderRadius: 20,
           },
         }
       : null;
@@ -119,7 +119,6 @@ export const createNodeSlice = (set, get) => ({
     console.log('Current edges before update:', get().edges);
     console.log('New edge to be added:', newEdge);
 
-    // Store'a ekle - önceki edges'i koru
     set((state) => {
       const newState = {
         nodes: [...state.nodes, newNode],
@@ -129,7 +128,6 @@ export const createNodeSlice = (set, get) => ({
       return newState;
     });
 
-    // Gerçek zamanlı iş birliği store'una da gönder
     useCollaborationStore.getState().sendUpdate({
       type: 'ADD_NODE',
       node: newNode,
