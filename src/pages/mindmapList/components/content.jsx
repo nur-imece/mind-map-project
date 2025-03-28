@@ -1,14 +1,16 @@
 import React from 'react';
-import { Layout, Input } from 'antd';
+import { Layout, Input, Row, Col, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import MindMapTable from './mindmaptable';
 import MapCards from './mapcards';
 
 const { Content } = Layout;
 const { Search } = Input;
+const { Title } = Typography;
 
 const MindMapContent = ({
     viewType,
+    setViewType,
     data,
     loading,
     searchText,
@@ -27,17 +29,22 @@ const MindMapContent = ({
         <Content className="content">
             {viewType === "card" ? (
                 <>
-                    <div className="search-section">
-                        <Search
-                            placeholder={t("filterByTagOrNameMsgTxt")}
-                            allowClear
-                            enterButton
-                            size="large"
-                            value={searchText}
-                            onSearch={handleSearch}
-                            onChange={(e) => handleSearch(e.target.value)}
-                        />
-                    </div>
+                    <Row className="header-row" align="middle" justify="space-between">
+                        <Col>
+                            <Title level={4}>{t("mindmapsMsgTxt")}</Title>
+                        </Col>
+                        <Col>
+                            <Search
+                                placeholder={t("filterByTagOrNameMsgTxt")}
+                                allowClear
+                                size="middle"
+                                value={searchText}
+                                onSearch={handleSearch}
+                                onChange={(e) => handleSearch(e.target.value)}
+                                style={{ width: 250 }}
+                            />
+                        </Col>
+                    </Row>
                     <div className="maps-grid">
                         <MapCards
                             data={data}
@@ -66,6 +73,8 @@ const MindMapContent = ({
                     updateMapName={(record, newName) => actions.updateMapName(record, newName, actions.getMindMap)}
                     filterType={filterType}
                     setFilterType={setFilterType}
+                    viewType={viewType}
+                    setViewType={setViewType}
                 />
             )}
         </Content>

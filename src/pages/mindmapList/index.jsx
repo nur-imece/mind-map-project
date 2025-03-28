@@ -8,13 +8,13 @@ import { Layout, Modal, message } from "antd";
 import './mindmapList.css';
 
 // Components
-import Sidebar from './components/sidebar';
-import Header from './components/header';
+import Header from '../../components/header';
 import MindMapContent from './components/content';
 
 // Services
 import mindmapService from '../../services/api/mindmap';
 import Utils from '../../utils';
+import ViewTypeSelector from "@/pages/mindmapList/components/viewtypeselector.jsx";
 
 const MindMapList = () => {
     const { t } = useTranslation();
@@ -188,14 +188,11 @@ const MindMapList = () => {
 
     return (
         <Layout className="mind-map-list-layout">
-            <Sidebar />
-            <Layout>
-                <Header 
-                    viewType={viewType} 
-                    setViewType={setViewType} 
-                />
+
+                <Header/>
                 <MindMapContent
                     viewType={viewType}
+                    setViewType={setViewType}
                     data={data}
                     loading={loading}
                     searchText={searchText}
@@ -208,7 +205,6 @@ const MindMapList = () => {
                     filterType={filterType}
                     setFilterType={setFilterType}
                 />
-            </Layout>
             <ToastContainer />
         </Layout>
     );

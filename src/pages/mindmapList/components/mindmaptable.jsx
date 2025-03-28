@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table, Input, Space, Button, Tooltip, Modal, Badge, Typography } from 'antd';
-import { 
-    SearchOutlined, 
-    DeleteOutlined, 
+import {
+    SearchOutlined,
+    DeleteOutlined,
     EditOutlined,
     LinkOutlined,
     LockOutlined,
@@ -14,41 +14,44 @@ import { useTranslation } from 'react-i18next';
 import TableFilters from './tablefilters';
 
 import ChatGptMapListIcon from "../../../styles/oldImage/img/gpt-gray-icon.png";
+import ViewTypeSelector from "@/pages/mindmapList/components/viewtypeselector.jsx";
 
 const { Text } = Typography;
 
-const MindMapTable = ({ 
-    data, 
-    loading, 
-    currentPage, 
-    pageSize, 
-    setCurrentPage, 
-    setPageSize, 
-    searchText, 
-    handleSearch, 
-    clickOpenUrl, 
-    makePublicPrivate, 
-    handleShareMap, 
-    addRemoveFavorite, 
-    deleteRow,
-    updateMapName,
-    filterType,
-    setFilterType
-}) => {
+const MindMapTable = ({
+                          data,
+                          loading,
+                          currentPage,
+                          pageSize,
+                          setCurrentPage,
+                          setPageSize,
+                          searchText,
+                          handleSearch,
+                          clickOpenUrl,
+                          makePublicPrivate,
+                          handleShareMap,
+                          addRemoveFavorite,
+                          deleteRow,
+                          updateMapName,
+                          filterType,
+                          setFilterType,
+                          viewType,
+                          setViewType
+                      }) => {
     const { t } = useTranslation();
 
-    // Filter data based on searchText and filterType
+    // Filtreli veriyi hazırlama
     const getFilteredData = () => {
         let filteredData = [...data];
 
-        // Apply search filter
+        // Arama filtresi
         if (searchText) {
-            filteredData = filteredData.filter(item => 
+            filteredData = filteredData.filter(item =>
                 item.name.toLowerCase().includes(searchText.toLowerCase())
             );
         }
 
-        // Apply type filter
+        // Tip filtresi
         if (filterType === "shared") {
             filteredData = filteredData.filter(item => item.isMapShared === true);
         } else if (filterType === "favorites") {
@@ -58,31 +61,39 @@ const MindMapTable = ({
         return filteredData;
     };
 
-    // Table columns configuration
+    // Tablo sütunları
     const columns = [
         {
             title: (
                 <div className="column-header-with-search">
-                    <span>{t("nameMsgTxt")}</span>
+                    <span className="column-name">{t("nameMsgTxt")}</span>
                     <Input
                         placeholder={t("searchMsgTxt")}
                         prefix={<SearchOutlined />}
                         onChange={(e) => handleSearch(e.target.value)}
                         value={searchText}
-                        className="table-search-input"
+                        className="table-search-input small-input"
                         allowClear
                     />
                 </div>
             ),
-            dataIndex: "name",
+        dataIndex: "name",
             key: "name",
             render: (text, record) => (
                 <div className="map-name-cell">
-                    <Text className="map-name" onClick={() => clickOpenUrl(record.id, record.name)}>{text}</Text>
+                    <Text className="map-name" onClick={() => clickOpenUrl(record.id, record.name)}>
+                        {text}
+                    </Text>
                     {record.isMapShared && (
-                        <Badge 
-                            count={<img src={ChatGptMapListIcon} alt="AI" style={{ width: 16, height: 16 }} />}
-                            className="shared-badge" 
+                        <Badge
+                            count={
+                                <img
+                                    src={ChatGptMapListIcon}
+                                    alt="AI"
+                                    style={{ width: 16, height: 16 }}
+                                />
+                            }
+                            className="shared-badge"
                             offset={[0, 0]}
                         />
                     )}
@@ -105,6 +116,7 @@ const MindMapTable = ({
             align: "center",
             render: (_, record) => (
                 <Space size="middle" className="status-icons">
+                    {/* Public / Private */}
                     <Tooltip title={record.isPublicMap ? t("makePrivateMsgTxt") : t("makePublicMsgTxt")}>
                         <Button
                             type="text"
@@ -113,6 +125,7 @@ const MindMapTable = ({
                             className={record.isPublicMap ? "public-icon" : "private-icon"}
                         />
                     </Tooltip>
+                    {/* Shared / Not shared */}
                     <Tooltip title={record.isMapShared ? t("sharedMsgTxt") : t("notSharedMsgTxt")}>
                         <Button
                             type="text"
@@ -121,6 +134,7 @@ const MindMapTable = ({
                             onClick={() => handleShareMap(record)}
                         />
                     </Tooltip>
+                    {/* Favorite / Not favorite */}
                     <Tooltip title={record.isFavorite ? t("removeFromFavListMsgTxt") : t("addToFavListMsgTxt")}>
                         <Button
                             type="text"
@@ -139,6 +153,7 @@ const MindMapTable = ({
             align: "right",
             render: (_, record) => (
                 <Space size="middle" className="action-buttons">
+                    {/* Edit */}
                     <Tooltip title={t("editNameMsgTxt")}>
                         <Button
                             type="text"
@@ -147,9 +162,9 @@ const MindMapTable = ({
                                 Modal.confirm({
                                     title: t("editNameMsgTxt"),
                                     content: (
-                                        <Input 
+                                        <Input
                                             defaultValue={record.name}
-                                            id="newMapName" 
+                                            id="newMapName"
                                         />
                                     ),
                                     onOk: () => {
@@ -161,6 +176,7 @@ const MindMapTable = ({
                             className="action-button edit-button"
                         />
                     </Tooltip>
+                    {/* Share */}
                     <Tooltip title={t("shareMsgTxt")}>
                         <Button
                             type="text"
@@ -169,6 +185,7 @@ const MindMapTable = ({
                             className="action-button share-button"
                         />
                     </Tooltip>
+                    {/* Delete */}
                     <Tooltip title={t("deleteMsgTxt")}>
                         <Button
                             type="text"
@@ -186,7 +203,9 @@ const MindMapTable = ({
         <div className="table-container">
             <div className="table-header">
                 <TableFilters filterType={filterType} setFilterType={setFilterType} />
+                <ViewTypeSelector viewType={viewType} setViewType={setViewType} />
             </div>
+
             <Table
                 columns={columns}
                 dataSource={getFilteredData()}
@@ -203,7 +222,8 @@ const MindMapTable = ({
                         setCurrentPage(1);
                         setPageSize(size);
                     },
-                    showTotal: (total, range) => `${t("pageTextMsgTxt")} ${currentPage} / ${Math.ceil(total/pageSize)}`,
+                    showTotal: (total) =>
+                        `${t("pageTextMsgTxt")} ${currentPage} / ${Math.ceil(total/pageSize)}`,
                     itemRender: (page, type, originalElement) => {
                         if (type === 'prev') {
                             return <Button size="small">{t("previousTextMsgTxt")}</Button>;
@@ -220,4 +240,4 @@ const MindMapTable = ({
     );
 };
 
-export default MindMapTable; 
+export default MindMapTable;

@@ -1,0 +1,7 @@
+// Import variables and mixins first
+@import "variables";
+@import "mixins";
+
+// Import other styles
+@import "../../components/header/index.scss";
+// Add other component styles here as needed 

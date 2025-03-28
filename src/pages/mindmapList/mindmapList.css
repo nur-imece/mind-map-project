@@ -195,7 +195,7 @@
 .table-header {
     margin-bottom: 16px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
 }
 
 .table-filters {
@@ -372,4 +372,34 @@
 
 .ant-select-selection-item {
     font-size: 14px;
-} 
+}
+.column-header-with-search {
+    display: flex;
+    flex-direction: row;    /* Yan yana dizmek için */
+    align-items: center;    /* Dikey hizalama */
+    gap: 8px;               /* Aralarında boşluk */
+    white-space: nowrap;    /* İçerik kaydırma yapmasın, aynı satırda kalsın */
+
+    /* Gerekirse sütun başlığının taşmasını engellemek için max-width tanımlayabilirsiniz */
+    /* max-width: 250px;
+       overflow: hidden;
+       text-overflow: ellipsis; */
+}
+
+/* "Name" yazısının stili (isteğe bağlı) */
+.column-name {
+    display: inline-block;
+    margin: 0;
+    font-weight: 500; /* Örnek kalınlık */
+}
+
+/* Arama kutusunu (input) küçültmek için */
+.small-input {
+    width: 130px !important;  /* Genişliği azalttık */
+    height: 28px !important;  /* Yüksekliği azalttık */
+    font-size: 12px !important;
+    line-height: 1 !important;
+    padding: 0 8px !important;
+    /* Eğer text yukarı-aşağı ortalanmazsa, align-items center ile birlikte
+       height’ı biraz daha büyütebilir veya input’un line-height’ını ayarlayabilirsiniz. */
+}

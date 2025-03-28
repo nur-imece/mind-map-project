@@ -40,8 +40,8 @@ body {
 
 .language-selector {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 10px;
+  margin-right: 100px;
 }
 
 .remember-forgot-wrapper {
