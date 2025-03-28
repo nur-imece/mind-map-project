@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { calculateEdgeThickness } from '../utils/position';
+import { calculateEdgeThickness } from '../utils/position.js';
 
 export const createEdgeSlice = (set, get) => ({
   edges: [],

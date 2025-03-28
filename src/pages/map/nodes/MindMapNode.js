@@ -37,11 +37,11 @@ import {
   ContentCut,
   ContentPaste,
 } from '@mui/icons-material';
-import NodeText from './NodeText';
-import NodeButtons from './NodeButtons';
-import NodeMenu from './NodeMenu';
-import NodePopover from './NodePopover';
-import useMindMapStore from '../../store/mindMapStore';
+import NodeText from './NodeText.js';
+import NodeButtons from './NodeButtons.js';
+import NodeMenu from './NodeMenu.js';
+import NodePopover from './NodePopover.js';
+import useMindMapStore from '../store/mindMapStore.js';
 
 const FONT_SIZES = ['Auto', 'Küçük', 'Orta', 'Büyük', 'En Büyük'];
 const FONT_FAMILIES = ['Indie Flower', 'Arial', 'Times New Roman', 'Courier New', 'Georgia'];

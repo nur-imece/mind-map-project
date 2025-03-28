@@ -29,7 +29,7 @@ import {
 } from '@mui/icons-material';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useReactFlow, ReactFlowProvider } from 'reactflow';
-import useMindMapStore from '../store/mindMapStore';
+import useMindMapStore from '../store/mindMapStore.js';
 
 const PresentationModeContent = ({ open, onClose, nodes, edges }) => {
   const [currentSlide, setCurrentSlide] = useState(0);

@@ -1,8 +1,8 @@
 // src/store/createNodeSlice.js
 import { nanoid } from 'nanoid';
-import { calculateNewNodePosition } from '../utils/position';
-import { COLORS, ROOT_COLOR } from '../constants';
-import useCollaborationStore from '../collaborationStore';
+import { calculateNewNodePosition } from '../utils/position.js';
+import { COLORS, ROOT_COLOR } from '../constants.js';
+import useCollaborationStore from '../collaborationStore.js';
 
 export const createNodeSlice = (set, get) => ({
   nodes: [],

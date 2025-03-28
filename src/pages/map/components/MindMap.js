@@ -8,9 +8,9 @@ import ReactFlow, {
   ReactFlowProvider
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import MindMapNode from './nodes/MindMapNode';
-import useMindMapStore from '../store/mindMapStore';
-import PresentationMode from './PresentationMode';
+import MindMapNode from '../nodes/MindMapNode.js';
+import useMindMapStore from '../store/mindMapStore.js';
+import PresentationMode from './PresentationMode.js';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { 

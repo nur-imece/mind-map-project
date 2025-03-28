@@ -7,7 +7,7 @@ import {
   ContentCut,
   ContentPaste,
 } from '@mui/icons-material';
-import useMindMapStore from '../../store/mindMapStore';
+import useMindMapStore from '../store/mindMapStore.js';
 
 const NodeMenu = ({ 
   anchorEl, 

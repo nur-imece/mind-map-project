@@ -1,5 +1,5 @@
-import useCollaborationStore from '../collaborationStore';
-import { calculateNewNodePosition, calculateEdgeThickness } from '../utils/position';
+import useCollaborationStore from '../collaborationStore.js';
+import { calculateNewNodePosition, calculateEdgeThickness } from '../utils/position.js';
 
 export const createCutPasteSlice = (set, get) => ({
   cutNode: null,

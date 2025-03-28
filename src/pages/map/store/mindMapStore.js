@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { createNodeSlice } from './slices/nodeSlice';
-import { createEdgeSlice } from './slices/edgeSlice';
-import { createPresentationSlice } from './slices/presentationSlice';
-import { createCutPasteSlice } from './slices/cutPasteSlice';
-import { createBackgroundSlice } from './slices/backgroundSlice';
+import { createNodeSlice } from './slices/nodeSlice.js';
+import { createEdgeSlice } from './slices/edgeSlice.js';
+import { createPresentationSlice } from './slices/presentationSlice.js';
+import { createCutPasteSlice } from './slices/cutPasteSlice.js';
+import { createBackgroundSlice } from './slices/backgroundSlice.js';
 
 const useMindMapStore = create((set, get) => ({
   ...createNodeSlice(set, get),
