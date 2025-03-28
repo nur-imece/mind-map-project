@@ -53,6 +53,68 @@ const Login = () => {
         }
     }, [t, form]);
 
+    const getUserInformation = async () => {
+        try {
+            Utils.loadingScreen.show();
+            console.log("Getting user information...");
+            console.log("Token:", localStorage.getItem("token"));
+            console.log("AccessToken:", localStorage.getItem("accessToken"));
+            
+            // Log the authorization header that will be sent
+            const authHeader = `Bearer ${localStorage.getItem("token") || localStorage.getItem("accessToken") || ""}`;
+            console.log("Authorization header:", authHeader);
+            
+            // Explicitly set headers
+            const headers = {
+                Authorization: authHeader
+            };
+            
+            const response = await accountService.getDetail();
+            console.log("User detail response:", response);
+            
+            if (response.error) {
+                console.error("Error fetching user details:", response.error);
+                message.error(t("loginErrorMsgTxt"));
+                return;
+            }
+            
+            if (response.data && response.data.user) {
+                // Store user and company information in localStorage
+                localStorage.setItem("loginType", response.data.user.loginType);
+                localStorage.setItem("userInformation", JSON.stringify(response.data.user));
+                
+                if (response.data.company) {
+                    localStorage.setItem("userCompanyInformation", JSON.stringify(response.data.company));
+                }
+                
+                if (response.data.companySubscription) {
+                    localStorage.setItem("c65s1", JSON.stringify(response.data.companySubscription));
+                }
+                
+                // Handle user role IDs
+                let userRoleIdList = JSON.parse(localStorage.getItem("userRoleIdList")) || [];
+                userRoleIdList.push(response.data.user.userTypeId);
+                localStorage.setItem("userRoleIdList", JSON.stringify(userRoleIdList));
+                
+                // Navigate to mind map list
+                navigate('/mind-map-list');
+            } else {
+                console.error("No user data in response");
+                message.error(t("loginErrorMsgTxt"));
+            }
+        } catch (error) {
+            console.error("Error fetching user information:", error);
+            if (error.response) {
+                console.error("Error status:", error.response.status);
+                console.error("Error data:", error.response.data);
+                console.error("Error headers:", error.response.headers);
+            }
+            message.error(t("loginErrorMsgTxt"));
+        } finally {
+            Utils.loadingScreen.hide();
+        }
+    };
+
     const handleSubmit = async (values) => {
         const { email, password, rememberMe } = values;
 
@@ -74,9 +136,16 @@ const Login = () => {
             if (response.error) {
                 message.error(t("loginErrorMsgTxt"));
             } else if (response.data) {
-                localStorage.setItem("token", response.data.token);
+                // Store token with both names for compatibility
+                const token = response.data.token;
+                localStorage.setItem("token", token);
+                localStorage.setItem("accessToken", token); // Also set accessToken for compatibility
                 localStorage.setItem("refreshToken", response.data.refreshToken);
-                navigate('/mind-map-list');
+                
+                console.log("Login successful, token:", token);
+                
+                // Get user information after successful login
+                await getUserInformation();
             }
         } catch (error) {
             console.error('Login error:', error);

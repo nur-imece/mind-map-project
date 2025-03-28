@@ -32,9 +32,9 @@ const handleError = (error: any): string => {
 };
 
 axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  (config.headers as AxiosRequestHeaders)["Authorization"] = `Bearer ${
-    localStorage.getItem("accessToken") || ""
-  }`;
+  // Try to get token with either name
+  const token = localStorage.getItem("token") || localStorage.getItem("accessToken") || "";
+  (config.headers as AxiosRequestHeaders)["Authorization"] = `Bearer ${token}`;
   return config;
 });
 

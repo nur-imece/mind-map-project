@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Utils from "../../utils";
-import foramindLogoBig from "../../styles/img/foramind_logo.png";
-import foramindLogoSmall from "../../styles/img/foramind-beta-logo-small.png";
-import ProfileService from "../../services/api/profile";
-import LogoutService from "../../services/api/logout";
-import AiPackages from "../../services/api/ai-packages";
-import LanguageSelect from "../language-select";
-import WarningModal from "../modals/warning-modal";
+import { Modal } from "antd";
+import foramindLogoBig from "../../styles/oldImage/img/foramind_logo.png";
+import foramindLogoSmall from "../../styles/oldImage/img/foramind-beta-logo-small.png";
+import accountService from "../../services/api/account";
+import mapAiPackageService from "../../services/api/mapaipackage";
+import LanguageSelector from "../languageSelector";
 import ChatGptIcon from "../../styles/oldImage/img/gpt-icon.png";
 import ProfileIcon from "../../styles/oldImage/img/profile-icon.png";
 import VerifiedIcon from "../../styles/oldImage/img/verified-icon.webp";
@@ -18,29 +16,17 @@ import SubsrictionIcon from "../../styles/oldImage/img/subs-package.png";
 
 const Header = () => {
   const [gptMapNumbers, setGptMapNumbers] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const changePopupStatus = () => {
-    Utils.modalm().close();
+    setIsModalVisible(false);
     localStorage.setItem("isShowPopupForTrialDay", false);
   };
 
   const infoPopupWhenUserTrialDayStart = () => {
-    WarningModal({
-      title: t("informationModalTitleMsgTxt"),
-      message: t("startTrialDayInfoAndWelcomePopupContentMsgTxt"),
-      buttons: [
-        {
-          text: t("okMsgTxt"),
-          class: "button yellow-button confirm-button",
-        },
-      ],
-    });
-
-    document.querySelector(".exit-button").addEventListener("click", changePopupStatus);
-    document.querySelector(".modalm-overlay").addEventListener("click", changePopupStatus);
-    document.querySelector(".confirm-button").addEventListener("click", changePopupStatus);
+    setIsModalVisible(true);
   };
 
   const setupMenuListeners = () => {
@@ -88,7 +74,11 @@ const Header = () => {
   };
 
   const getProfile = () => {
-    ProfileService.getProfile(fillProfile);
+    accountService.getDetail().then(response => {
+      if (response.data) {
+        fillProfile(JSON.stringify(response.data));
+      }
+    });
   };
 
   const fillProfile = (response) => {
@@ -110,7 +100,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    LogoutService.Logout();
+    accountService.logout();
   };
 
   const renderRemainingMaps = () => {
@@ -164,9 +154,11 @@ const Header = () => {
     setupMenuListeners();
     getProfile();
 
-    AiPackages.getMapNumbers(userId)
-      .then(responseData => {
-        setGptMapNumbers(JSON.stringify(responseData));
+    mapAiPackageService.getRemainingMaps(userId)
+      .then(response => {
+        if (response.data) {
+          setGptMapNumbers(JSON.stringify(response.data));
+        }
       });
 
     // Trial day popup for existing users
@@ -212,171 +204,189 @@ const Header = () => {
     userCompanyLogo = userCompany.logo;
   }
 
-  const appBaseUrl = process.env.REACT_APP_BASE_URL || "";
-
   return (
-    <header className="header">
-      <div className="pull-right">
-        {(
-          JSON.parse(localStorage.getItem("userCompanyInformation")).id === 12
-        ) && (
-          JSON.parse(localStorage.getItem('c65s1')) === null ||
-          (JSON.parse(localStorage.getItem('c65s1')) !== null && 
-          JSON.parse(localStorage.getItem('c65s1')).companyRemainingProductDays === 0)
-        ) && (
-          (
-            JSON.parse(localStorage.getItem('hw8w0')) === 0 &&
-            JSON.parse(localStorage.getItem('ab0c5')) > 0
+    <>
+      <Modal
+        title={t("informationModalTitleMsgTxt")}
+        open={isModalVisible}
+        onOk={changePopupStatus}
+        onCancel={changePopupStatus}
+        footer={[
+          <button 
+            key="ok" 
+            className="button yellow-button" 
+            onClick={changePopupStatus}
+          >
+            {t("okMsgTxt")}
+          </button>
+        ]}
+      >
+        <p>{t("startTrialDayInfoAndWelcomePopupContentMsgTxt")}</p>
+      </Modal>
+
+      <header className="header">
+        <div className="pull-right">
+          {(
+            JSON.parse(localStorage.getItem("userCompanyInformation")).id === 12
           ) && (
-            <div className="subscription-link pull-left">
-              <a onClick={() => navigate("/payment")}>
-                {t("subscribeMsgTxt")}
-              </a>
-            </div>
-          )
-        )}
+            JSON.parse(localStorage.getItem('c65s1')) === null ||
+            (JSON.parse(localStorage.getItem('c65s1')) !== null && 
+            JSON.parse(localStorage.getItem('c65s1')).companyRemainingProductDays === 0)
+          ) && (
+            (
+              JSON.parse(localStorage.getItem('hw8w0')) === 0 &&
+              JSON.parse(localStorage.getItem('ab0c5')) > 0
+            ) && (
+              <div className="subscription-link pull-left">
+                <a onClick={() => navigate("/payment")}>
+                  {t("subscribeMsgTxt")}
+                </a>
+              </div>
+            )
+          )}
 
-        <div className="pull-left remaining-container">
-          {renderRemainingMaps()}
-        </div>
+          <div className="pull-left remaining-container">
+            {renderRemainingMaps()}
+          </div>
 
-        <div className="language pull-left">
-          <LanguageSelect />
-        </div>
-        
-        <div className="navbar navbar-toggleable-md navbar-light right-menu">
-          <a className="" role="button">
-            <img id="headerImage" src="" alt="" />
-            <div id="nameLatter" className="user-name-letters"></div>
-          </a>
-          <div className="dropdown-menu-wrapper none">
-            <div className="dropdown-menu menu right-menu-toggle none" aria-labelledby="navbarDropdown">
-              <div className="arrow"></div>
-              <ul className="">
-                <li className="sub-menu-toggle">
-                  <a className="dropdown-item up-menu">
-                    <i className="icon-settings " aria-hidden="true"></i>
-                    {t("accountsettingsMsgTxt")}
-                    <i className="animate-icon fa fa-chevron-up arrow-up arrow-size" aria-hidden="true"></i>
-                  </a>
-                  <ul className="sub-menu none">
-                    <li>
-                      <a className="dropdown-item" onClick={() => navigate("/profile")}>
-                        <i className="header-icons"><img src={ProfileIcon} alt="Profile icon" /></i>
-                        {t("profileMsgTxt")}
-                      </a>
-                    </li>
-                    
-                    {JSON.parse(localStorage.getItem("iFU0")) === false && 
-                     JSON.parse(localStorage.getItem("userCompanyInformation")).id === 12 && 
-                     localStorage.getItem('hw8w0') !== "0" ? (
+          <div className="language pull-left">
+            <LanguageSelector />
+          </div>
+          
+          <div className="navbar navbar-toggleable-md navbar-light right-menu">
+            <a className="" role="button">
+              <img id="headerImage" src="" alt="" />
+              <div id="nameLatter" className="user-name-letters"></div>
+            </a>
+            <div className="dropdown-menu-wrapper none">
+              <div className="dropdown-menu menu right-menu-toggle none" aria-labelledby="navbarDropdown">
+                <div className="arrow"></div>
+                <ul className="">
+                  <li className="sub-menu-toggle">
+                    <a className="dropdown-item up-menu">
+                      <i className="icon-settings " aria-hidden="true"></i>
+                      {t("accountsettingsMsgTxt")}
+                      <i className="animate-icon fa fa-chevron-up arrow-up arrow-size" aria-hidden="true"></i>
+                    </a>
+                    <ul className="sub-menu none">
                       <li>
-                        <a className="dropdown-item" onClick={() => navigate("/ai-payment")}>
-                          <i className="header-icons"><img src={ChatGptIcon} alt="ChatGPT icon" /></i>
-                          {t("chatGptPayment")}
+                        <a className="dropdown-item" onClick={() => navigate("/profile")}>
+                          <i className="header-icons"><img src={ProfileIcon} alt="Profile icon" /></i>
+                          {t("profileMsgTxt")}
                         </a>
                       </li>
-                    ) : null}
-                    
-                    {JSON.parse(localStorage.getItem("c65s1")) !== null &&
-                     JSON.parse(localStorage.getItem("c65s1")).companyRemainingProductDays > 0 ? null : (
-                      <>
+                      
+                      {JSON.parse(localStorage.getItem("iFU0")) === false && 
+                       JSON.parse(localStorage.getItem("userCompanyInformation")).id === 12 && 
+                       localStorage.getItem('hw8w0') !== "0" ? (
                         <li>
-                          <a className="dropdown-item" onClick={() => navigate("/payment")}>
-                            <i className="header-icons"><img src={SubsrictionIcon} alt="Subscription icon" /></i>
-                            {t("paymentPageMsgTxt")}
+                          <a className="dropdown-item" onClick={() => navigate("/ai-payment")}>
+                            <i className="header-icons"><img src={ChatGptIcon} alt="ChatGPT icon" /></i>
+                            {t("chatGptPayment")}
                           </a>
                         </li>
-                        <li>
-                          <a className="dropdown-item" onClick={() => navigate("/subscription-detail")}>
-                            <i className="header-icons"><img src={VerifiedIcon} alt="Verified icon" /></i>
-                            {t("subscriptionMenuTitleMsgTxt")}
-                          </a>
-                        </li>
-                      </>
-                    )}
-                    
-                    <li>
-                      <a className="dropdown-item change-password" onClick={() => navigate("/change-password")}>
-                        <i className="header-icons"><img src={PasswordIcon} alt="Password icon" /></i>
-                        {t("passwordMsgTxt")}
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a className="dropdown-item up-menu" onClick={() => navigate("/contact")}>
-                    <i className="icon-mail" aria-hidden="true"></i>
-                    {t("contactMsgTxt")}
+                      ) : null}
+                      
+                      {JSON.parse(localStorage.getItem("c65s1")) !== null &&
+                       JSON.parse(localStorage.getItem("c65s1")).companyRemainingProductDays > 0 ? null : (
+                        <>
+                          <li>
+                            <a className="dropdown-item" onClick={() => navigate("/payment")}>
+                              <i className="header-icons"><img src={SubsrictionIcon} alt="Subscription icon" /></i>
+                              {t("paymentPageMsgTxt")}
+                            </a>
+                          </li>
+                          <li>
+                            <a className="dropdown-item" onClick={() => navigate("/subscription-detail")}>
+                              <i className="header-icons"><img src={VerifiedIcon} alt="Verified icon" /></i>
+                              {t("subscriptionMenuTitleMsgTxt")}
+                            </a>
+                          </li>
+                        </>
+                      )}
+                      
+                      <li>
+                        <a className="dropdown-item change-password" onClick={() => navigate("/change-password")}>
+                          <i className="header-icons"><img src={PasswordIcon} alt="Password icon" /></i>
+                          {t("passwordMsgTxt")}
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a className="dropdown-item up-menu" onClick={() => navigate("/contact")}>
+                      <i className="icon-mail" aria-hidden="true"></i>
+                      {t("contactMsgTxt")}
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item up-menu" onClick={handleLogout}>
+                      <i className="icon-logout" aria-hidden="true"></i>
+                      {t("logoutMsgTxt")}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="left-menu" id="leftMenu">
+          <a href={"/"}>
+            <img
+              src={userCompanyLogo ? userCompanyLogo : foramindLogoBig}
+              height={45}
+              className="left-logo big"
+              alt={`${userCompanyName ? userCompanyName : "Foramind"}`}
+            />
+            <img
+              src={foramindLogoSmall}
+              height={45}
+              className="left-logo small"
+              alt="Foramind"
+            />
+          </a>
+          <div className="sub-left-menu">
+            <div className="" aria-labelledby="navbarDropdown">
+              <ul className="">
+                <li className={`sub-bar${currentUrl === "template-list" ? " current-url" : ""}`}>
+                  <a onClick={() => navigate("/template-list")}>
+                    <i className="icon-create_new_map_icon"></i>
+                  </a>
+                  <a className="title" onClick={() => navigate("/template-list")}>
+                    {t("createNewMapMsgTxt")}
                   </a>
                 </li>
-                <li>
-                  <a className="dropdown-item up-menu" onClick={handleLogout}>
-                    <i className="icon-logout" aria-hidden="true"></i>
-                    {t("logoutMsgTxt")}
+                <li className={`sub-bar${currentUrl === "mind-map-list" ? " current-url" : ""}`}>
+                  <a onClick={() => navigate("/mind-map-list")}>
+                    <i className="icon-map_list_icon"></i>
+                  </a>
+                  <a className="title" onClick={() => navigate("/mind-map-list")}>
+                    {t("mindMapsMsgTxt")}
+                  </a>
+                </li>
+                <li className={`sub-bar${currentUrl === "mind-map-share-list" ? " current-url" : ""}`}>
+                  <a onClick={() => navigate("/mind-map-list")}>
+                    <i className="icon-share_list_icon"></i>
+                  </a>
+                  <a className="title" onClick={() => navigate("/mind-map-share-list")}>
+                    {t("mindMapsShareMsgTxt")}
+                  </a>
+                </li>
+                <li className={`sub-bar${currentUrl === "help" ? " current-url" : ""}`}>
+                  <a onClick={() => navigate("/help")}>
+                    <i className="icon-help-outline"></i>
+                  </a>
+                  <a className="title" onClick={() => navigate("/help")}>
+                    {t("helpMenuMsgTxt")}
                   </a>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="left-menu" id="leftMenu">
-        <a href={appBaseUrl || "/"}>
-          <img
-            src={userCompanyLogo ? userCompanyLogo : foramindLogoBig}
-            height={45}
-            className="left-logo big"
-            alt={`${userCompanyName ? userCompanyName : "Foramind"}`}
-          />
-          <img
-            src={foramindLogoSmall}
-            height={45}
-            className="left-logo small"
-            alt="Foramind"
-          />
-        </a>
-        <div className="sub-left-menu">
-          <div className="" aria-labelledby="navbarDropdown">
-            <ul className="">
-              <li className={`sub-bar${currentUrl === "template-list" ? " current-url" : ""}`}>
-                <a onClick={() => navigate("/template-list")}>
-                  <i className="icon-create_new_map_icon"></i>
-                </a>
-                <a className="title" onClick={() => navigate("/template-list")}>
-                  {t("createNewMapMsgTxt")}
-                </a>
-              </li>
-              <li className={`sub-bar${currentUrl === "mind-map-list" ? " current-url" : ""}`}>
-                <a onClick={() => navigate("/mind-map-list")}>
-                  <i className="icon-map_list_icon"></i>
-                </a>
-                <a className="title" onClick={() => navigate("/mind-map-list")}>
-                  {t("mindMapsMsgTxt")}
-                </a>
-              </li>
-              <li className={`sub-bar${currentUrl === "mind-map-share-list" ? " current-url" : ""}`}>
-                <a onClick={() => navigate("/mind-map-list")}>
-                  <i className="icon-share_list_icon"></i>
-                </a>
-                <a className="title" onClick={() => navigate("/mind-map-share-list")}>
-                  {t("mindMapsShareMsgTxt")}
-                </a>
-              </li>
-              <li className={`sub-bar${currentUrl === "help" ? " current-url" : ""}`}>
-                <a onClick={() => navigate("/help")}>
-                  <i className="icon-help-outline"></i>
-                </a>
-                <a className="title" onClick={() => navigate("/help")}>
-                  {t("helpMenuMsgTxt")}
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
 
