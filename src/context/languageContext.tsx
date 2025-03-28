@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, useContext } from "react";
 import PropTypes from "prop-types";
 
 interface LanguageContextType {
@@ -24,6 +24,8 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
     </LanguageContext.Provider>
   );
 };
+
+export const useLanguage = () => useContext(LanguageContext);
 
 LanguageProvider.propTypes = {
   children: PropTypes.node.isRequired,

@@ -1,43 +1,20 @@
-import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MindMap from './pages/map/index.jsx';
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { ConfigProvider } from 'antd';
+import AppRoutes from "./routes";
+import { LanguageProvider } from "./context/languageContext";
+import './i18n/i18n';
 
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#2196f3',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-    background: {
-      default: '#fafafa',
-      paper: '#ffffff',
-    }
-  },
-  components: {
-    MuiIconButton: {
-      styleOverrides: {
-        root: {
-          padding: 4,
-        },
-      },
-    },
-  },
-  typography: {
-    fontFamily: "'Segoe UI', 'Roboto', sans-serif",
-  },
-});
-
-function App() {
+const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <MindMap />
-    </ThemeProvider>
+    <ConfigProvider>
+      <LanguageProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </LanguageProvider>
+    </ConfigProvider>
   );
-}
+};
 
 export default App; 
