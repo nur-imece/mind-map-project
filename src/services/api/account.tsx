@@ -15,7 +15,7 @@ import {
   UserLoginResponse,
   UserRegistrationRequest,
   UserSubscriptionDetailResponse
-} from '../../types/account';
+} from '@/types/account.ts';
 
 const accountService = {
   register: async (

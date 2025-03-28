@@ -23,5 +23,22 @@
   "welcomeMsgTxt": "Welcome",
   "languageTurkish": "Turkish",
   "languageEnglish": "English",
-  "languageSelect": "Select a Language"
+  "languageSelect": "Select a Language",
+  
+  "informationModalTitleMsgTxt": "Information",
+  "startTrialDayInfoAndWelcomePopupContentMsgTxt": "Welcome to your trial period! You can explore all features for a limited time.",
+  "okMsgTxt": "OK",
+  "remainingMapsTxt": "Remaining Maps:",
+  "subscribeMsgTxt": "Subscribe",
+  "accountsettingsMsgTxt": "Account Settings",
+  "profileMsgTxt": "Profile",
+  "chatGptPayment": "AI Package Purchase",
+  "paymentPageMsgTxt": "Payment",
+  "subscriptionMenuTitleMsgTxt": "My Subscription",
+  "contactMsgTxt": "Contact",
+  "logoutMsgTxt": "Logout",
+  "createNewMapMsgTxt": "Create New Map",
+  "mindMapsMsgTxt": "My Mind Maps",
+  "mindMapsShareMsgTxt": "Shared Mind Maps",
+  "helpMenuMsgTxt": "Help"
 }

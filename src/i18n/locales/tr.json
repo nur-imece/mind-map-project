@@ -23,5 +23,22 @@
   "welcomeMsgTxt": "Hoş geldiniz",
   "languageTurkish": "Türkçe",
   "languageEnglish": "İngilizce",
-  "languageSelect": "Dil Seçin"
+  "languageSelect": "Dil Seçin",
+
+  "informationModalTitleMsgTxt": "Bilgi",
+  "startTrialDayInfoAndWelcomePopupContentMsgTxt": "Deneme sürenize hoş geldiniz! Sınırlı bir süre için tüm özellikleri keşfedebilirsiniz.",
+  "okMsgTxt": "Tamam",
+  "remainingMapsTxt": "Kalan Haritalar:",
+  "subscribeMsgTxt": "Abone Ol",
+  "accountsettingsMsgTxt": "Hesap Ayarları",
+  "profileMsgTxt": "Profil",
+  "chatGptPayment": "AI Paketi Satın Al",
+  "paymentPageMsgTxt": "Ödeme",
+  "subscriptionMenuTitleMsgTxt": "Aboneliğim",
+  "contactMsgTxt": "İletişim",
+  "logoutMsgTxt": "Çıkış Yap",
+  "createNewMapMsgTxt": "Yeni Harita Oluştur",
+  "mindMapsMsgTxt": "Zihin Haritalarım",
+  "mindMapsShareMsgTxt": "Paylaşılan Haritalar",
+  "helpMenuMsgTxt": "Yardım"
 }
