@@ -14,8 +14,8 @@ interface EnvConfigs {
 const envConfigs: EnvConfigs = {
   local: {
     appBaseEnvURL: "",
-    apiBaseEnvURL: "https://localhost:7254/api",
-    signalrBaseEnvURL: "https://localhost:7254",
+    apiBaseEnvURL: "https://foramind-api-dev.azurewebsites.net/",
+    signalrBaseEnvURL: "https://icy-glacier-0e873bf03-dev.westeurope.3.azurestaticapps.net",
   },
   dev: {
     appBaseEnvURL: "",

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Checkbox, Space, Typography } from 'antd';
+import { Form, Input, Button, Checkbox, Space, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Utils from '../../utils';
+import accountService from '../../services/api/account';
 import loginRegisterLogo from '../../styles/img/foramind_logo.png';
 import googleBtnImage from '../../styles/img/google-btn-image.png';
 import microsoftBtnImage from '../../styles/img/microsoft-btn.svg';
 import loginRegisterBg from '../../styles/img/form-bg.png';
-import LanguageSelector from '../../components/LanguageSelector';
+import LanguageSelector from '../../components/languageSelector';
 import './login.css';
 
 const { Text } = Typography;
@@ -18,6 +19,7 @@ const Login = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         document.title = "Foramind | " + t("loginMsgTxt");
@@ -51,7 +53,7 @@ const Login = () => {
         }
     }, [t, form]);
 
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         const { email, password, rememberMe } = values;
 
         if (rememberMe) {
@@ -61,8 +63,27 @@ const Login = () => {
             localStorage.setItem("rememberMe", "");
             localStorage.setItem("userMail", "");
         }
-
-        console.log('Login data:', { email, password });
+        
+        setLoading(true);
+        try {
+            const response = await accountService.login({
+                email,
+                password
+            });
+            
+            if (response.error) {
+                message.error(t("loginErrorMsgTxt"));
+            } else if (response.data) {
+                localStorage.setItem("token", response.data.token);
+                localStorage.setItem("refreshToken", response.data.refreshToken);
+                navigate('/mind-map-list');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            message.error(t("loginErrorMsgTxt"));
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -131,7 +152,13 @@ const Login = () => {
                         </Form.Item>
 
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" block className="login-button">
+                            <Button 
+                                type="primary" 
+                                htmlType="submit" 
+                                block 
+                                className="login-button" 
+                                loading={loading}
+                            >
                                 {t("loginMsgTxt")}
                             </Button>
                         </Form.Item>

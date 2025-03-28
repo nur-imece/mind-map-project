@@ -1,6 +1,5 @@
 import React from 'react';
 import { Select, Space } from 'antd';
-import { GlobalOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { LanguageContext } from '../../context/languageContext';
@@ -23,7 +22,6 @@ const LanguageSelector: React.FC = () => {
             <Select
                 value={selectedLanguage}
                 onChange={handleLanguageChange}
-                suffixIcon={<GlobalOutlined />}
                 style={{ width: 120 }}
                 dropdownStyle={{ minWidth: '120px' }}
             >
