@@ -4,6 +4,7 @@ import Login from '../pages/login';
 import Register from '../pages/register';
 import MindMap from '../pages/mindmap';
 import MindMapList from '../pages/mindmapList';
+import TemplateList from '../pages/templateList';
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
       <Route path="/mindmap" element={<MindMap />} />
       <Route path="/mind-map-list" element={<MindMapList />} />
       <Route path="/map" element={<MindMap />} />
+      <Route path="/template-list" element={<TemplateList />} />
     </Routes>
   );
 };

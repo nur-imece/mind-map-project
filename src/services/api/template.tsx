@@ -5,7 +5,7 @@ import {
   TemplateGetListResponse,
   TemplateResponseDto,
   UpdateTemplateRequestModel
-} from '../../types/template';
+} from '@/types/template.ts';
 
 const templateService = {
   createTemplate: async (
@@ -27,10 +27,10 @@ const templateService = {
   },
 
   getTemplateList: async (
+      recordSize?: number,
     languageId?: number,
+      tagId?: number,
     filterText?: string,
-    tagId?: number,
-    recordSize?: number,
     parentTemplateId?: string
   ): Promise<{ data?: TemplateGetListResponse; error?: string }> => {
     const params: Record<string, any> = {};

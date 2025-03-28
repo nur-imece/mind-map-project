@@ -13,7 +13,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import TableFilters from './tablefilters';
 
-import ChatGptMapListIcon from "../../../styles/oldImage/img/gpt-gray-icon.png";
+import ChatGptMapListIcon from "@/styles/img/gpt-gray-icon.png";
 import ViewTypeSelector from "@/pages/mindmapList/components/viewtypeselector.jsx";
 
 const { Text } = Typography;

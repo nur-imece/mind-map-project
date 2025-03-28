@@ -86,5 +86,24 @@
   "pageMsgTxt": "Page",
   "totalItemsMsgTxt": "items",
   "previousMsgTxt": "Previous",
-  "nextMsgTxt": "Next"
+  "nextMsgTxt": "Next",
+
+  "createMindMapMsgTxt": "Create Mind Map",
+  "categoryFilterMsgTxt": "Filter by category name",
+  "addBlankMapMsgTxt": "New Blank Map",
+  "addChatGPTMsgTxt": "Create map with AI",
+  "addNewCategoryMapMsgTxt": "Add New Category",
+  "optionsMsgTxt": "Options",
+  "editMsgTxt": "Edit",
+  "categoryWillRemoveWithSubsAreYouSureMsgTxt": "This category and all its sub-templates will be deleted. Are you sure?",
+  "chatGPTCreate": "Create Map with AI",
+  "chatGptMapSubject": "Map Subject",
+  "fillSubject": "Enter a subject for your map",
+  "useDocumentMsgTxt": "Use Document",
+  "pleaseSelectDocumentMsgTxt": "Please select a document",
+  "cancelChatGpt": "Cancel",
+  "createMap": "Create Map",
+  "examplenameMsgTxt": "Example Name",
+  "templatelistmapnameMsgTxt": "Please enter a name for your map",
+  "filterApplied": "filter(s) applied"
 }

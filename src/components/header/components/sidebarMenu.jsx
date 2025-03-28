@@ -7,8 +7,8 @@ import {
   ShareAltOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import foramindLogoBig from "../../../styles/oldImage/img/foramind_logo.png";
-import foramindLogoSmall from "../../../styles/oldImage/img/foramind-beta-logo-small.png";
+import foramindLogoBig from "@/styles/img/foramind_logo.png";
+import foramindLogoSmall from "@/styles/img/foramind-beta-logo-small.png";
 
 const SidebarMenu = ({ currentUrl, userCompanyLogo, userCompanyName }) => {
   const navigate = useNavigate();

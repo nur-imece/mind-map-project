@@ -24,8 +24,8 @@ import {
   SetFavoriteMapStatusRequestModel,
   ShareMapToUsersRequest,
   UpdateMapPermissionRequest
-} from '../../types/mindmap';
-import { BaseResponse } from '../../types/account';
+} from '@/types/mindmap.ts';
+import { BaseResponse } from '@/types/account.ts';
 
 const mindMapService = {
   createMindMap: async (

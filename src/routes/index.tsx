@@ -4,6 +4,7 @@ import Login from '../pages/login';
 import Register from '../pages/register';
 import MindMap from '../pages/mindmap';
 import MindMapList from '../pages/mindmapList';
+import TemplateList from "@/pages/templateList";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -15,7 +16,9 @@ const AppRoutes: React.FC = () => {
       <Route path="/register" element={<Register />} />
 
         <Route path="/mind-map-list" element={<MindMapList/>} />
-      {/* Protected routes */}
+        <Route path="/template-list" element={<TemplateList/>} />
+
+        {/* Protected routes */}
       <Route path="/mindmap" element={<MindMap />} />
     </Routes>
   );

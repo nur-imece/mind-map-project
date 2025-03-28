@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+5. `Resources` kütüphanesini kullanma. Metinleri `locales/tr.json` ve `locales/en.json` gibi i18n dosyalarına taşı.
+6. Eğer yönlendirme yapılacaksa `window.location` gibi yapılar yerine `navigate` fonksiyonunu kullan.
+7. Servis fonksiyonları sadece `request` ve `paths` üzerinden işlem yapsın.

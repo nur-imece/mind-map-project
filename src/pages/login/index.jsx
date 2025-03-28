@@ -7,7 +7,7 @@ import Utils from '../../utils';
 import accountService from '../../services/api/account';
 import loginRegisterLogo from '../../styles/img/foramind_logo.png';
 import googleBtnImage from '../../styles/img/google-btn-image.png';
-import microsoftBtnImage from '../../styles/img/microsoft-btn.svg';
+import microsoftBtnImage from '@/styles/img/microsoft-btn.svg';
 import loginRegisterBg from '../../styles/img/form-bg.png';
 import LanguageSelector from '../../components/languageSelector';
 import './login.css';

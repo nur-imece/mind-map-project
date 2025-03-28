@@ -6,11 +6,11 @@ import {
   LogoutOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import ProfileIcon from "../../../styles/oldImage/img/profile-icon.png";
-import ChatGptIcon from "../../../styles/oldImage/img/gpt-icon.png";
-import VerifiedIcon from "../../../styles/oldImage/img/verified-icon.webp";
-import PasswordIcon from "../../../styles/oldImage/img/password-icon.webp";
-import SubsrictionIcon from "../../../styles/oldImage/img/subs-package.png";
+import ProfileIcon from "@/styles/img/profile-icon.png";
+import ChatGptIcon from "@/styles/img/gpt-icon.png";
+import VerifiedIcon from "@/styles/img/verified-icon.webp";
+import PasswordIcon from "@/styles/img/password-icon.webp";
+import SubsrictionIcon from "@/styles/img/subs-package.png";
 import accountService from "../../../services/api/account";
 
 const UserMenu = ({ isUserMenuOpen, isAccountMenuOpen, setIsAccountMenuOpen }) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import RemainingMapsIcon from "../../../styles/oldImage/img/remaining-map-img.png";
+import RemainingMapsIcon from "@/styles/img/remaining-map-img.png";
 
 const RemainingMaps = ({ gptMapNumbers }) => {
   const { t } = useTranslation();
