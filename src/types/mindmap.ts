@@ -1,5 +1,4 @@
-import { BaseResponse, SaveFileRequest, User } from './account';
-import { Template } from './template';
+import { BaseResponse } from './account';
 
 export interface MindMap {
   id: string;
