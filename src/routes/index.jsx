@@ -8,6 +8,7 @@ import TemplateList from '../pages/templateList';
 import MindMapShareList from "pages/mindMapShareList";
 import Help from "pages/help";
 import Profile from "pages/profile";
+import AiPayment from "pages/payment/aiPayment";
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,8 @@ const AppRoutes = () => {
         <Route path="/mind-map-share-list" element={<MindMapShareList />} />
         <Route path="/help" element={<Help />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/ai-payment" element={<AiPayment />} />
+
 
     </Routes>
   );
