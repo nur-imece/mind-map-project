@@ -1,4 +1,3 @@
-import Resources from "../libraries/resources";
 
 function ExplicitConsentText() {
   return (

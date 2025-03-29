@@ -7,6 +7,7 @@ import MindMapList from '../pages/mindmapList';
 import TemplateList from '../pages/templateList';
 import MindMapShareList from "pages/mindMapShareList";
 import Help from "pages/help";
+import Profile from "pages/profile";
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes = () => {
       <Route path="/template-list" element={<TemplateList />} />
         <Route path="/mind-map-share-list" element={<MindMapShareList />} />
         <Route path="/help" element={<Help />} />
+        <Route path="/profile" element={<Profile />} />
 
     </Routes>
   );

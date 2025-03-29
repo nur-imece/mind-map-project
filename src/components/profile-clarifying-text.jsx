@@ -1,5 +1,3 @@
-import Resources from "../libraries/resources";
-
 function profileClarifyingText() {
   return (
     "<p><b>Veri Sorumlusu</b></p>" +

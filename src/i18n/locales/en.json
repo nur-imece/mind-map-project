@@ -112,5 +112,26 @@
   "triggerDescMsgTxt": "Click to sort descending",
   "triggerAscMsgTxt": "Click to sort ascending",
   "cancelSortMsgTxt": "Click to cancel sorting",
-  "clearFilters": "Clear Filters"
+  "clearFilters": "Clear Filters",
+  
+  "firstnameMsgTxt": "First Name",
+  "lastnameMsgTxt": "Last Name",
+  "phonenumberMsgTxt": "Phone Number",
+  "currentemailMsgTxt": "Email Address",
+  "companyMsgTxt": "Company",
+  "jobtitleMsgTxt": "Job Title",
+  "saveMsgTxt": "Save",
+  "selectFileMsgTxt": "Select Image",
+  "selectColorMsgTxt": "Select Color",
+  "removeProfileImageMsgTxt": "Remove Profile Image",
+  "wrongPhoneNumberMsgTxt": "Please enter a valid phone number",
+  "imageFileSizeMsgTxt": "Image file cannot be larger than *_*_* KB",
+  "profileUpdateClarifyAgreementTitle": "Profile Update Privacy Notice",
+  "profileUpdateExplicitConsentTextTitle": "Profile Photo Explicit Consent",
+  "profileUpdateClarifyAgreement": "Profile Update Privacy Notice",
+  "profileUpdateExplicitConsentText": "Profile Photo Explicit Consent",
+  "registerMembershipAgreement": "I have read and agree to the terms.",
+  "profileAgreementsInfoMsgText": "If you want to add your Profile Photo, Company Information and Job Title, please read and approve the texts below.",
+  "profileUpdateAgreementReqiredInfoMsgTxt": "Please accept the required texts.",
+  "profileImageRemoveAgreementReqiredInfoMsgTxt": "You must accept the required texts to remove your photo."
 }

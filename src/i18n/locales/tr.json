@@ -113,5 +113,26 @@
   "triggerDescMsgTxt": "Azalan sıralama için tıklayın",
   "triggerAscMsgTxt": "Artan sıralama için tıklayın",
   "cancelSortMsgTxt": "Sıralamayı iptal etmek için tıklayın",
-  "clearFilters": "Filtreleri Temizle"
+  "clearFilters": "Filtreleri Temizle",
+  
+  "firstnameMsgTxt": "Ad",
+  "lastnameMsgTxt": "Soyad",
+  "phonenumberMsgTxt": "Telefon Numarası",
+  "currentemailMsgTxt": "E-posta Adresi",
+  "companyMsgTxt": "Şirket",
+  "jobtitleMsgTxt": "İş Unvanı",
+  "saveMsgTxt": "Kaydet",
+  "selectFileMsgTxt": "Resim Seç",
+  "selectColorMsgTxt": "Renk Seç",
+  "removeProfileImageMsgTxt": "Profil Resmini Kaldır",
+  "wrongPhoneNumberMsgTxt": "Lütfen geçerli bir telefon numarası girin",
+  "imageFileSizeMsgTxt": "Resim dosyası *_*_* KB'den büyük olamaz",
+  "profileUpdateClarifyAgreementTitle": "Profil Güncelleme Aydınlatma Metni",
+  "profileUpdateExplicitConsentTextTitle": "Profil Fotoğrafı Açık Rıza Metni",
+  "profileUpdateClarifyAgreement": "Profil Düzenleme Aydınlatma Metni",
+  "profileUpdateExplicitConsentText": "Profil Fotoğrafı Açık Rıza Metni",
+  "registerMembershipAgreement": "metnini okudum ve kabul ediyorum.",
+  "profileAgreementsInfoMsgText": "Profil Fotoğrafı, Şirket Bilgisi ve İş Ünvanı bilginizi girmek istemeniz halinde lütfen aşağıda yer alan metinleri okuyup onaylayınız.",
+  "profileUpdateAgreementReqiredInfoMsgTxt": "Lütfen gerekli metinleri kabul ediniz.",
+  "profileImageRemoveAgreementReqiredInfoMsgTxt": "Fotoğrafınızı kaldırabilmek için gerekli metinleri kabul etmelisiniz."
 }
