@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from "react-i18next";
-import { Layout, Modal, message } from "antd";
+import { Layout, Modal, message, Spin } from "antd";
 
 // Styles
 import './mindmapList.css';
@@ -26,12 +26,13 @@ const MindMapList = () => {
     const [filterType, setFilterType] = useState("all"); // all, shared, favorites
     const [pageSize, setPageSize] = useState(10);
     const [deletedMapId, setDeletedMapId] = useState(null);
+    const [spinLoading, setSpinLoading] = useState(false);
     
     // Data fetching function
     const getMindMap = async () => {
         try {
             setLoading(true);
-            Utils.loadingScreen.show();
+            setSpinLoading(true);
             const recordSize = 1000;
             const response = await mindmapService.getMindMapListByUserId(recordSize);
             
@@ -57,7 +58,7 @@ const MindMapList = () => {
             message.error(t("errorFetchingMindMaps"));
         } finally {
             setLoading(false);
-            Utils.loadingScreen.hide();
+            setSpinLoading(false);
         }
     };
     
@@ -87,7 +88,7 @@ const MindMapList = () => {
     const updateMapName = async (record, newName) => {
         try {
             if (newName && newName.trim() && newName !== record.name) {
-                Utils.loadingScreen.show();
+                setSpinLoading(true);
                 await mindmapService.updateMindMapSetting(record.id, newName);
                 await getMindMap();
                 message.success(t("mapNameUpdatedSuccessfully"));
@@ -96,7 +97,7 @@ const MindMapList = () => {
             console.error("Error updating map name:", error);
             message.error(t("errorUpdatingMapName"));
         } finally {
-            Utils.loadingScreen.hide();
+            setSpinLoading(false);
         }
     };
 
@@ -108,7 +109,7 @@ const MindMapList = () => {
 
     const addRemoveFavorite = async (mapId, isFavStatus) => {
         try {
-            Utils.loadingScreen.show();
+            setSpinLoading(true);
             const userId = JSON.parse(localStorage.getItem('userInformation')).id;
             const favData = {
                 mindMapId: mapId,
@@ -125,13 +126,13 @@ const MindMapList = () => {
             console.error("Error updating favorite status:", error);
             message.error(t("errorUpdatingFavoriteStatus"));
         } finally {
-            Utils.loadingScreen.hide();
+            setSpinLoading(false);
         }
     };
 
     const makePublicPrivate = async (mapId, isPublicStatus) => {
         try {
-            Utils.loadingScreen.show();
+            setSpinLoading(true);
             await mindmapService.setPublicOrPrivateMap(mapId, isPublicStatus);
             await getMindMap();
             message.success(isPublicStatus ? 
@@ -141,7 +142,7 @@ const MindMapList = () => {
             console.error("Error updating public/private status:", error);
             message.error(t("errorUpdatingMapStatus"));
         } finally {
-            Utils.loadingScreen.hide();
+            setSpinLoading(false);
         }
     };
     
@@ -187,7 +188,8 @@ const MindMapList = () => {
     };
 
     return (
-        <Layout className="mind-map-list-layout">
+        <Spin spinning={spinLoading} size="large">
+            <Layout className="mind-map-list-layout">
                 <Header/>
                 <MindMapContent
                     viewType={viewType}
@@ -204,8 +206,9 @@ const MindMapList = () => {
                     filterType={filterType}
                     setFilterType={setFilterType}
                 />
-            <ToastContainer />
-        </Layout>
+                <ToastContainer />
+            </Layout>
+        </Spin>
     );
 };
 

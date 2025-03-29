@@ -247,6 +247,7 @@ const ChatGptPayment = () => {
   const submitForm = async (payment) => {
     message.loading({ content: "Processing payment...", key: "paymentLoading" });
     try {
+      localStorage.setItem("918171", true);
       const response = await paymentService.createAiPayment(payment);
       fillPayment(response);
       bilingAdress();

@@ -55,7 +55,6 @@ const Login = () => {
 
     const getUserInformation = async () => {
         try {
-            Utils.loadingScreen.show();
             console.log("Getting user information...");
             console.log("Token:", localStorage.getItem("token"));
             console.log("AccessToken:", localStorage.getItem("accessToken"));
@@ -111,7 +110,6 @@ const Login = () => {
             }
             message.error(t("loginErrorMsgTxt"));
         } finally {
-            Utils.loadingScreen.hide();
         }
     };
 
