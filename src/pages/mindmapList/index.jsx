@@ -188,7 +188,6 @@ const MindMapList = () => {
 
     return (
         <Layout className="mind-map-list-layout">
-
                 <Header/>
                 <MindMapContent
                     viewType={viewType}

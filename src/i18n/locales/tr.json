@@ -45,11 +45,13 @@
   "exitMsgTxt": "Çıkış",
   "areyousureMsgTxt": "Emin misiniz?",
   "deleteMapApproveModalMsgTxt": "Bu haritayı silmek istiyor musunuz?",
+  "deleteMapApproveWithPermissionModalMsgTxt": "Bu paylaşılmış haritayı silmek istiyor musunuz?",
   "noMsgTxt": "Hayır",
   "yesMsgTxt": "Evet",
   "sharedMapMsgTxt": "Paylaşılan Harita",
   "copiedMapMsgTxt": "Kopyalanmış Harita",
   "isCopiedInfoMsgTxt": "'in haritası kopyalandı",
+  "isSharedInfoMsgTxt": " tarafından paylaşıldı",
   "makePrivateMsgTxt": "Özel Yap",
   "makePublicFromListMsgTxt": "Herkese Açık Yap",
   "isAiGeneratedMsgTxt": "AI Tarafından Oluşturulan Harita",
@@ -106,5 +108,10 @@
   "createMap": "Harita Oluştur",
   "examplenameMsgTxt": "Örnek İsim",
   "templatelistmapnameMsgTxt": "Lütfen haritanız için bir isim girin",
-  "filterApplied": "filtre uygulandı"
+  "filterApplied": "filtre uygulandı",
+  
+  "triggerDescMsgTxt": "Azalan sıralama için tıklayın",
+  "triggerAscMsgTxt": "Artan sıralama için tıklayın",
+  "cancelSortMsgTxt": "Sıralamayı iptal etmek için tıklayın",
+  "clearFilters": "Filtreleri Temizle"
 }

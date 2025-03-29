@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import TemplateListService from "../services/api/template-list";
+import TemplateListService from "../services/api/template";
 import Utils from "../utils";
 import Resizer from 'react-image-file-resizer';
 // image crop

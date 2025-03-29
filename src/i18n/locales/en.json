@@ -45,11 +45,13 @@
   "exitMsgTxt": "Exit",
   "areyousureMsgTxt": "Are you sure?",
   "deleteMapApproveModalMsgTxt": "Do you want to delete this map?",
+  "deleteMapApproveWithPermissionModalMsgTxt": "Do you want to delete this shared map?",
   "noMsgTxt": "No",
   "yesMsgTxt": "Yes",
   "sharedMapMsgTxt": "Shared Map",
   "copiedMapMsgTxt": "Copied Map",
   "isCopiedInfoMsgTxt": "'s map is copied",
+  "isSharedInfoMsgTxt": " shared by",
   "makePrivateMsgTxt": "Make Private",
   "makePublicFromListMsgTxt": "Make Public",
   "isAiGeneratedMsgTxt": "AI Generated Map",
@@ -105,5 +107,10 @@
   "createMap": "Create Map",
   "examplenameMsgTxt": "Example Name",
   "templatelistmapnameMsgTxt": "Please enter a name for your map",
-  "filterApplied": "filter(s) applied"
+  "filterApplied": "filter(s) applied",
+  
+  "triggerDescMsgTxt": "Click to sort descending",
+  "triggerAscMsgTxt": "Click to sort ascending",
+  "cancelSortMsgTxt": "Click to cancel sorting",
+  "clearFilters": "Clear Filters"
 }
