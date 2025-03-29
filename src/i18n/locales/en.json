@@ -41,6 +41,17 @@
   "mindMapsMsgTxt": "My Mind Maps",
   "mindMapsShareMsgTxt": "Shared Mind Maps",
   "helpMenuMsgTxt": "Help",
+  "landingPageFeaturesPricingMsgTxt": "Packages",
+  
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "30Days": "30 Days",
+  "couponCode": "Coupon Code",
+  "useCodeMsgTxt": "Use Code",
+  "paymentPageMothlyTitleMsgTxt": "Monthly Package",
+  "paymentPageYearlyTitleMsgTxt": "Yearly Package",
+  "kdvInfoForPackagesTextMsgTxt": "VAT included",
+  
   "chatGptAgreementTxt": "The AI packages you are about to purchase will be active during your current subscription period. If your subscription expires and you have remaining AI package quota, this right will be reserved. When you purchase a subscription package again, you can continue to use from your remaining AI package quota.",
   "agreementRequiredMessage": "You must accept the agreement",
   "noProductsAvailable": "No products available",

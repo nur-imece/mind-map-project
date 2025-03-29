@@ -1,0 +1,258 @@
+/* Payment Page Styles */
+.payment-page {
+  background-color: #f8fafc;
+  padding: 20px;
+}
+
+.buy-form {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  margin-bottom: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.buy-header {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.buy-header i {
+  margin-right: 10px;
+  font-size: 24px;
+}
+
+.many-show-text {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+/* Form Styling */
+.form-wrap {
+  padding-right: 20px;
+}
+
+.form-wrap .ant-input,
+.form-wrap .ant-select .ant-select-selector {
+  border-radius: 30px;
+  padding: 8px 15px;
+  background-color: #f2f2f2;
+  border: none;
+  height: 40px;
+}
+
+.form-wrap .ant-select .ant-select-selector {
+  display: flex;
+  align-items: center;
+}
+
+.form-wrap .ant-form-item {
+  margin-bottom: 15px;
+}
+
+.color-gray {
+  color: #666;
+}
+
+/* Package Cards */
+.payment-cards-2 {
+  padding-left: 0;
+}
+
+.cards-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 5px;
+  max-width: 400px;
+}
+
+.card {
+  border-radius: 15px;
+  border: 1px solid #eaeaea;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+}
+
+.card.activate {
+  border: 2px solid #0096FF;
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.1);
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.title-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.title-wrap img {
+  height: 30px;
+  width: auto;
+}
+
+.price {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.kdv-info {
+  display: block;
+  color: #999;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.price-area {
+  margin-bottom: 10px;
+}
+
+.many-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #4FB8FF;
+}
+
+.monthly-period, .yearly-period {
+  font-size: 22px;
+  font-weight: 600;
+  color: #666;
+}
+
+.days-info {
+  font-size: 14px;
+  color: #999;
+}
+
+/* Coupon Input */
+.coupon-input-area {
+  display: flex;
+  margin-top: 20px;
+  background-color: #f2f2f2;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.coupon-input-area .ant-input {
+  border-radius: 30px 0 0 30px;
+  border: none;
+  background-color: #f2f2f2;
+  height: 40px;
+  padding-left: 20px;
+  flex: 1;
+}
+
+.use-code-btn {
+  border-radius: 0 30px 30px 0;
+  border: none;
+  background-color: #45B6FF;
+  height: 40px;
+  color: white;
+  padding: 0 20px;
+  min-width: 140px;
+}
+
+.use-code-btn:hover {
+  background-color: #0096FF;
+}
+
+/* Buy Button */
+.buy-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  padding-right: 15px;
+}
+
+.buy-button-right {
+  background-color: #FF9800;
+  border: none;
+  border-radius: 30px;
+  height: 40px;
+  padding: 0 40px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.buy-button-right:hover, .buy-button-right:focus {
+  background-color: #F57C00 !important;
+  color: white;
+}
+
+/* Checkbox */
+.buy-checkbox {
+  margin-top: 10px;
+}
+
+.distant-sales-contract-color {
+  color: #45B6FF;
+}
+
+.ant-checkbox-wrapper {
+  font-size: 14px;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #45B6FF;
+  border-color: #45B6FF;
+}
+
+/* Footer */
+.buy-footer {
+  margin-top: 30px;
+}
+
+.buy-footer hr {
+  margin-bottom: 20px;
+  border-color: #f2f2f2;
+}
+
+.buy-footer img {
+  height: 30px;
+}
+
+/* Form layout */
+.form-wrap-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-wrap-top {
+    flex-direction: column;
+  }
+
+  .cards-wrap {
+    margin-top: 20px;
+  }
+
+  .form-wrap {
+    padding-right: 0;
+  }
+
+  .payment-cards-2 {
+    padding-left: 0;
+    margin-top: 30px;
+  }
+}

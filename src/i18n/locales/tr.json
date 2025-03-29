@@ -41,7 +41,17 @@
   "mindMapsMsgTxt": "Zihin Haritalarım",
   "mindMapsShareMsgTxt": "Paylaşılan Haritalar",
   "helpMenuMsgTxt": "Yardım",
+  "landingPageFeaturesPricingMsgTxt": "Paketler",
 
+  "monthly": "Aylık",
+  "yearly": "Yıllık",
+  "30Days": "30 Gün",
+  "couponCode": "Kupon Kodu",
+  "useCodeMsgTxt": "Kodu Kullan",
+  "paymentPageMothlyTitleMsgTxt": "Aylık Paket",
+  "paymentPageYearlyTitleMsgTxt": "Yıllık Paket",
+  "kdvInfoForPackagesTextMsgTxt": "KDV dahil",
+  
   "exitMsgTxt": "Çıkış",
   "areyousureMsgTxt": "Emin misiniz?",
   "deleteMapApproveModalMsgTxt": "Bu haritayı silmek istiyor musunuz?",
