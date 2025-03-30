@@ -1,42 +1,33 @@
-import React, { useEffect } from "react";
-import { Modal } from "antd";
+import React from "react";
+import { Modal, Button } from "antd";
 import { useTranslation } from "react-i18next";
 
-const SubscriptionInformationModal = ({ popupContent, sharedClick, handler }) => {
+const SubscriptionInformationModal = ({ popupContent, sharedClick }) => {
 	const { t } = useTranslation();
 	
-	useEffect(() => {
-		const closeModal = () => {
-			sharedClick(false);
-			localStorage.setItem('isCustomModalOpen', false);
-		};
-		
-		const closeButton = document.querySelector(".close-modal");
-		if (closeButton) {
-			closeButton.addEventListener("click", closeModal);
-		}
-		
-		return () => {
-			if (closeButton) {
-				closeButton.removeEventListener("click", closeModal);
-			}
-		};
-	}, [sharedClick]);
+	const handleClose = () => {
+		sharedClick(false);
+		localStorage.setItem('isCustomModalOpen', false);
+	};
 
 	return (
-		<div className="overlay subscription-information-modal">
-			<div className="popup">
-				<div className="title">
-					{popupContent.title}
-				</div>
-				<a className="close close-modal" onClick={handler}>&times;</a>
-				<div className="select-shared">
-					<div className="modal-content-wrapper">
-						<div dangerouslySetInnerHTML={{ __html: popupContent.content }}></div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<Modal
+			title={popupContent.title}
+			open={true}
+			onCancel={handleClose}
+			centered
+			footer={[
+				<Button 
+					key="ok" 
+					type="primary" 
+					onClick={handleClose}
+				>
+					{t("okMsgTxt")}
+				</Button>
+			]}
+		>
+			<div dangerouslySetInnerHTML={{ __html: popupContent.content }}></div>
+		</Modal>
 	);
 };
 

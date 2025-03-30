@@ -101,6 +101,11 @@
   "previousMsgTxt": "Önceki",
   "nextMsgTxt": "Sonraki",
   
+  "subscriptionHistoryPageTitleMsgTxt": "Abonelik Geçmişi",
+  "backToSubscriptionDetailMsgTxt": "Abonelik Detayına Dön",
+  "filterMsgTxt": "Filtrele",
+  "resetMsgTxt": "Sıfırla",
+  
   "createMindMapMsgTxt": "Zihin Haritası Oluştur",
   "categoryFilterMsgTxt": "Kategori adına göre filtrele",
   "addBlankMapMsgTxt": "Yeni Boş Harita",
@@ -230,5 +235,60 @@
   "birlesikArapMsgTxt": "Birleşik Arap Emirlikleri",
   "birlesikKrallikMsgTxt": "Birleşik Krallık",
   "abdMsgTxt": "ABD",
-  "ozbekistanMsgTxt": "Özbekistan"
+  "ozbekistanMsgTxt": "Özbekistan",
+  
+  "accountContactClarifyAgreement": "İletişim Formu Aydınlatma Metni",
+  "changepasswordMsgTxt": "Şifre Değiştir", 
+  "currentpasswordMsgTxt": "Mevcut Şifre", 
+  "newpasswordMsgTxt": "Yeni Şifre", 
+  "confirmpasswordMsgTxt": "Şifre Tekrar",
+  "passwordMismatchMsgTxt": "Şifreler eşleşmiyor",
+  "passwordChangedSuccessMsg": "Şifre başarıyla değiştirildi!",
+  "description": "Açıklama",
+  "contactsendMsgTxt": "Gönder",
+
+  "AccountContactClarifyingText": "<p>6698 sayılı Kişisel Verilerin Korunması Kanunu ('Kanun') uyarınca, bu Aydınlatma Metni, veri sahibi olarak kişisel verilerinizin işlenmesi hakkında sizi bilgilendirmek amacıyla Foramind tarafından hazırlanmıştır.</p><p>İletişim formu aracılığıyla sağladığınız kişisel verileriniz, veri sorumlusu olan Şirketimiz tarafından, Kanun'da belirtilen ilkeler doğrultusunda, taleplerinizi ve önerilerinizi yanıtlamak, ürün ve hizmetlerimizi geliştirmek ve daha iyi hizmet sunmak amacıyla işlenmektedir.</p><p>Kişisel verileriniz, yukarıda belirtilen amaçların yerine getirilmesi için üçüncü taraf hizmet sağlayıcıları, talep edildiğinde yasal makamlar ve gerektiğinde iş ortakları ile Kanun'a uygun olarak paylaşılabilir.</p><p>Veri sahibi olarak, kişisel verileriniz hakkında bilgi talep etme, eksik veya yanlış ise düzeltilmesini isteme, belirli koşullar altında silinmesini veya yok edilmesini talep etme, işlenmesine itiraz etme ve hukuka aykırı işleme nedeniyle zarar görmüşseniz tazminat talep etme haklarına sahipsiniz.</p>",
+  
+  "ContactClarifyingText": "<p>Bu gizlilik bildirimi, iletişim formu aracılığıyla sağladığınız kişisel bilgileri nasıl topladığımızı, kullandığımızı, paylaştığımızı ve koruduğumuzu açıklar.</p><p>İletişim formu aracılığıyla bilgi gönderdiğinizde, adınızı, e-posta adresinizi ve mesajınızda sağladığınız diğer bilgileri toplar ve işleriz. Bu bilgileri yalnızca sorgunuzu yanıtlamak, endişelerinizi gidermek ve hizmetlerimizi iyileştirmek amacıyla kullanırız.</p><p>Verileriniz güvenli bir şekilde saklanır ve yalnızca size yardımcı olması gereken yetkili personel tarafından erişilebilir. Bilgilerinizi, yasal olarak gerekli olmadıkça veya açık onayınız olmadan üçüncü taraflarla paylaşmayız.</p><p>İletişim bilgilerinizi, sorgunuzu yanıtlamak ve iletişim kaydımızı tutmak için gerekli olan süre boyunca saklarız, ardından güvenli bir şekilde silinir.</p>",
+  
+  "CookiePolicyText": "<p>Web sitemiz, tarama deneyiminizi geliştirmek, site trafiğini analiz etmek ve içeriği kişiselleştirmek için çerezler kullanır. Çerezler, tarayıcınızı ve tercihlerinizi tanımlamamıza yardımcı olan cihazınızda saklanan küçük metin dosyalarıdır.</p><p>Web sitesinin düzgün çalışması için gerekli olan temel çerezler kullanıyoruz. Ayrıca ziyaretçilerin sitemizle nasıl etkileşimde bulunduğunu anlamamıza yardımcı olan, böylece işlevselliğini iyileştirmemize olanak tanıyan analitik çerezler kullanıyoruz. Ek olarak, ilgi alanlarınıza göre daha alakalı içerik sunmak için pazarlama çerezleri kullanabiliriz.</p><p>Tarayıcı tercihleriniz aracılığıyla çerez ayarlarını kontrol edebilirsiniz. Çoğu tarayıcı, çerezleri engellemenize veya silmenize olanak tanır, ancak bu, sitemizdeki deneyiminizi etkileyebilir.</p><p>Web sitemizi kullanmaya devam ederek, bu politikada açıklanan çerez kullanımımıza onay vermiş olursunuz. Çerez uygulamalarımızı düzenli olarak gözden geçirerek gizlilik düzenlemelerine uygunluğunu sağlıyoruz.</p>",
+  
+  "feedbackClarifyingText": "<p>Geri bildiriminizi bizimle paylaştığınız için teşekkür ederiz. Görüşlerinizi değerli buluyoruz çünkü hizmetlerimizi geliştirmemize ve ihtiyaçlarınızı daha iyi karşılamamıza yardımcı oluyor.</p><p>Geri bildirim gönderdiğinizde, adınız ve iletişim bilgileriniz gibi kişisel bilgilerinizi, yorumlarınız veya önerilerinizle birlikte topluyoruz. Bu bilgiler, yalnızca geri bildiriminizi anlamak ve ele almak, ürün ve hizmetlerimizi iyileştirmek ve takip gerekiyorsa sizinle iletişim kurmak amacıyla işlenir.</p><p>Geri bildiriminiz, iyileştirmeleri uygulamak için ilgili ekiplerle dahili olarak paylaşılabilir. Ayrıca anonim hale getirilmiş geri bildirimi kalite kontrol ve eğitim amaçları için kullanabiliriz.</p><p>Geri bildirim bilgilerinizi, uygun analiz ve iyileştirmelerin uygulanmasına olanak tanımak için makul bir süre boyunca saklarız. Kişisel verileriniz, Gizlilik Politikamız ve geçerli veri koruma yasaları uyarınca işlenir.</p>",
+  
+  "MembershipAgreementText": "<p>Bu Üyelik Sözleşmesi ('Sözleşme'), siz ('Üye') ve Foramind ('Şirket') arasında yapılmıştır.</p><p><strong>1. Üyelik Koşulları:</strong> Kayıt olarak, platformumuzun üyesi olmayı ve bu Sözleşme'de belirtilen koşullara uymayı kabul edersiniz.</p><p><strong>2. Hesap Sorumlulukları:</strong> Hesap kimlik bilgilerinizin gizliliğini korumak ve hesabınız altında gerçekleşen tüm etkinliklerden sorumlusunuz.</p><p><strong>3. Abonelik ve Ödemeler:</strong> Üyelik, fiyatlandırma planlarımızda belirtilen abonelik ücretleri gerektirebilir. Aksi belirtilmedikçe tüm ödemeler iade edilmez.</p><p><strong>4. İçerik ve Fikri Mülkiyet:</strong> Platformumuz aracılığıyla sağlanan tüm içerik, fikri mülkiyet hakları ile korunmaktadır. Üyeler, izin olmadan içeriği çoğaltamaz, dağıtamaz veya türev eserler oluşturamaz.</p><p><strong>5. Gizlilik:</strong> Kişisel bilgileriniz Gizlilik Politikamız uyarınca işlenecektir.</p><p><strong>6. Fesih:</strong> Şirket, bu Sözleşme'yi ihlal eden veya takdiri doğrultusunda herhangi bir nedenle hesapları sonlandırma veya askıya alma hakkını saklı tutar.</p><p><strong>7. Değişiklikler:</strong> Bu Sözleşme'yi istediğimiz zaman değiştirebiliriz. Hizmeti kullanmaya devam etmeniz, değiştirilen koşulları kabul ettiğiniz anlamına gelir.</p>",
+  
+  "RegisterClarifyingText": "<p>Bu Kayıt Gizlilik Bildirimi, kayıt işlemi sırasında kişisel bilgilerinizi nasıl topladığımızı, kullandığımızı ve koruduğumuzu açıklar.</p><p>Bizimle bir hesap oluşturduğunuzda, adınız, e-posta adresiniz ve hesabınızı oluşturmak ve yönetmek için gerekli diğer bilgiler gibi kişisel bilgileri toplarız. Bu bilgiler, kimliğinizi doğrulamak, hizmetlerimize erişim sağlamak ve hesabınız hakkında önemli güncellemeleri iletmek için kullanılır.</p><p>Verilerinizi, kayıt olduğunuzda sizinle sözleşmemizi yerine getirme gerekliliğine dayanarak işleriz. Bilgileriniz güvenli bir şekilde saklanır ve yalnızca hizmetlerimizi sağlamak için ihtiyaç duyan yetkili personel tarafından erişilebilir.</p><p>Kayıt bilgileriniz, hizmetlerimizi sunmamıza yardımcı olan güvenilir üçüncü taraf hizmet sağlayıcılarla, her zaman katı gizlilik anlaşmaları altında paylaşılabilir. Kayıt bilgilerinizi, bizimle aktif bir hesap tuttuğunuz sürece saklarız, ardından güvenli bir şekilde silinir veya anonimleştirilir.</p>",
+
+  "subscriptionDetailMsgTxt": "Abonelik Detayı",
+  "membershipInfoMsgTxt": "Üyelik Bilgisi",
+  "membershipStartDateMsgTxt": "Üyelik Başlangıç Tarihi",
+  "subscriptionStartDateMsgTxt": "Abonelik Başlangıç Tarihi",
+  "subscriptionEndDateMsgTxt": "Abonelik Bitiş Tarihi",
+  "forSubscriptionHistoryMsgTxt": "Abonelik Geçmişi İçin",
+  "forCancellationOfMembershipMsgTxt": "Üyelik İptali İçin",
+  "forReturnPolicyMsgTxt": "İade Politikası İçin",
+  "forHelpMsgTxt": "Yardım İçin",
+  "clickMsgTxt": "Tıklayın",
+  "yearlyPackageMsgTxt": "Yıllık Paket",
+  "vatIncludedMsgTxt": "KDV dahil",
+  "unlimitedMindMapsMsgTxt": "Sınırsız Zihin Haritası",
+  "imageAttachmentMsgTxt": "Görsel Ekleme",
+  "imageExportPdfExportMsgTxt": "Görsel Dışa Aktarma, PDF Dışa Aktarma",
+  "mindMapPrintingMsgTxt": "Zihin Haritası Yazdırma",
+  "customStylesAndBoundariesMsgTxt": "Özel Stiller ve Sınırlar",
+  "presentationModeMsgTxt": "Sunum Modu",
+  "yearlyPackageInfoMsgTxt": "Yıllık Paket; Bu pakete dahilsiniz. Planı değiştirmek için",
+  "toAccessYourAIPackageMsgTxt": "AI Paketinize erişmek için",
+  
+  "cancelMembershipContentMsgTxt": "Üyelik iptali için <a href=\"mailto:info@zihinlerfora.com\">info@zihinlerfora.com</a> adresinden yardım alabilirsiniz. En kısa sürede size geri dönüş yapacağız.",
+  "returnConditionsContentMsgTxt": "İade politikamız hakkında bilgi almak için <a href=\"mailto:info@zihinlerfora.com\">info@zihinlerfora.com</a> adresinden yardım alabilirsiniz. En kısa sürede size geri dönüş yapacağız.",
+  "helpCenterContentMsgTxt": "Herhangi bir soru veya yardım için <a href=\"mailto:info@zihinlerfora.com\">info@zihinlerfora.com</a> adresinden destek alabilirsiniz. En kısa sürede size geri dönüş yapacağız.",
+  "totalMsgTxt": "Toplam",
+  "actionDateMsgTxt": "İşlem Tarihi",
+  "subscriptionAiDetailMsgTxt": "Yapay Zeka Satın Alma Bilgilerim",
+  "packageName": "Paket Adı",
+  "packageMapNumbers": "Paketteki Harita Sayısı",
+  "packageBuyDate": "Paket Satın Alım Tarihi",
+  "packagePrice": "Paket Fiyatı",
+  "numberMaps": "Adet"
 }

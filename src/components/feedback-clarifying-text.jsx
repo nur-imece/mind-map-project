@@ -1,9 +1,8 @@
-import Resources from "../libraries/resources";
+import { useTranslation } from "react-i18next";
 
 function feedbackClarifyingText() {
-  return (
-    Resources.getValue("feedbackClarifyingText")
-  );
+  const { t } = useTranslation();
+  return t("feedbackClarifyingText");
 }
 
 export default feedbackClarifyingText;

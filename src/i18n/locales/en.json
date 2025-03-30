@@ -103,6 +103,11 @@
   "totalItemsMsgTxt": "items",
   "previousMsgTxt": "Previous",
   "nextMsgTxt": "Next",
+  
+  "subscriptionHistoryPageTitleMsgTxt": "Subscription History",
+  "backToSubscriptionDetailMsgTxt": "Back to Subscription Detail",
+  "filterMsgTxt": "Filter",
+  "resetMsgTxt": "Reset",
 
   "createMindMapMsgTxt": "Create Mind Map",
   "categoryFilterMsgTxt": "Filter by category name",
@@ -229,5 +234,61 @@
   "birlesikArapMsgTxt": "United Arab Emirates",
   "birlesikKrallikMsgTxt": "United Kingdom",
   "abdMsgTxt": "USA",
-  "ozbekistanMsgTxt": "Uzbekistan"
+  "ozbekistanMsgTxt": "Uzbekistan",
+  
+  "accountContactClarifyAgreement": "Contact Form Privacy Notice",
+  "changepasswordMsgTxt": "Change Password", 
+  "currentpasswordMsgTxt": "Current Password", 
+  "newpasswordMsgTxt": "New Password", 
+  "confirmpasswordMsgTxt": "Confirm Password",
+  "passwordMismatchMsgTxt": "Passwords do not match",
+  "passwordChangedSuccessMsg": "Password changed successfully!",
+  "description": "Description",
+  "contactsendMsgTxt": "Send",
+
+  "AccountContactClarifyingText": "<p>In accordance with the Personal Data Protection Law No. 6698 ('Law'), this Clarification Text has been prepared by Foramind to inform you, as the data subject, about the processing of your personal data.</p><p>The personal data you provide through this contact form is processed by our Company as the data controller, in accordance with the principles set forth in the Law, to respond to your requests and suggestions, to improve our products and services, and to provide better service.</p><p>Your personal data may be shared with third-party service providers to fulfill the purposes mentioned above, legal authorities when requested, and business partners when necessary, in accordance with the Law.</p><p>As a data subject, you have the right to request information about your personal data, to request correction if it is incomplete or inaccurate, to request deletion or destruction under certain conditions, to object to the processing, and to claim damages if you suffer loss due to unlawful processing.</p>",
+  
+  "ContactClarifyingText": "<p>This privacy notice explains how we collect, use, share, and protect the personal information you provide through our contact form.</p><p>When you submit information through our contact form, we collect and process your name, email address, and any other details you provide in your message. We use this information solely to respond to your inquiry, address your concerns, and improve our services.</p><p>Your data is securely stored and only accessed by authorized personnel who need it to assist you. We will not share your information with third parties except when legally required or with your explicit consent.</p><p>We retain your contact information only for as long as necessary to respond to your inquiry and maintain a record of our communication, after which it will be securely deleted.</p>",
+  
+  "CookiePolicyText": "<p>Our website uses cookies to enhance your browsing experience, analyze site traffic, and personalize content. Cookies are small text files stored on your device that help us identify your browser and preferences.</p><p>We use essential cookies that are necessary for the website to function properly. We also use analytical cookies to understand how visitors interact with our site, helping us improve its functionality. Additionally, we may use marketing cookies to deliver more relevant content based on your interests.</p><p>You can control cookie settings through your browser preferences. Most browsers allow you to block or delete cookies, though this may impact your experience on our site.</p><p>By continuing to use our website, you consent to our use of cookies as described in this policy. We review our cookie practices regularly to ensure compliance with privacy regulations.</p>",
+  
+  "feedbackClarifyingText": "<p>Thank you for sharing your feedback with us. We value your opinion as it helps us improve our services and better meet your needs.</p><p>When you submit feedback, we collect personal information such as your name and contact details, along with your comments or suggestions. This information is processed solely for the purpose of understanding and addressing your feedback, improving our products and services, and contacting you if follow-up is needed.</p><p>Your feedback may be shared internally with relevant teams to implement improvements. We may also use anonymized feedback for quality control and training purposes.</p><p>We retain your feedback information for a reasonable period to allow for proper analysis and implementation of improvements. Your personal data is handled in accordance with our Privacy Policy and applicable data protection laws.</p>",
+  
+  "MembershipAgreementText": "<p>This Membership Agreement ('Agreement') is entered into between you ('Member') and Foramind ('Company').</p><p><strong>1. Membership Terms:</strong> By registering, you agree to become a member of our platform and abide by the terms outlined in this Agreement.</p><p><strong>2. Account Responsibilities:</strong> You are responsible for maintaining the confidentiality of your account credentials and all activities that occur under your account.</p><p><strong>3. Subscription and Payments:</strong> Membership may require subscription fees as outlined in our pricing plans. All payments are non-refundable unless otherwise specified.</p><p><strong>4. Content and Intellectual Property:</strong> All content provided through our platform is protected by intellectual property rights. Members may not reproduce, distribute, or create derivative works without permission.</p><p><strong>5. Privacy:</strong> Your personal information will be handled in accordance with our Privacy Policy.</p><p><strong>6. Termination:</strong> The Company reserves the right to terminate or suspend accounts that violate this Agreement or for any other reason at our discretion.</p><p><strong>7. Modifications:</strong> We may modify this Agreement at any time. Continued use of the service constitutes acceptance of modified terms.</p>",
+  
+  "RegisterClarifyingText": "<p>This Registration Privacy Notice explains how we collect, use, and protect your personal information during the registration process.</p><p>When you register an account with us, we collect personal information such as your name, email address, and other details necessary to create and manage your account. This information is used to authenticate your identity, provide access to our services, and communicate important updates about your account.</p><p>We process your data based on the necessity to perform our contract with you when you register for our services. Your information is securely stored and only accessed by authorized personnel who need it to provide our services.</p><p>Your registration data may be shared with trusted third-party service providers who help us deliver our services, always under strict confidentiality agreements. We retain your registration information for as long as you maintain an active account with us, after which it will be securely deleted or anonymized.</p>",
+
+  "subscriptionDetailMsgTxt": "Subscription Detail",
+  "membershipInfoMsgTxt": "Membership Info",
+  "membershipStartDateMsgTxt": "Membership Start Date",
+  "subscriptionStartDateMsgTxt": "Subscription Start Date",
+  "subscriptionEndDateMsgTxt": "Subscription End Date",
+  "forSubscriptionHistoryMsgTxt": "For Subscription History",
+  "forCancellationOfMembershipMsgTxt": "For Cancellation of Membership",
+  "forReturnPolicyMsgTxt": "For Return Policy",
+  "forHelpMsgTxt": "For Help",
+  "clickMsgTxt": "Click",
+  "yearlyPackageMsgTxt": "Yearly Package",
+  "vatIncludedMsgTxt": "VAT included",
+  "unlimitedMindMapsMsgTxt": "Unlimited Mind Maps",
+  "imageAttachmentMsgTxt": "Image Attachment",
+  "imageExportPdfExportMsgTxt": "Image Export, PDF Export",
+  "mindMapPrintingMsgTxt": "Mind Map Printing",
+  "customStylesAndBoundariesMsgTxt": "Custom Styles and Boundaries",
+  "presentationModeMsgTxt": "Presentation Mode",
+  "yearlyPackageInfoMsgTxt": "Yearly Package; You are included in this package. To change the plan",
+  "toAccessYourAIPackageMsgTxt": "To access your AI Package",
+  
+  "cancelMembershipContentMsgTxt": "You can get help from <a href=\"mailto:info@zihinlerfora.com\">info@zihinlerfora.com</a> for your membership cancellation. We will get back to you as soon as possible.",
+  "returnConditionsContentMsgTxt": "You can get help from <a href=\"mailto:info@zihinlerfora.com\">info@zihinlerfora.com</a> for information about our return policy. We will get back to you as soon as possible.",
+  "helpCenterContentMsgTxt": "You can get help from <a href=\"mailto:info@zihinlerfora.com\">info@zihinlerfora.com</a> for any questions or assistance. We will get back to you as soon as possible.",
+  "totalMsgTxt": "Total",
+  "actionDateMsgTxt": "Action Date",
+
+  "subscriptionAiDetailMsgTxt": "AI Package Purchase History",
+  "packageName": "Package Name",
+  "packageMapNumbers": "Number of Maps",
+  "packageBuyDate": "Purchase Date",
+  "packagePrice": "Price",
+  "numberMaps": "Maps"
 }

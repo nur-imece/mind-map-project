@@ -1,9 +1,8 @@
-import Resources from "../libraries/resources";
+import { useTranslation } from "react-i18next";
 
 function MembershipAgreementText() {
-  return (
-    Resources.getValue("MembershipAgreementText")
-  );
+  const { t } = useTranslation();
+  return t("MembershipAgreementText");
 }
 
 export default MembershipAgreementText;

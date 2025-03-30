@@ -1,9 +1,8 @@
-import Resources from "../libraries/resources";
+import { useTranslation } from "react-i18next";
 
 function ClarifyingText() {
-  return (
-    Resources.getValue("AccountContactClarifyingText")
-  );
+  const { t } = useTranslation();
+  return <div className="membership-agreement" dangerouslySetInnerHTML={{ __html: t("AccountContactClarifyingText") }} />;
 }
 
 export default ClarifyingText;

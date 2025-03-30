@@ -1,9 +1,8 @@
-import Resources from "../libraries/resources";
+import { useTranslation } from "react-i18next";
 
 function contactClarifyingText() {
-  return (
-    Resources.getValue("ContactClarifyingText")
-  );
+  const { t } = useTranslation();
+  return t("ContactClarifyingText");
 }
 
 export default contactClarifyingText;

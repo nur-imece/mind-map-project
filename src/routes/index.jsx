@@ -10,7 +10,11 @@ import Help from "pages/help";
 import Profile from "pages/profile";
 import AiPayment from "pages/payment/aiPayment";
 import Payment from "pages/payment/subscriptionPayment";
-
+import Contact from "pages/contact";
+import ChangePassword from "pages/changePassword";
+import SubscriptionDetail from "pages/SubscriptionDetail";
+import SubscriptionHistory from "pages/SubscriptionHistory";
+import SubscriptionAiDetail from "pages/subscriptionAiDetail";
 
 const AppRoutes = () => {
   return (
@@ -32,6 +36,12 @@ const AppRoutes = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/ai-payment" element={<AiPayment />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/subscription-detail" element={<SubscriptionDetail />} />
+        <Route path="/subscription-history" element={<SubscriptionHistory />} />
+        <Route path="/ai-subscription-detail" element={<SubscriptionAiDetail />} />
+
 
     </Routes>
   );

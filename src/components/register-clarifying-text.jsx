@@ -1,9 +1,8 @@
-import Resources from "../libraries/resources";
+import { useTranslation } from "react-i18next";
 
 function ClarifyingText() {
-  return (
-    Resources.getValue("RegisterClarifyingText")
-  );
+  const { t } = useTranslation();
+  return t("RegisterClarifyingText");
 }
 
 export default ClarifyingText;
