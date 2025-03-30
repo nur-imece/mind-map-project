@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 import Header from "../../components/header";
 import SubHeader from "../../components/subHeader.jsx";
@@ -139,40 +140,70 @@ const TemplateList = () => {
     };
 
     const newMap = async (templateData, templateName) => {
-        if (templateData == "yeni") {
-            localStorage.removeItem("openedMapName");
-            localStorage.removeItem("openedMapId");
-            localStorage.setItem("mapTemplate", templateData);
-            localStorage.setItem("isNewMap", true);
-            var data = {
-                name: "yeni",
-                content:
-                    '{backgroundName: "", "pageBgImage": "", "root":{"id":"' +
-                    localStorage.getItem("createdNewMapContentId") +
-                    '","text":"yeni","layout":"map","collapsed":false,"nodeBackground":true,"imageItem":false,"nodeLine":true}}',
-                backgroundName: "",
-                templateId: null,
+        try {
+            console.log("Creating new mind map...");
+            
+            // Root node için benzersiz ID oluştur
+            const rootId = Date.now().toString() + Math.floor(Math.random() * 100000000000000000).toString();
+            
+            // API isteği için data - MindMapCreateRequest tipine uygun hazırlama
+            const data = {
+                name: templateData === "yeni" ? "New Mind Map" : (templateName || "Template Mind Map"),
+                content: JSON.stringify({
+                    root: {
+                        id: rootId,
+                        text: "<br>New Mind Map<br><br>",
+                        color: "#56DA66 !important",
+                        borderColor: "#ff84cb",
+                        textColor: "#F6F6F6 !important",
+                        layout: "map",
+                        shape: "box",
+                        line: "solid",
+                        collapsed: false,
+                        nodeBackground: true,
+                        imageItem: false,
+                        nodeLine: true,
+                        children: []
+                    }
+                }),
+                isPublic: false,
+                isDownloadable: true,
+                isCopiable: true,
+                isShareable: true,
+                languageId: 1
             };
-            var mapName = "yeni";
-            localStorage.setItem("userIsOwner", true);
-            localStorage.setItem("mapPermission", 0);
-            // create service
-            await MapService.createMindMap(JSON.stringify(data), mapName);
-        } else {
-            localStorage.removeItem("openedMapName");
-            localStorage.removeItem("openedMapId");
-            localStorage.setItem("mapTemplate", templateData);
-            var data = {
-                name: templateName,
-                content:
-                    '{backgroundName: "", "pageBgImage": "", "root":{"id":"' +
-                    localStorage.getItem("createdNewMapContentId") +
-                    '","text":"yeni","layout":"map","collapsed":false,"nodeBackground":true,"imageItem":false,"nodeLine":true}}',
-                backgroundName: "",
-            };
-            var mapName = templateName;
-            // create service
-            await MapService.createMindMap(JSON.stringify(data), mapName);
+            
+            // API'ye istek at
+            console.log("Calling MapService.createMindMap with data:", data);
+            const response = await MapService.createMindMap(data);
+            console.log("Create mind map response:", response);
+            
+            // Response yapısı kontrol ediliyor ve mapId alınıyor
+            if (response && response.data) {
+                // data içindeki mindMap'i kontrol et
+                if (response.data.mindMap && response.data.mindMap.id) {
+                    // Başarılı cevap - Map ID ile yönlendirme yap
+                    const mapId = response.data.mindMap.id;
+                    console.log("Successfully created mind map with ID:", mapId);
+                    navigate(`/map?mapId=${mapId}`);
+                    return;
+                } 
+                
+                // Eski yapı kontrolü (response.data.id)
+                else if (response.data.id) {
+                    console.log("Successfully created mind map with ID:", response.data.id);
+                    navigate(`/map?mapId=${response.data.id}`);
+                    return;
+                }
+            }
+            
+            // Hiçbir durum uymadıysa hata göster
+            console.error("Failed to create mind map or get map ID:", response);
+            message.error(t("errorCreatingMapMsgTxt"));
+            
+        } catch (error) {
+            console.error("Error creating mind map:", error);
+            message.error(t("errorCreatingMapMsgTxt"));
         }
     };
 

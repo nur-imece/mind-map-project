@@ -1,11 +1,8 @@
 import React from 'react';
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
-
-// Pages
 import Login from '../pages/login';
 import Register from '../pages/register';
-import MindMap from '../pages/mindmap';
 import MindMapList from '../pages/mindmapList';
 import TemplateList from '../pages/templateList';
 import MindMapShareList from "pages/mindMapShareList";
@@ -18,6 +15,7 @@ import ChangePassword from "pages/changePassword";
 import SubscriptionDetail from "pages/SubscriptionDetail";
 import SubscriptionHistory from "pages/SubscriptionHistory";
 import SubscriptionAiDetail from "pages/subscriptionAiDetail";
+import Map from "pages/map";
 
 // Define PrivateRoute directly here to avoid import/export issues
 const PrivateRoute = ({ requiresPayment }) => {
@@ -57,12 +55,12 @@ const AppRoutes = () => {
       
       {/* Private routes with payment requirement */}
       <Route element={<PrivateRoute requiresPayment={true} />}>
-        <Route path="/mindmap" element={<MindMap />} />
         <Route path="/mind-map-list" element={<MindMapList />} />
-        <Route path="/map" element={<MindMap />} />
         <Route path="/template-list" element={<TemplateList />} />
         <Route path="/mind-map-share-list" element={<MindMapShareList />} />
         <Route path="/ai-payment" element={<AiPayment />} />
+        <Route path="/map" element={<Map/>} />
+        <Route path="/map/:mapId" element={<Map/>} />
       </Route>
     </Routes>
   );

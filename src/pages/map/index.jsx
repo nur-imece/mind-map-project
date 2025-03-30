@@ -1,289 +1,272 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { Box, IconButton, Tooltip, Select, MenuItem, FormControl, InputLabel, Dialog, DialogTitle, DialogContent, Button } from '@mui/material';
-import ReactFlow, { Background, Controls, MiniMap, ConnectionMode, Panel } from 'reactflow';
-import { Slideshow as SlideshowIcon, Wallpaper as WallpaperIcon, SaveAlt as SaveAltIcon } from '@mui/icons-material';
+import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import ReactFlow, {
+  Background,
+  Controls,
+  MiniMap,
+  useNodesState,
+  useEdgesState,
+  Handle,
+  Position
+} from 'reactflow';
 import 'reactflow/dist/style.css';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 
-import MindMapNode from './nodes/MindMapNode.js';
-import useMindMapStore from './store/mindMapStore.js';
-import PresentationMode from './components/PresentationMode.js';
-import ActiveUsers from './components/ActiveUsers.js';
-import useCollaborationStore from './store/collaborationStore.js';
+import { Spin, Empty, Button, Typography, Space, Tag, Divider, Row, Col } from 'antd';
+import { LeftOutlined } from '@ant-design/icons';
 
-const nodeTypes = {
-  mindMap: MindMapNode,
-};
+import mindMapService from '@/services/api/mindmap';
+import './index.scss';
 
-const defaultEdgeOptions = {
-  type: 'smoothstep',
-  animated: true,
-  style: { 
-    strokeWidth: 2,
-    stroke: '#90caf9',
-    strokeDasharray: '0',
-  },
-};
+const { Title, Text } = Typography;
 
-const minimapStyle = {
-  backgroundColor: '#f5f5f5',
-  maskColor: '#f5f5f550',
-};
+// -- (A) Custom Node Tanımı ----------------------------------------------
+const CustomNode = memo(({ data, isConnectable, selected }) => {
+  return (
+      <div
+          className={`custom-node ${selected ? 'selected' : ''}`}
+          style={{
+            background: data.bgColor || '#FFFFFF',
+            color: data.color || '#000000',
+            fontSize: data.fontSize ? `${data.fontSize}px` : '16px',
+            borderColor: selected ? '#4096ff' : '#ddd'
+          }}
+      >
+        <Handle type="target" position={Position.Left} isConnectable={isConnectable} />
+        <div
+            className="html-content"
+            dangerouslySetInnerHTML={{ __html: data.label }}
+        />
+        <Handle type="source" position={Position.Right} isConnectable={isConnectable} />
+      </div>
+  );
+});
 
-function MindMap() {
-  const {
-    nodes,
-    edges,
-    addNode,
-    updateNodePosition,
-    updateNodeStyle,
-    setEdgeStyle
-  } = useMindMapStore();
+// -- (B) MapHeader: Harita bilgilerini gösterecek üst panel ---------------
+const MapHeader = ({ mapData, onBack }) => {
+  if (!mapData) return null;
 
-  const [presentationMode, setPresentationMode] = useState(false);
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [bgColor, setBgColor] = useState('#ffffff');
-
-  const backgroundColors = [
-    { id: 1, name: 'Beyaz', color: '#ffffff' },
-    { id: 2, name: 'Açık Mavi', color: '#e3f2fd' },
-    { id: 3, name: 'Açık Yeşil', color: '#e8f5e9' },
-    { id: 4, name: 'Açık Pembe', color: '#fce4ec' },
-    { id: 5, name: 'Açık Mor', color: '#f3e5f5' },
-    { id: 6, name: 'Açık Sarı', color: '#fffde7' },
-    { id: 7, name: 'Açık Gri', color: '#f5f5f5' },
-  ];
-
-  const handleBackgroundChange = () => {
-    const colors = ['#e3f2fd', '#e8f5e9', '#fce4ec', '#f3e5f5', '#fffde7', '#f5f5f5'];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    setBgColor(randomColor);
-  };
-
-  const onNodesChange = useCallback((changes) => {
-    changes.forEach(change => {
-      if (change.type === 'position' && change.position) {
-        updateNodePosition(change.id, change.position);
-      }
-    });
-  }, [updateNodePosition]);
-
-  const onNodeClick = useCallback((_, node) => {
-    setSelectedNode(node);
-  }, []);
-
-  React.useEffect(() => {
-    if (nodes.length === 0) {
-      addNode(null, 'Ana Fikir');
-    }
-  }, [addNode, nodes.length]);
-
-  const { initializeConnection, activeUsers } = useCollaborationStore();
-
-  // Dummy kullanıcı verileri
-  const dummyUsers = [
-    { 
-      id: 1, 
-      name: 'Ahmet Yılmaz', 
-      color: '#1976d2', 
-      avatar: 'https://i.pravatar.cc/150?img=1',
-      status: 'online'
-    },
-    { 
-      id: 2, 
-      name: 'Mehmet Demir', 
-      color: '#4caf50', 
-      avatar: 'https://i.pravatar.cc/150?img=2',
-      status: 'online'
-    },
-    { 
-      id: 3, 
-      name: 'Ayşe Kaya', 
-      color: '#f44336', 
-      avatar: 'https://i.pravatar.cc/150?img=3',
-      status: 'busy'
-    },
-    { 
-      id: 4, 
-      name: 'Fatma Şahin', 
-      color: '#ff9800', 
-      avatar: 'https://i.pravatar.cc/150?img=4',
-      status: 'online'
-    },
-    { 
-      id: 5, 
-      name: 'Ali Öztürk', 
-      color: '#9c27b0', 
-      avatar: 'https://i.pravatar.cc/150?img=5',
-      status: 'busy'
-    },
-    { 
-      id: 6, 
-      name: 'Zeynep Yıldız', 
-      color: '#009688', 
-      avatar: 'https://i.pravatar.cc/150?img=6',
-      status: 'online'
-    }
-  ];
-
-  useEffect(() => {
-    const userId = "user-" + Math.random().toString(36).substr(2, 9);
-    const userName = "Test User";
-    const mindMapId = "mindmap-1";
-
-    initializeConnection(userId, userName, mindMapId);
-
-    // Dummy kullanıcıları ekle
-    useCollaborationStore.setState({ activeUsers: dummyUsers });
-
-    return () => {
-      useCollaborationStore.getState().disconnect();
-    };
-  }, []);
-
-  // Export settings state
-  const [exportSettings, setExportSettings] = useState({
-    format: 'A4',
-    orientation: 'landscape',
-    scale: 1,
-    quality: 2,
-    showExportDialog: false
-  });
-
-  // Function to handle mind map export
-  const handleExport = async (format) => {
-    // Export code implementation
-    console.log('Exporting as', format);
-    setExportSettings({
-      ...exportSettings,
-      showExportDialog: true
-    });
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
   };
 
   return (
-    <>
-      {presentationMode ? (
-        <PresentationMode 
-          nodes={nodes} 
-          edges={edges} 
-          onClose={() => setPresentationMode(false)}
-        />
-      ) : (
-        <Box sx={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          height: '100vh',
-          bgcolor: bgColor
-        }}>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            nodeTypes={nodeTypes}
-            defaultEdgeOptions={defaultEdgeOptions}
-            onNodesChange={onNodesChange}
-            onNodeClick={onNodeClick}
-            connectionMode={ConnectionMode.Loose}
-            fitView
-          >
-            <Background />
-            <Controls />
-            <MiniMap style={minimapStyle} nodeColor="#1976d2" />
-            
-            <Panel position="top-right">
-              <Box sx={{ display: 'flex', gap: 1, bgcolor: 'rgba(255,255,255,0.8)', p: 0.5, borderRadius: 1 }}>
-                <ActiveUsers users={activeUsers} />
-              
-                <Tooltip title="Sunum Modu">
-                  <IconButton
-                    onClick={() => setPresentationMode(true)}
-                    size="small"
-                    sx={{ bgcolor: 'white' }}
-                  >
-                    <SlideshowIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-                
-                <Tooltip title="Arka Plan Değiştir">
-                  <IconButton
-                    onClick={handleBackgroundChange}
-                    size="small"
-                    sx={{ bgcolor: 'white' }}
-                  >
-                    <WallpaperIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-                
-                <Tooltip title="Dışa Aktar">
-                  <IconButton
-                    onClick={() => handleExport('pdf')}
-                    size="small"
-                    sx={{ bgcolor: 'white' }}
-                  >
-                    <SaveAltIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            </Panel>
-          </ReactFlow>
-          
-          <Dialog
-            open={exportSettings.showExportDialog}
-            onClose={() => setExportSettings({...exportSettings, showExportDialog: false})}
-            maxWidth="sm"
-            fullWidth
-          >
-            <DialogTitle>Dışa Aktarma Ayarları</DialogTitle>
-            <DialogContent>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Kağıt Boyutu</InputLabel>
-                  <Select
-                    value={exportSettings.format}
-                    label="Kağıt Boyutu"
-                    onChange={(e) => setExportSettings({...exportSettings, format: e.target.value})}
-                  >
-                    <MenuItem value="A4">A4</MenuItem>
-                    <MenuItem value="A3">A3</MenuItem>
-                    <MenuItem value="A5">A5</MenuItem>
-                  </Select>
-                </FormControl>
-                
-                <FormControl fullWidth>
-                  <InputLabel>Yönlendirme</InputLabel>
-                  <Select
-                    value={exportSettings.orientation}
-                    label="Yönlendirme"
-                    onChange={(e) => setExportSettings({...exportSettings, orientation: e.target.value})}
-                  >
-                    <MenuItem value="landscape">Yatay</MenuItem>
-                    <MenuItem value="portrait">Dikey</MenuItem>
-                  </Select>
-                </FormControl>
-                
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
-                  <Button 
-                    onClick={() => setExportSettings({...exportSettings, showExportDialog: false})}
-                  >
-                    İptal
-                  </Button>
-                  <Button 
-                    variant="contained"
-                    onClick={() => {
-                      console.log('Exporting with settings:', exportSettings);
-                      setExportSettings({...exportSettings, showExportDialog: false});
-                    }}
-                  >
-                    Dışa Aktar
-                  </Button>
-                </Box>
-              </Box>
-            </DialogContent>
-          </Dialog>
-        </Box>
-      )}
-    </>
+      <div className="map-header">
+        <Row gutter={[16, 16]} align="middle">
+          <Col span={1}>
+            <Button type="text" icon={<LeftOutlined />} onClick={onBack} title="Geri Dön" />
+          </Col>
+          <Col span={15}>
+            <Title level={4} style={{ margin: 0 }}>{mapData.name}</Title>
+            <Space size="small" wrap>
+              {mapData.isPublic && <Tag color="green">Herkese Açık</Tag>}
+              {mapData.isDownloadable && <Tag color="blue">İndirilebilir</Tag>}
+            </Space>
+          </Col>
+          <Col span={8} style={{ textAlign: 'right' }}>
+            <Space direction="vertical" size="small">
+              <Text type="secondary">Oluşturulma: {formatDate(mapData.createdDate)}</Text>
+              <Text type="secondary">Güncellenme: {formatDate(mapData.updatedDate)}</Text>
+            </Space>
+          </Col>
+        </Row>
+        <Divider style={{ margin: '12px 0' }} />
+      </div>
   );
-}
+};
 
-export default MindMap;
+// -- (C) Ana Component ---------------------------------------------------
+const MindMapPage = () => {
+  // query parametreden mapId'yi al
+  const [searchParams] = useSearchParams();
+  const mapId = searchParams.get('mapId');
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [mindMapData, setMindMapData] = useState(null);
+
+  // React Flow state yönetimi
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+  // (1) `nodeTypes`'ı componentin her render'ında yeniden oluşturmamak için
+  //     ya fonksiyonun dışına taşıyın ya da useMemo ile sarın:
+  const nodeTypes = useMemo(() => ({
+    customNode: CustomNode
+  }), []);
+
+  // (2) Mind map JSON'undan ReactFlow formatına dönüştürme fonksiyonu
+  const convertMindMapToReactFlow = useCallback(
+      (node, nodesAcc = [], edgesAcc = [], parentId = null) => {
+        if (!node) return { nodes: nodesAcc, edges: edgesAcc };
+
+        const { id, text, position, children = [], color, bgColor, fontSize } = node;
+
+        const newNode = {
+          id,
+          position: {
+            x: position?.left || 0,
+            y: position?.top || 0
+          },
+          data: {
+            label: text,
+            color,
+            bgColor,
+            fontSize
+          },
+          type: 'customNode'
+        };
+
+        nodesAcc.push(newNode);
+
+        // Kenar (edge) oluştur, eğer bir parent varsa
+        if (parentId) {
+          edgesAcc.push({
+            id: `edge-${parentId}-${id}`,
+            source: parentId,
+            target: id,
+            type: 'smoothstep',
+            animated: false,
+            style: { stroke: '#555' }
+          });
+        }
+
+        // Alt çocukları (children) dolaşarak ekle
+        if (Array.isArray(children) && children.length > 0) {
+          children.forEach((child) => {
+            convertMindMapToReactFlow(child, nodesAcc, edgesAcc, id);
+          });
+        }
+
+        return { nodes: nodesAcc, edges: edgesAcc };
+      },
+      []
+  );
+
+  // (3) API'den mind map verisi alma
+  const fetchMindMap = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      if (!mapId) {
+        setError('Harita ID’si yok veya geçersiz (mapId parametresi).');
+        return;
+      }
+
+      // mindMapService'den veriyi çek
+      // Sizin belirttiğiniz gibi response yapısı: response.data.mindMap
+      const response = await mindMapService.getMindMapById(mapId);
+
+      if (!response || !response.data?.mindMap) {
+        throw new Error('Harita bulunamadı veya geçersiz yanıt.');
+      }
+
+      const mindMap = response.data.mindMap;
+
+      // content alanını parse edelim
+      const parsedContent = JSON.parse(mindMap.content);
+
+      // Header'da göstereceğimiz veriler
+      setMindMapData({
+        ...parsedContent,
+        name: mindMap.name,
+        // API’den creationDate / modifiedDate vs. alıyorsanız bunları set edin
+        createdDate: mindMap.creationDate,
+        updatedDate: mindMap.modifiedDate,
+        // "isPublicMap" varsa isPublic = mindMap.isPublicMap
+        isPublic: mindMap.isPublicMap,
+        // Farklı alan varsa bunları da ayarlayın
+        isDownloadable: mindMap.isDownloadable ?? false
+      });
+
+      // React Flow'a uygun hale getir
+      if (parsedContent && parsedContent.root) {
+        const { nodes, edges } = convertMindMapToReactFlow(parsedContent.root);
+        setNodes(nodes);
+        setEdges(edges);
+      } else {
+        setError('Harita verisi geçersiz veya boş.');
+      }
+    } catch (err) {
+      console.error('Mind map yükleme hatası:', err);
+      setError(err.message || 'Harita yüklenirken bir hata oluştu');
+    } finally {
+      setLoading(false);
+    }
+  }, [mapId, convertMindMapToReactFlow, setNodes, setEdges]);
+
+  // (4) component mount veya mapId değiştiğinde fetchMindMap çalıştır
+  useEffect(() => {
+    if (mapId) {
+      fetchMindMap();
+    } else {
+      setLoading(false); // mapId yoksa, boş state
+    }
+  }, [mapId, fetchMindMap]);
+
+  // Geri butonuna basınca ana sayfaya yönlendirelim
+  const handleBack = () => {
+    navigate('/');
+  };
+
+  // (5) Hata durumu
+  if (error && !loading) {
+    return (
+        <div className="mind-map-page">
+          <div className="map-error-container">
+            <Empty description={<span>{error}</span>} image={Empty.PRESENTED_IMAGE_SIMPLE}>
+              <Button type="primary" onClick={handleBack}>
+                Ana Sayfaya Dön
+              </Button>
+            </Empty>
+          </div>
+        </div>
+    );
+  }
+
+  // (6) Ana render, Spin’i nested şekilde kullanırsak tip uyarısı kaybolur.
+  return (
+      <div className="mind-map-page">
+        <Spin spinning={loading} tip="Harita yükleniyor..." style={{ minHeight: '400px' }}>
+          {!loading && (
+              <>
+                <MapHeader mapData={mindMapData} onBack={handleBack} />
+                <div className="mind-map-container">
+                  {nodes.length > 0 ? (
+                      <ReactFlow
+                          nodes={nodes}
+                          edges={edges}
+                          onNodesChange={onNodesChange}
+                          onEdgesChange={onEdgesChange}
+                          nodeTypes={nodeTypes}
+                          fitView
+                          fitViewOptions={{ padding: 0.2 }}
+                          minZoom={0.1}
+                          maxZoom={2}
+                          attributionPosition="bottom-right"
+                      >
+                        <Background color="#aaa" gap={16} />
+                        <Controls />
+                        <MiniMap
+                            nodeStrokeColor={(n) => n.data?.bgColor || '#eee'}
+                            nodeColor={(n) => n.data?.bgColor || '#fff'}
+                            nodeBorderRadius={2}
+                        />
+                      </ReactFlow>
+                  ) : (
+                      <div className="map-empty-container">
+                        <Empty description="Haritada görüntülenecek düğüm yok" />
+                      </div>
+                  )}
+                </div>
+              </>
+          )}
+        </Spin>
+      </div>
+  );
+};
+
+export default MindMapPage;

@@ -62,6 +62,36 @@ const MapCards = ({
         </Menu>
     );
 
+    // Create menu items from the Menu
+    const getMapCardMenuItems = (record) => [
+        {
+            key: "1",
+            icon: <EditOutlined />,
+            label: t("editNameMsgTxt"),
+            onClick: () => {
+                Modal.confirm({
+                    title: t("editNameMsgTxt"),
+                    content: (
+                        <Input 
+                            defaultValue={record.name}
+                            id="newMapName" 
+                        />
+                    ),
+                    onOk: () => {
+                        const newName = document.getElementById('newMapName').value;
+                        updateMapName(record, newName);
+                    }
+                });
+            }
+        },
+        {
+            key: "2",
+            icon: <DeleteOutlined />,
+            label: t("deleteMsgTxt"),
+            onClick: () => deleteRow(record.id)
+        }
+    ];
+
     return (
         <Row gutter={[16, 16]}>
             {/* Kullanıcı haritaları */}
@@ -71,7 +101,7 @@ const MapCards = ({
                         hoverable 
                         className="map-card user-map-card"
                         actions={[
-                            <Dropdown overlay={mapCardMenu(map)} trigger={['click']}>
+                            <Dropdown menu={{ items: getMapCardMenuItems(map) }} trigger={['click']}>
                                 <MoreOutlined key="more" />
                             </Dropdown>
                         ]}
