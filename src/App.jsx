@@ -3,17 +3,20 @@ import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider } from 'antd';
 import AppRoutes from "./routes";
 import { LanguageProvider } from "./context/languageContext";
+import { AuthProvider } from "./context/authContext";
 import './i18n/i18n';
 
 const App = () => {
   return (
-    <ConfigProvider>
-      <LanguageProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </LanguageProvider>
-    </ConfigProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <ConfigProvider>
+          <LanguageProvider>
+            <AppRoutes />
+          </LanguageProvider>
+        </ConfigProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 

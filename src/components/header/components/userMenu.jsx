@@ -11,14 +11,15 @@ import ChatGptIcon from "@/styles/img/gpt-icon.png";
 import VerifiedIcon from "@/styles/img/verified-icon.webp";
 import PasswordIcon from "@/styles/img/password-icon.webp";
 import SubsrictionIcon from "@/styles/img/subs-package.png";
-import accountService from "../../../services/api/account";
+import { useAuth } from "../../../context/authContext";
 
 const UserMenu = ({ isUserMenuOpen, isAccountMenuOpen, setIsAccountMenuOpen }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { logout } = useAuth();
 
-  const handleLogout = () => {
-    accountService.logout();
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (

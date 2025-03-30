@@ -4,12 +4,12 @@ import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from '@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Utils from '../../utils';
-import accountService from '../../services/api/account';
 import loginRegisterLogo from '../../styles/img/foramind_logo.png';
 import googleBtnImage from '../../styles/img/google-btn-image.png';
 import microsoftBtnImage from '@/styles/img/microsoft-btn.svg';
 import loginRegisterBg from '../../styles/img/form-bg.png';
 import LanguageSelector from '../../components/languageSelector';
+import { useAuth } from '../../context/authContext';
 import './login.css';
 
 const { Text } = Typography;
@@ -18,6 +18,7 @@ const Login = () => {
     const [form] = Form.useForm();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -53,66 +54,6 @@ const Login = () => {
         }
     }, [t, form]);
 
-    const getUserInformation = async () => {
-        try {
-            console.log("Getting user information...");
-            console.log("Token:", localStorage.getItem("token"));
-            console.log("AccessToken:", localStorage.getItem("accessToken"));
-            
-            // Log the authorization header that will be sent
-            const authHeader = `Bearer ${localStorage.getItem("token") || localStorage.getItem("accessToken") || ""}`;
-            console.log("Authorization header:", authHeader);
-            
-            // Explicitly set headers
-            const headers = {
-                Authorization: authHeader
-            };
-            
-            const response = await accountService.getDetail();
-            console.log("User detail response:", response);
-            
-            if (response.error) {
-                console.error("Error fetching user details:", response.error);
-                message.error(t("loginErrorMsgTxt"));
-                return;
-            }
-            
-            if (response.data && response.data.user) {
-                // Store user and company information in localStorage
-                localStorage.setItem("loginType", response.data.user.loginType);
-                localStorage.setItem("userInformation", JSON.stringify(response.data.user));
-                
-                if (response.data.company) {
-                    localStorage.setItem("userCompanyInformation", JSON.stringify(response.data.company));
-                }
-                
-                if (response.data.companySubscription) {
-                    localStorage.setItem("c65s1", JSON.stringify(response.data.companySubscription));
-                }
-                
-                // Handle user role IDs
-                let userRoleIdList = JSON.parse(localStorage.getItem("userRoleIdList")) || [];
-                userRoleIdList.push(response.data.user.userTypeId);
-                localStorage.setItem("userRoleIdList", JSON.stringify(userRoleIdList));
-                
-                // Navigate to mind map list
-                navigate('/mind-map-list');
-            } else {
-                console.error("No user data in response");
-                message.error(t("loginErrorMsgTxt"));
-            }
-        } catch (error) {
-            console.error("Error fetching user information:", error);
-            if (error.response) {
-                console.error("Error status:", error.response.status);
-                console.error("Error data:", error.response.data);
-                console.error("Error headers:", error.response.headers);
-            }
-            message.error(t("loginErrorMsgTxt"));
-        } finally {
-        }
-    };
-
     const handleSubmit = async (values) => {
         const { email, password, rememberMe } = values;
 
@@ -126,24 +67,13 @@ const Login = () => {
         
         setLoading(true);
         try {
-            const response = await accountService.login({
+            const result = await login({
                 email,
                 password
             });
             
-            if (response.error) {
+            if (!result.success) {
                 message.error(t("loginErrorMsgTxt"));
-            } else if (response.data) {
-                // Store token with both names for compatibility
-                const token = response.data.token;
-                localStorage.setItem("token", token);
-                localStorage.setItem("accessToken", token); // Also set accessToken for compatibility
-                localStorage.setItem("refreshToken", response.data.refreshToken);
-                
-                console.log("Login successful, token:", token);
-                
-                // Get user information after successful login
-                await getUserInformation();
             }
         } catch (error) {
             console.error('Login error:', error);
