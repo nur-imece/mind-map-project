@@ -53,6 +53,22 @@
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   z-index: 5;
+  
+  .edit-button {
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    
+    &:hover {
+      opacity: 1;
+      color: #1890ff;
+      background-color: rgba(24, 144, 255, 0.1);
+    }
+  }
+  
+  .ant-typography {
+    display: inline-flex;
+    align-items: center;
+  }
 }
 
 .mind-map-container {
@@ -107,21 +123,31 @@
 
 /* Custom node styling */
 .custom-node {
-  padding: 10px 15px;
-  border-radius: 5px;
-  min-width: 150px;
-  max-width: 300px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  min-width: 160px;
+  max-width: 320px;
+  min-height: 40px;
   border: 1px solid #ddd;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
   
   &.selected {
     border-width: 2px;
+    box-shadow: 0 4px 8px rgba(24, 144, 255, 0.15);
+    transform: translateY(-1px);
+  }
+  
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .react-flow__handle {
     width: 8px;
     height: 8px;
     background-color: #555;
+    opacity: 0; /* Hide handles by default */
+    transition: opacity 0.2s ease;
     
     &.react-flow__handle-left {
       left: -4px;
@@ -130,6 +156,52 @@
     &.react-flow__handle-right {
       right: -4px;
     }
+  }
+  
+  &:hover .react-flow__handle, &.selected .react-flow__handle {
+    opacity: 0.7; /* Show handles on hover */
+  }
+}
+
+/* Custom styling for edges */
+.react-flow__edge {
+  cursor: pointer;
+  
+  &.selected {
+    .react-flow__edge-path {
+      stroke: #4096ff !important;
+      stroke-width: 3px !important;
+    }
+  }
+  
+  &:hover .react-flow__edge-path {
+    stroke-opacity: 1;
+    filter: drop-shadow(0 0 3px rgba(24, 144, 255, 0.5));
+  }
+}
+
+/* Edge type styles */
+.react-flow__edge-path {
+  transition: stroke 0.3s ease, stroke-width 0.3s ease, stroke-dasharray 0.3s ease;
+}
+
+/* Custom tooltip for edge type indicator */
+.edge-type-tooltip {
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  
+  .edge-type-name {
+    font-weight: bold;
+    margin-bottom: 2px;
+  }
+  
+  .edge-type-description {
+    color: rgba(0, 0, 0, 0.65);
   }
 }
 
