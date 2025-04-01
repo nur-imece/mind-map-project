@@ -103,7 +103,9 @@
 
 /* Override ReactFlow default styles */
 .react-flow__node.selected {
-  box-shadow: 0 0 0 2px #4096ff;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
@@ -219,4 +221,18 @@
   i, em {
     font-style: italic;
   }
+}
+
+/* Custom animation for selected nodes */
+.react-flow__node.selected .custom-node {
+  animation: node-pulse 1.8s ease-in-out infinite !important;
+  z-index: 10 !important;
+  border-width: 2px !important;
+  outline: none !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+@keyframes node-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02) translate(0, -2px); }
 }
