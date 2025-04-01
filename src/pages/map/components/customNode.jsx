@@ -1,9 +1,8 @@
 import React, { memo, useState, useCallback } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
-import { Button, Dropdown } from 'antd';
+import { Button, Dropdown, Input } from 'antd';
 import {
     PlusOutlined,
-
     PictureOutlined,
     FontSizeOutlined,
     BranchesOutlined
@@ -20,10 +19,61 @@ import './customNode.scss';
  */
 const CustomNode = memo(({ data, isConnectable, selected, id }) => {
     const [visibleDropdown, setVisibleDropdown] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editableText, setEditableText] = useState('');
     const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
     const handleAddClick = (position) => {
         setVisibleDropdown(position);
+    };
+
+    // Parse HTML content to get plain text
+    const getPlainTextFromHTML = (html) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html || '';
+        return tempDiv.textContent || tempDiv.innerText || '';
+    };
+
+    // Enable text editing
+    const startEditing = () => {
+        // Extract plain text from HTML content
+        const plainText = getPlainTextFromHTML(data.label);
+        setEditableText(plainText);
+        setIsEditing(true);
+    };
+
+    // Save the edited text
+    const saveText = () => {
+        const nodes = getNodes();
+        const updatedNodes = nodes.map(node => {
+            if (node.id === id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        label: editableText
+                    }
+                };
+            }
+            return node;
+        });
+        setNodes(updatedNodes);
+        setIsEditing(false);
+    };
+
+    // Handle text change
+    const handleTextChange = (e) => {
+        setEditableText(e.target.value);
+    };
+
+    // Handle keyboard events (Enter to save, Escape to cancel)
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            saveText();
+        } else if (e.key === 'Escape') {
+            setIsEditing(false);
+        }
     };
 
     // Ebeveyne en yakın boşluğu bularak yeni node konumunu hesapla
@@ -32,54 +82,53 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
 // - direction === 'left'  ise parentX - 300 civarına yerleştir
 // - Sonra while döngüsüyle çakışma varsa y'yi step kadar artır (alttan alta diz)
     function findPositionWithoutOverlap(parentX, parentY, direction, allNodes) {
-        // Node'un varsayılan genişlik/yükseklik değerleri.
-        // Hem ebeveyn hem de yeni node için ~160 px kabul ediyorsanız
-        // buradaki değeri aynı şekilde kullanabilirsiniz.
+        // Node ölçümleri (ortalama genişlik / yükseklik)
         const nodeWidth = 160;
         const nodeHeight = 60;
 
-        // Ebeveynden yatayda ne kadar uzaklaşsın?
-        // (Yani, sağdaysa "parent'ın sağ kenarı + offset",
-        //  soldaysa "parent'ın sol kenarı - offset")
+        // Node'lar arasına eklemek istediğiniz "boşluk" (margin)
+        // Yatay yerleşimde kenarların üst üste binmemesi için de faydalı olur
+        const margin = 20;
+
+        // Ebeveynden uzaklaşma miktarı
+        // (sağdaysa parent'ın sağ kenarı + offset,
+        // soldaysa parent'ın sol kenarı - offset)
         const offset = 260;
 
-        // Çakışma olursa dikeyde ne kadar kaydıralım?
-        const verticalStep = 80;
+        // Eğer sağa ekliyorsak...
+        let newX = direction === 'right'
+            ? parentX + nodeWidth + offset
+            : parentX - nodeWidth - offset;
 
-        // Sağa ekliyorsak: yeni node'un sol kenarı = parentX + parentWidth + offset
-        // Sola ekliyorsak: yeni node'un sol kenarı = parentX - nodeWidth - offset
-        let newX =
-            direction === 'right'
-                ? parentX + nodeWidth + offset   // parent'ın sağ kenarı + offset
-                : parentX - nodeWidth - offset;  // parent'ın sol kenarı - offset - yeni node genişliği
-
-        // Başlangıçta, parent'la aynı Y hizasından deniyoruz
+        // Başlangıçta, parent'ın Y hizasını baz al
         let newY = parentY;
 
-        // Dikdörtgen çakışma kontrolü (basit)
+        // Çakışma kontrolü (margin dahil)
         const overlaps = (x1, y1, node2) => {
             const x2 = node2.position.x;
             const y2 = node2.position.y;
-            const w2 = node2.__width || 160;   // React Flow'da node genişliği __width'te tutulabiliyor
-            const h2 = node2.__height || 60;
+            const w2 = node2.__width || nodeWidth;
+            const h2 = node2.__height || nodeHeight;
 
-            // İki dikdörtgen üst üste biniyor mu?
-            //  (x1 < x2 + w2) && (x1 + w1 > x2) && (y1 < y2 + h2) && (y1 + h1 > y2)
+            // Şu kadar da margin ekleyelim ki node'lar biraz daha boşluklu olsun
+            const totalWidth = nodeWidth + margin;
+            const totalHeight = nodeHeight + margin;
+
+            // İki dikdörtgenin çakışıp çakışmadığını kontrol et
             return !(
-                x1 + nodeWidth < x2 ||  // yeni node tamamen solunda
-                x1 > x2 + w2 ||         // yeni node tamamen sağında
-                y1 + nodeHeight < y2 || // yeni node tamamen yukarısında
-                y1 > y2 + h2            // yeni node tamamen aşağısında
+                x1 + totalWidth < x2 ||
+                x1 > x2 + w2 + margin ||
+                y1 + totalHeight < y2 ||
+                y1 > y2 + h2 + margin
             );
         };
 
-        // Herhangi bir node (ebeveyn dahil) ile çakışma varsa,
-        // dikeyde verticalStep kadar aşağı itmeye devam et.
+        // Bir çakışma bulduğumuz sürece Y'yi step kadar aşağı al
+        const verticalStep = 80;
         while (allNodes.some((n) => overlaps(newX, newY, n))) {
             newY += verticalStep;
         }
 
-        // Sonuç pozisyon
         return { x: newX, y: newY };
     }
 
@@ -111,7 +160,26 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
         }
     };
 
-    const addNewNode = (position, nodeType = 'text', content = '') => {
+    const handleOptionClick = (action, position) => {
+        switch(action) {
+            case 'text':
+                // Add a text node with no-border styling
+                addNewNode(position, 'text', '', true);
+                break;
+            case 'node':
+                // Add a new child node
+                addNewNode(position, 'text');
+                break;
+            case 'image':
+                // Add an image node
+                addNewNode(position, 'image');
+                break;
+            default:
+                break;
+        }
+    };
+
+    const addNewNode = (position, nodeType = 'text', content = '', noBorder = false) => {
         // Get current nodes and edges
         const nodes = getNodes();
         const edges = getEdges();
@@ -124,7 +192,6 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
         const newNodeId = uuidv4();
         
         // Parent'a en yakın boşluğa göre konumu hesapla
-        // addNewNode içinde örnek:
         const newPosition = findPositionWithoutOverlap(
             currentNode.position.x,  // parentX
             currentNode.position.y,  // parentY
@@ -142,7 +209,8 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
                 color: currentNode.data.color,
                 fontSize: currentNode.data.fontSize,
                 absPos: newPosition,
-                nodeType: position // Mark as 'left' or 'right' based on where it was created
+                nodeType: position, // Mark as 'left' or 'right' based on where it was created
+                noBorder: noBorder // Add noBorder flag
             },
             type: 'customNode'
         };
@@ -185,25 +253,6 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
         setVisibleDropdown(null);
     };
 
-    const handleOptionClick = (action, position) => {
-        switch(action) {
-            case 'text':
-                // Add a text node
-                addNewNode(position, 'text');
-                break;
-            case 'node':
-                // Add a new child node
-                addNewNode(position, 'text');
-                break;
-            case 'image':
-                // Add an image node
-                addNewNode(position, 'image');
-                break;
-            default:
-                break;
-        }
-    };
-
     // Green icons style matching the reference image
     const iconStyle = { 
         fontSize: '16px',
@@ -239,16 +288,16 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
     const getNodePosition = useCallback(() => {
         const edges = getEdges();
         const incomingEdge = edges.find(edge => edge.target === id);
-        
+
         if (!incomingEdge) return 'root';
-        
+
         // Check which handle was used to create this node
-        if (incomingEdge.sourceHandle === 'sourceLeft') {
+        if (incomingEdge.sourceHandle === 'sourceLeft' || incomingEdge.sourceHandle === 'sourceBottom') {
             return 'left'; // Node is on the left side of its parent
-        } else if (incomingEdge.sourceHandle === 'sourceRight') {
+        } else if (incomingEdge.sourceHandle === 'sourceRight' || incomingEdge.sourceHandle === 'sourceTop') {
             return 'right'; // Node is on the right side of its parent
         }
-        
+
         return 'unknown';
     }, [getEdges, id]);
 
@@ -296,27 +345,58 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
 
     // Only show buttons when selected
     if (!selected) {
+        const nodeStyle = {
+            background: data.bgColor || '#FFFFFF',
+            color: data.color || '#000000',
+            fontSize: data.fontSize ? `${data.fontSize}px` : '16px',
+            borderColor: data.color,
+            padding: '10px 16px',
+            borderRadius: '8px',
+            minWidth: '160px',
+            minHeight: '40px',
+            position: 'relative',
+        };
+
+        // Apply no-border styling if specified
+        if (data.noBorder) {
+            nodeStyle.border = 'none';
+            nodeStyle.boxShadow = 'none';
+            nodeStyle.background = 'transparent';
+        }
+
         return (
             <div
-                className="custom-node"
-                style={{
-                    background: data.bgColor || '#FFFFFF',
-                    color: data.color || '#000000',
-                    fontSize: data.fontSize ? `${data.fontSize}px` : '16px',
-                    borderColor: data.color,
-                    padding: '10px 16px',
-                    borderRadius: '8px',
-                    minWidth: '160px',
-                    minHeight: '40px',
-                    position: 'relative',
-                }}
+                className={`custom-node ${data.noBorder ? 'no-border' : ''}`}
+                style={nodeStyle}
+                onDoubleClick={startEditing}
             >
                 <Handle id="targetLeft" type="target" position={Position.Left} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />
                 <Handle id="targetRight" type="target" position={Position.Right} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />
                 <Handle id="targetTop" type="target" position={Position.Top} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />
                 <Handle id="targetBottom" type="target" position={Position.Bottom} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />
 
-                <div className="html-content" dangerouslySetInnerHTML={{ __html: data.label }} />
+                {isEditing ? (
+                    <Input.TextArea
+                        autoSize
+                        value={editableText}
+                        onChange={handleTextChange}
+                        onBlur={saveText}
+                        onKeyDown={handleKeyDown}
+                        autoFocus
+                        className="no-border"
+                        style={{
+                            fontSize: data.fontSize ? `${data.fontSize}px` : '16px',
+                            color: data.color || '#000000',
+                            background: 'transparent',
+                            border: 'none',
+                            boxShadow: 'none',
+                            width: '100%',
+                            resize: 'none'
+                        }}
+                    />
+                ) : (
+                    <div className="html-content" dangerouslySetInnerHTML={{ __html: data.label }} />
+                )}
 
                 <Handle id="sourceLeft" type="source" position={Position.Left} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />
                 <Handle id="sourceRight" type="source" position={Position.Right} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />
@@ -327,29 +407,40 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
     }
 
     const nodePosition = getNodePosition();
+    console.log("nodePosition",nodePosition)
     const rootNode = nodePosition === 'root';
     const leftNode = nodePosition === 'left';
     const rightNode = nodePosition === 'right';
-    
+
     // Determine which buttons to show based on node position
     const showLeftButton = rootNode || leftNode;
     const showRightButton = rootNode || rightNode;
 
+    const nodeStyle = {
+        background: data.bgColor || '#FFFFFF',
+        color: data.color || '#000000',
+        fontSize: data.fontSize ? `${data.fontSize}px` : '16px',
+        borderColor: data.color,
+        padding: '10px 16px',
+        borderRadius: '8px',
+        minWidth: '160px',
+        minHeight: '40px',
+        position: 'relative',
+    };
+
+    // Apply no-border styling if specified
+    if (data.noBorder) {
+        nodeStyle.border = 'none';
+        nodeStyle.boxShadow = 'none';
+        nodeStyle.background = 'transparent';
+    }
+
     return (
         <>
             <div
-                className="custom-node selected"
-                style={{
-                    background: data.bgColor || '#FFFFFF',
-                    color: data.color || '#000000',
-                    fontSize: data.fontSize ? `${data.fontSize}px` : '16px',
-                    borderColor: data.color,
-                    padding: '10px 16px',
-                    borderRadius: '8px',
-                    minWidth: '160px',
-                    minHeight: '40px',
-                    position: 'relative',
-                }}
+                className={`custom-node selected ${data.noBorder ? 'no-border' : ''}`}
+                style={nodeStyle}
+                onDoubleClick={startEditing}
             >
                 {/* TARGET handle'lar (4 yön) - invisible but functional */}
                 <Handle id="targetLeft" type="target" position={Position.Left} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />
@@ -358,7 +449,28 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
                 <Handle id="targetBottom" type="target" position={Position.Bottom} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />
 
                 {/* İçerik */}
-                <div className="html-content" dangerouslySetInnerHTML={{ __html: data.label }} />
+                {isEditing ? (
+                    <Input.TextArea
+                        autoSize
+                        value={editableText}
+                        onChange={handleTextChange}
+                        onBlur={saveText}
+                        onKeyDown={handleKeyDown}
+                        autoFocus
+                        className="no-border"
+                        style={{
+                            fontSize: data.fontSize ? `${data.fontSize}px` : '16px',
+                            color: data.color || '#000000',
+                            background: 'transparent',
+                            border: 'none',
+                            boxShadow: 'none',
+                            width: '100%',
+                            resize: 'none'
+                        }}
+                    />
+                ) : (
+                    <div className="html-content" dangerouslySetInnerHTML={{ __html: data.label }} />
+                )}
 
                 {/* SOURCE handle'lar (4 yön) - invisible but functional */}
                 <Handle id="sourceLeft" type="source" position={Position.Left} isConnectable={isConnectable} className="node-handle hidden-handle" style={{ opacity: 0 }} />

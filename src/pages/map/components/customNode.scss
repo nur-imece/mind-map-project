@@ -81,3 +81,44 @@
     }
   }
 }
+
+// Input textarea için sınırsız stil
+.no-border {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  
+  &:focus, &:hover, &:active {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    outline: none !important;
+  }
+  
+  // Ant Design özel sınıflarını da ezmek için
+  &.ant-input, &.ant-input-textarea, &.ant-input-affix-wrapper {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    
+    &:focus, &:hover, &:active {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      outline: none !important;
+    }
+    
+    .ant-input {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      
+      &:focus, &:hover, &:active {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        outline: none !important;
+      }
+    }
+  }
+}
