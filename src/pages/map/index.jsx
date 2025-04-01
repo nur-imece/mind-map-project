@@ -259,6 +259,12 @@ const MindMapPage = () => {
     });
   }, [nodes, mindMapData]);
 
+  // Handle node click to ensure selection works
+  const handleNodeClick = useCallback((event, node) => {
+    console.log('Node clicked:', node);
+    // Selection is handled by ReactFlow automatically
+  }, []);
+
   // Handle name change from header
   const handleNameChange = useCallback((newName) => {
     if (newName && newName.trim() !== '' && newName !== mindMapData?.name) {
@@ -376,6 +382,7 @@ const MindMapPage = () => {
                   onNodesChange={onNodesChange}
                   onEdgesChange={onEdgesChange}
                   onEdgeClick={handleEdgeClick}
+                  onNodeClick={handleNodeClick}
                   nodeTypes={nodeTypes}
                   edgeTypes={edgeTypes}
                   edgesUpdatable={true}

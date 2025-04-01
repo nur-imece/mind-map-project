@@ -20,20 +20,6 @@ export const EDGE_STYLES = [
     style: { strokeWidth: 2, strokeDasharray: '1,3' },
     name: 'Noktalı Çizgi',
     description: 'Bilgi notu, açıklama ilişkisi için'
-  },
-  // Eğri (Curved / Bezier Line)
-  {
-    type: 'bezier',
-    style: { strokeWidth: 2 },
-    name: 'Eğri',
-    description: 'Estetik amaçlı, kompleks yapılarda çakışmayı önlemek için'
-  },
-  // Yay Çizgi (Arc)
-  {
-    type: 'smoothstep',
-    style: { strokeWidth: 2 },
-    name: 'Yay Çizgi',
-    description: 'Aynı seviyedeki node\'lar arasında ilişki göstermek için'
   }
 ];
 
