@@ -1,11 +1,9 @@
-// CustomNode.jsx
 import React, { memo, useState, useCallback } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { Button, Dropdown } from 'antd';
 import {
     PlusOutlined,
-    FileTextOutlined,
-    AppstoreOutlined,
+
     PictureOutlined,
     FontSizeOutlined,
     BranchesOutlined

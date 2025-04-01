@@ -1,0 +1,83 @@
+// Custom Node Styles
+.custom-node-dropdown {
+  // Dropdown menüsü için şeffaf arka plan ayarları
+  :global(.ant-dropdown .ant-dropdown-menu) {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  // Menü elemanları için
+  :global(.ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item) {
+    background-color: white !important;
+    padding: 4px !important;
+    margin: 3px !important;
+    border: 1.5px solid #52c41a !important;
+    border-radius: 50% !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    
+    &:hover {
+      background-color: white !important;
+      border-color: #52c41a !important;
+      transform: scale(1.05) !important;
+      transition: all 0.2s ease !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+    }
+  }
+}
+
+// Ant Design dropdown menüsü için özelleştirmeler (custom-node-dropdown-menu class'ı ile)
+.custom-node-dropdown-menu {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  
+  .ant-dropdown-menu {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding: 3px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    
+    .ant-dropdown-menu-item {
+      background-color: white !important;
+      border: 1.5px solid #52c41a !important;
+      border-radius: 50% !important;
+      width: 28px !important;
+      height: 28px !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      padding: 4px !important;
+      margin: 3px !important;
+      
+      &:hover {
+        background-color: white !important;
+        border-color: #52c41a !important;
+        transform: scale(1.05) !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      // Menü açıldığında SVG simgeler için hover efekti
+      .node-menu-icon {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        font-size: 16px !important;
+        width: 100% !important;
+        height: 100% !important;
+        color: #52c41a !important;
+        
+        &:hover {
+          transform: scale(1.1);
+          transition: transform 0.2s ease;
+        }
+      }
+    }
+  }
+}
