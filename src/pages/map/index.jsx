@@ -45,11 +45,11 @@ const MindMapPage = () => {
     customNode: CustomNode
   }), []);
 
+  // Edge type definitions
   const edgeTypes = useMemo(() => ({
     default: CustomEdge,
-    bezier: CustomEdge,
     straight: CustomEdge,
-    step: CustomEdge,
+    bezier: CustomEdge,
     smoothstep: CustomEdge
   }), []);
   
@@ -207,18 +207,31 @@ const MindMapPage = () => {
 
   // Handle edge click to change edge style
   const handleEdgeClick = useCallback((event, edge) => {
+    console.log('Edge clicked:', edge);
+    
     const edgeId = edge?.id;
     if (!edgeId) return;
     
     setEdges((eds) => {
       const updatedEdges = eds.map((e) => {
         if (e.id === edgeId) {
-          const nextStyle = getNextEdgeStyle(e.type, e.style);
+          // Mevcut edge'in rengini sakla
+          const currentColor = e.style.stroke;
           
+          // Bir sonraki stili al
+          const nextStyle = getNextEdgeStyle(e.type, {
+            ...e.style,
+            stroke: undefined // Renk karşılaştırmasını etkilememesi için stroke'u çıkar
+          });
+          
+          // Yeni edge'i oluştur, rengi koru
           const updatedEdge = {
             ...e,
             type: nextStyle.type,
-            style: nextStyle.style,
+            style: {
+              ...nextStyle.style,
+              stroke: currentColor // Parent node'un rengini koru
+            },
             data: {
               ...e.data,
               styleName: nextStyle.name,
@@ -352,6 +365,8 @@ const MindMapPage = () => {
               mapData={mindMapData} 
               onBack={handleBack} 
               onNameChange={handleNameChange}
+              onSave={saveMindMapChanges}
+              saveInProgress={saveInProgress}
             />
             <div className="mind-map-container" style={{ width: '100%', height: '80vh' }}>
               {nodes.length > 0 ? (
@@ -360,14 +375,15 @@ const MindMapPage = () => {
                   edges={edges}
                   onNodesChange={onNodesChange}
                   onEdgesChange={onEdgesChange}
+                  onEdgeClick={handleEdgeClick}
                   nodeTypes={nodeTypes}
                   edgeTypes={edgeTypes}
-                  onEdgeClick={handleEdgeClick}
+                  edgesUpdatable={true}
+                  edgesFocusable={true}
+                  selectNodesOnDrag={false}
+                  elementsSelectable={true}
                   fitView
-                  fitViewOptions={{ padding: 0.2 }}
-                  minZoom={0.1}
-                  maxZoom={2}
-                  attributionPosition="bottom-right"
+                  attributionPosition="bottom-left"
                 >
                   <Background color="#aaa" gap={16} />
                   <Controls />

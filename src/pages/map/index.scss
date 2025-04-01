@@ -165,11 +165,11 @@
 
 /* Custom styling for edges */
 .react-flow__edge {
-  cursor: pointer;
+  cursor: pointer !important;
+  z-index: 10 !important;
   
   &.selected {
     .react-flow__edge-path {
-      stroke: #4096ff !important;
       stroke-width: 3px !important;
     }
   }
@@ -180,9 +180,11 @@
   }
 }
 
-/* Edge type styles */
+/* Improve edge clickability */
 .react-flow__edge-path {
   transition: stroke 0.3s ease, stroke-width 0.3s ease, stroke-dasharray 0.3s ease;
+  cursor: pointer !important;
+  pointer-events: all !important;
 }
 
 /* Custom tooltip for edge type indicator */
