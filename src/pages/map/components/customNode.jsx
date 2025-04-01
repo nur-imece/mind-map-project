@@ -2,8 +2,16 @@
 import React, { memo, useState, useCallback } from 'react';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { Button, Dropdown } from 'antd';
-import { PlusOutlined, FileTextOutlined, AppstoreOutlined, PictureOutlined } from '@ant-design/icons';
+import {
+    PlusOutlined,
+    FileTextOutlined,
+    AppstoreOutlined,
+    PictureOutlined,
+    FontSizeOutlined,
+    BranchesOutlined
+} from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
+import './customNode.scss';
 
 /**
  * side: 'root'   => 4 tane source handle (top/right/bottom/left)
@@ -77,23 +85,6 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
         return { x: newX, y: newY };
     }
 
-
-    // Node'un tüm çocuklarını bul (bu fonksiyonu koruyoruz, gerekebilir)
-    const getChildNodes = (nodeId) => {
-        const edges = getEdges();
-        const childEdges = edges.filter(edge => edge.source === nodeId);
-        return childEdges.map(edge => edge.target);
-    };
-
-    // Belirli bir yöndeki çocukları bul (sol veya sağ)
-    const getDirectionalChildren = (nodeId, direction) => {
-        const edges = getEdges();
-        const sourceHandle = direction === 'right' ? 'sourceRight' : 'sourceLeft';
-        
-        return edges
-            .filter(edge => edge.source === nodeId && edge.sourceHandle === sourceHandle)
-            .map(edge => edge.target);
-    };
 
     // Bağlantı için en uygun handle'ları belirle
     const determineHandles = (sourcePos, targetPos) => {
@@ -216,26 +207,30 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
     };
 
     // Green icons style matching the reference image
-    const iconStyle = { fontSize: '24px', color: '#52c41a' };
+    const iconStyle = { 
+        fontSize: '16px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    };
 
     const dropdownItems = [
         {
             key: 'text',
-            label: <FileTextOutlined style={iconStyle} />,
+            label: <FontSizeOutlined className="node-menu-icon" style={iconStyle} />,
             onClick: () => handleOptionClick('text', visibleDropdown),
         },
         {
             key: 'node',
-            label: <AppstoreOutlined style={iconStyle} />,
+            label: <BranchesOutlined className="node-menu-icon" style={iconStyle} />,
             onClick: () => handleOptionClick('node', visibleDropdown),
         },
         {
             key: 'image',
-            label: <PictureOutlined style={iconStyle} />,
+            label: <PictureOutlined className="node-menu-icon" style={iconStyle} />,
             onClick: () => handleOptionClick('image', visibleDropdown),
         },
     ];
-
     // Check if this is a root node (no incoming edges)
     const isRootNode = useCallback(() => {
         const edges = getEdges();
@@ -258,6 +253,48 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
         
         return 'unknown';
     }, [getEdges, id]);
+
+    // Menünün arka planını şeffaf yapacak stiller
+    const transparentMenuStyle = {
+        boxShadow: 'none',
+        background: 'transparent',
+    };
+
+    // Dropdown overlay stilleri
+    const dropdownOverlayStyle = {
+        background: 'transparent',
+        boxShadow: 'none'
+    };
+
+    // Dropdown menu stilini özelleştirme
+    const dropdownProps = {
+        menu: { items: dropdownItems },
+        trigger: ['click'],
+        overlayStyle: {
+            background: 'transparent',
+            boxShadow: 'none',
+            minWidth: 'auto',
+            padding: 0
+        },
+        overlayClassName: 'custom-node-dropdown-menu',
+        dropdownRender: (menu) => (
+            <div style={{
+                background: 'transparent',
+                boxShadow: 'none',
+                minWidth: 'auto',
+                borderRadius: '50%'
+            }}>
+                {React.cloneElement(menu, {
+                    style: {
+                        background: 'transparent',
+                        boxShadow: 'none',
+                        padding: 0,
+                        borderRadius: '8px'
+                    }
+                })}
+            </div>
+        )
+    };
 
     // Only show buttons when selected
     if (!selected) {
@@ -345,15 +382,11 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
                     }}
                 >
                     <Dropdown
-                        menu={{ items: dropdownItems }}
-                        placement="leftTop"
+                        {...dropdownProps}
+                        placement="leftTop" 
                         open={visibleDropdown === 'left'}
                         onOpenChange={(open) => !open && setVisibleDropdown(null)}
-                        trigger={['click']}
-                        overlayStyle={{ 
-                            background: 'transparent',
-                            boxShadow: 'none'
-                        }}
+                        className="custom-node-dropdown"
                     >
                         <Button
                             type="primary" 
@@ -385,15 +418,11 @@ const CustomNode = memo(({ data, isConnectable, selected, id }) => {
                     }}
                 >
                     <Dropdown
-                        menu={{ items: dropdownItems }}
+                        {...dropdownProps}
                         placement="rightTop"
                         open={visibleDropdown === 'right'}
                         onOpenChange={(open) => !open && setVisibleDropdown(null)}
-                        trigger={['click']}
-                        overlayStyle={{ 
-                            background: 'transparent',
-                            boxShadow: 'none'
-                        }}
+                        className="custom-node-dropdown"
                     >
                         <Button
                             type="primary"
