@@ -1,0 +1,119 @@
+// Change Password Page Styles
+.mindmap-table {
+  padding: 20px 0;
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 80px); // Adjust for header height
+
+  .change-password-form {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+    margin-top: 20px;
+    
+    h4 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 600;
+      color: #333;
+      font-size: 24px;
+    }
+    
+    .form-wrapper {
+      width: 100%;
+    }
+    
+    // Form inputs
+    .ant-input-affix-wrapper {
+      border-radius: 10px;
+      height: 50px;
+      font-size: 16px;
+      transition: all 0.3s;
+      
+      &:hover {
+        border-color: #faad14;
+      }
+      
+      &:focus,
+      &-focused {
+        border-color: #faad14;
+        box-shadow: 0 0 0 2px rgba(250, 173, 20, 0.2);
+      }
+      
+      .ant-input-prefix {
+        color: #999;
+        margin-right: 10px;
+        font-size: 18px;
+      }
+    }
+    
+    .ant-form-item {
+      margin-bottom: 24px;
+    }
+    
+    // Password input specific styles
+    .ant-input-password {
+      .ant-input {
+        height: 30px; // Adjust for inner input
+        font-size: 16px;
+      }
+      
+      .ant-input-suffix {
+        color: #999;
+        font-size: 16px;
+      }
+    }
+    
+    // Submit button
+    .yellow-button {
+      background-color: #faad14;
+      border-color: #faad14;
+      color: white;
+      border-radius: 10px;
+      height: 50px;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 0 30px;
+      transition: all 0.3s;
+      
+      &:hover,
+      &:focus {
+        background-color: #ffc53d;
+        border-color: #ffc53d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(250, 173, 20, 0.3);
+      }
+      
+      &:active {
+        background-color: #d48806;
+        border-color: #d48806;
+        transform: translateY(0);
+      }
+    }
+    
+    .float-right {
+      float: right;
+    }
+    
+    // Error messages
+    .ant-form-item-explain-error {
+      font-size: 14px;
+      margin-top: 6px;
+      color: #ff4d4f;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .mindmap-table .change-password-form {
+    padding: 20px;
+    margin: 10px;
+  }
+}
+
+.form-centered {
+  width: 700px;
+  margin: 0 auto;
+  max-width: 90%;
+} 

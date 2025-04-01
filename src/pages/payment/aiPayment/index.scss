@@ -1,0 +1,268 @@
+/* Payment Container */
+.payment-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.payment-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Payment Header */
+.payment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+
+  .shopping-icon {
+    font-size: 24px;
+    color: #4ad7d1;
+    margin-right: 12px;
+  }
+
+  h3 {
+    margin: 0;
+    color: #333;
+    font-weight: 500;
+  }
+}
+
+/* Form Styles */
+.payment-form {
+  margin-bottom: 20px;
+}
+
+.form-section, .package-section {
+  padding: 16px;
+  height: 100%;
+}
+
+.section-title {
+  margin-bottom: 16px !important;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-input {
+  border-radius: 20px !important;
+  height: 40px;
+  background-color: #f5f5f5;
+  border: none;
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(74, 215, 209, 0.2);
+  }
+}
+
+.form-select {
+  width: 100%;
+  border-radius: 20px !important;
+
+  .ant-select-selector {
+    height: 40px !important;
+    background-color: #f5f5f5 !important;
+    border: none !important;
+    border-radius: 20px !important;
+    padding-top: 4px !important;
+  }
+}
+
+/* Agreement */
+.agreement-checkbox {
+  margin-bottom: 8px;
+}
+
+.agreement-link {
+  color: #4ad7d1;
+  text-decoration: underline;
+}
+
+.agreement-text {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* Package Options */
+.package-section {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  
+  // Add scroll container
+  .package-options {
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 650px;
+    padding-right: 5px;
+    
+    // Scrollbar styling
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+      background: #aaa;
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.package-option {
+  height: auto !important;
+  width: 100%;
+  margin-bottom: 16px;
+  border: none !important;
+  background: transparent !important;
+}
+
+// Enhanced package card styling
+.package-card {
+  width: 100%;
+  text-align: center;
+  border-radius: 10px !important;
+  padding: 16px;
+  height: 100%;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.09);
+    transform: translateY(-2px);
+  }
+  
+  .ant-card-body {
+    padding: 15px;
+  }
+}
+
+.selected-package {
+  border: 2px solid #4ad7d1 !important;
+  background-color: rgba(74, 215, 209, 0.05) !important;
+  box-shadow: 0 4px 12px rgba(74, 215, 209, 0.15) !important;
+}
+
+.package-title {
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.package-price {
+  font-size: 24px;
+  color: #4ad7d1;
+  font-weight: bold;
+  margin-bottom: 12px;
+
+  .currency {
+    font-size: 18px;
+    margin-left: 2px;
+  }
+}
+
+.package-name {
+  font-size: 14px;
+  color: #666;
+}
+
+.no-packages {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+}
+
+/* Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding: 0 16px 16px;
+}
+
+.buy-button {
+  background-color: #4ad7d1 !important;
+  border-color: #4ad7d1 !important;
+  border-radius: 20px !important;
+  height: 40px;
+  padding: 0 30px;
+  font-weight: 500;
+
+  &:hover, &:focus {
+    background-color: #3bc0ba !important;
+    border-color: #3bc0ba !important;
+  }
+}
+
+/* Footer */
+.payment-footer {
+  text-align: center;
+  padding-top: 16px;
+
+  .payment-logo {
+    height: 40px;
+    margin: 0 auto;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .payment-container {
+    padding: 0 12px;
+    margin: 15px auto;
+  }
+  
+  .form-section, .package-section {
+    padding: 12px;
+  }
+  
+  .package-options {
+    max-height: 400px;
+  }
+}
+
+/* Ant Design Overrides */
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #4ad7d1 !important;
+  border-color: #4ad7d1 !important;
+}
+
+.ant-radio-button-wrapper-checked {
+  border: none !important;
+  outline: none !important;
+}
+
+.ant-radio-button-wrapper::before {
+  display: none !important;
+}
+
+/* Custom Radio Button Style for Packages */
+.ant-radio-button-wrapper {
+  height: auto !important;
+  padding: 0 !important;
+  border: none !important;
+} 

@@ -1,0 +1,197 @@
+// Contact Page Styles
+.mindmap-table {
+  padding: 20px 0;
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 80px); // Adjust for header height
+
+  .profile-form {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+    margin-top: 20px;
+    
+    h4 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 600;
+      color: #333;
+      font-size: 24px;
+    }
+    
+    // Form inputs
+    .ant-input,
+    .ant-input-affix-wrapper {
+      border-radius: 10px;
+      height: 50px;
+      font-size: 16px;
+      transition: all 0.3s;
+      
+      &:hover {
+        border-color: #faad14;
+      }
+      
+      &:focus,
+      &-focused {
+        border-color: #faad14;
+        box-shadow: 0 0 0 2px rgba(250, 173, 20, 0.2);
+      }
+    }
+    
+    .ant-form-item {
+      margin-bottom: 24px;
+    }
+    
+    // Text area
+    .ant-input-textarea {
+      .ant-input {
+        height: auto;
+        min-height: 180px;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 16px;
+        line-height: 1.8;
+      }
+    }
+    
+    // Character counter
+    #the-count {
+      float: right;
+      color: #999;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    
+    // Agreement checkbox
+    .register-checkbox {
+      display: flex;
+      align-items: flex-start;
+      font-size: 15px;
+      
+      .ant-checkbox {
+        margin-top: 2px;
+      }
+      
+      a {
+        color: #1890ff;
+        cursor: pointer;
+        font-weight: 500;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    
+    // Submit button
+    .yellow-button {
+      background-color: #faad14;
+      border-color: #faad14;
+      color: white;
+      border-radius: 10px;
+      height: 50px;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 0 30px;
+      transition: all 0.3s;
+      
+      &:hover,
+      &:focus {
+        background-color: #ffc53d;
+        border-color: #ffc53d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(250, 173, 20, 0.3);
+      }
+      
+      &:active {
+        background-color: #d48806;
+        border-color: #d48806;
+        transform: translateY(0);
+      }
+    }
+    
+    .float-right {
+      float: right;
+    }
+  }
+}
+
+// Modal styles
+.privacy-modal {
+  .ant-modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    
+    .ant-modal-header {
+      padding: 20px 24px;
+      background-color: #f5f5f5;
+      border-bottom: 1px solid #eee;
+      
+      .ant-modal-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+    
+    .ant-modal-body {
+      padding: 30px;
+      max-height: 65vh;
+      overflow-y: auto;
+      font-size: 16px;
+      line-height: 1.8;
+      
+      p {
+        margin-bottom: 20px;
+      }
+    }
+    
+    .ant-modal-footer {
+      border-top: 1px solid #eee;
+      padding: 15px 24px;
+      
+      .ant-btn-primary {
+        background-color: #faad14;
+        border-color: #faad14;
+        border-radius: 8px;
+        height: 45px;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 0 24px;
+        
+        &:hover {
+          background-color: #ffc53d;
+          border-color: #ffc53d;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(250, 173, 20, 0.3);
+        }
+      }
+    }
+  }
+}
+
+.membership-agreement {
+  max-height: none;
+  padding: 0;
+  line-height: 1.8;
+  
+  p {
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .mindmap-table .profile-form {
+    padding: 20px;
+    margin: 10px;
+  }
+}
+
+.form-centered {
+  width: 700px;
+  margin: 0 auto;
+  max-width: 90%;
+} 

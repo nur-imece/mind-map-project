@@ -1,0 +1,26 @@
+.custom-node {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+  &.selected {
+    border-color: #4096ff;
+    box-shadow: 0 0 0 2px rgba(64, 150, 255, 0.3);
+  }
+  
+  .html-content {
+    word-break: break-word;
+  }
+  
+  /* Hide the handle borders by default */
+  .react-flow__handle {
+    width: 8px;
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: none;
+    
+    &:hover {
+      background-color: #4096ff;
+    }
+  }
+} 

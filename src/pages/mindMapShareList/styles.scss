@@ -1,0 +1,286 @@
+.template-list-container {
+  .template-panel {
+    .title-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #e8e8e8;
+
+      .view-controls {
+        display: flex;
+        gap: 10px;
+        margin-right: 15px;
+
+        .view-control-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 4px;
+          color: #888;
+          transition: all 0.3s;
+
+          &:hover {
+            color: #1890ff;
+            background-color: rgba(24, 144, 255, 0.1);
+          }
+
+          &.active {
+            color: #1890ff;
+            background-color: rgba(24, 144, 255, 0.15);
+          }
+
+          .anticon {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+
+  .filter-bar {
+    margin-top: 20px;
+  }
+
+  .table-list, .table-grid {
+    display: none;
+    &.show {
+      display: block;
+    }
+  }
+
+  .grid-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+
+    .grid-item {
+      position: relative;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .fav-action {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 2;
+        color: #ccc;
+        cursor: pointer;
+        font-size: 18px;
+
+        &.active {
+          color: #faad14;
+        }
+
+        i {
+          transition: color 0.3s;
+        }
+
+        &:hover i {
+          color: #faad14;
+        }
+      }
+
+      .shared-icon {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 20px;
+        height: 20px;
+      }
+
+      img {
+        max-width: 80px;
+        margin: 15px auto;
+        display: block;
+      }
+
+      .name {
+        margin-top: 10px;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+    }
+  }
+
+  // Table styling
+  .map-table {
+    .name-fav-wrapper {
+      display: flex;
+      align-items: center;
+
+      &__item-name {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        a {
+          color: #1890ff;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        img {
+          width: 16px;
+          height: 16px;
+          margin-left: 5px;
+        }
+      }
+
+      .shared-user-name {
+        font-size: 12px;
+        color: #888;
+        margin-left: 5px;
+      }
+
+      .fav-action {
+        color: #ccc;
+        
+        &.active {
+          color: #faad14;
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .template-list-container {
+    .grid-items {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  }
+}
+
+// Mind Map Share List Styles
+.mind-map-share-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  
+  .page-title {
+    margin-bottom: 24px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .controls-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+  
+  .view-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    min-height: 400px;
+    
+    .list-view-table {
+      .ant-table-cell {
+        vertical-align: middle;
+      }
+    }
+    
+    .map-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+  
+  .filter-bar {
+    border-radius: 8px;
+    
+    .ant-input-affix-wrapper {
+      border-radius: 4px;
+    }
+    
+    .ant-select {
+      .ant-select-selector {
+        border-radius: 4px;
+      }
+    }
+  }
+  
+  // View Controls
+  .view-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    
+    .ant-btn {
+      margin-left: 8px;
+      
+      &.active {
+        background-color: #1890ff;
+        color: white;
+      }
+    }
+    
+    .favorite-filter-btn {
+      &.active {
+        background-color: #faad14;
+        color: white;
+        border-color: #faad14;
+      }
+    }
+  }
+  
+  // Empty State
+  .ant-empty {
+    margin: 40px 0;
+  }
+  
+  // Loading Spinner
+  .ant-spin {
+    margin: 40px auto;
+  }
+  
+  // Responsive adjustments
+  @media (max-width: 576px) {
+    padding: 10px;
+    
+    .view-container {
+      padding: 10px;
+    }
+    
+    .filter-bar {
+      flex-direction: column;
+      
+      > div {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+  }
+} 
