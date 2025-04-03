@@ -19,7 +19,7 @@
     justify-content: center !important;
     align-items: center !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    
+
     &:hover {
       background-color: white !important;
       border-color: #52c41a !important;
@@ -34,7 +34,7 @@
 .custom-node-dropdown-menu {
   background-color: transparent !important;
   box-shadow: none !important;
-  
+
   .ant-dropdown-menu {
     background-color: transparent !important;
     box-shadow: none !important;
@@ -42,7 +42,7 @@
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    
+
     .ant-dropdown-menu-item {
       background-color: white !important;
       border: 1.5px solid #52c41a !important;
@@ -55,14 +55,14 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
       padding: 4px !important;
       margin: 3px !important;
-      
+
       &:hover {
         background-color: white !important;
         border-color: #52c41a !important;
         transform: scale(1.05) !important;
         transition: all 0.2s ease !important;
       }
-      
+
       // Menü açıldığında SVG simgeler için hover efekti
       .node-menu-icon {
         display: flex !important;
@@ -72,7 +72,7 @@
         width: 100% !important;
         height: 100% !important;
         color: #52c41a !important;
-        
+
         &:hover {
           transform: scale(1.1);
           transition: transform 0.2s ease;
@@ -87,32 +87,32 @@
   border: none !important;
   box-shadow: none !important;
   background: transparent !important;
-  
+
   &:focus, &:hover, &:active {
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;
     outline: none !important;
   }
-  
+
   // Ant Design özel sınıflarını da ezmek için
   &.ant-input, &.ant-input-textarea, &.ant-input-affix-wrapper {
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;
-    
+
     &:focus, &:hover, &:active {
       border: none !important;
       box-shadow: none !important;
       background: transparent !important;
       outline: none !important;
     }
-    
+
     .ant-input {
       border: none !important;
       box-shadow: none !important;
       background: transparent !important;
-      
+
       &:focus, &:hover, &:active {
         border: none !important;
         box-shadow: none !important;
@@ -128,7 +128,7 @@
   border: 2px dashed #1890ff !important;
   background-color: transparent !important;
   border-radius: 4px;
-  
+
   .image-controls {
     opacity: 1 !important;
   }
@@ -139,22 +139,22 @@
   border: none !important;
   background: transparent !important;
   overflow: hidden;
-  
+
   .image-node-container {
     width: 100%;
     height: 100%;
     position: relative;
-    
+
     .node-image {
       width: auto;
-      height: auto; 
+      height: auto;
       display: block;
       max-width: 100%;
       border-radius: 4px;
       object-fit: contain;
       transition: transform 0.2s ease;
     }
-    
+
     .image-controls {
       position: absolute;
       top: 5px;
@@ -166,17 +166,17 @@
       transition: opacity 0.2s ease;
     }
   }
-  
+
   &:hover .image-controls {
     opacity: 1;
   }
-  
+
   // Resimli düğüm seçildiğinde ekleme düğmelerini daha belirgin yap
-  &.selected + div, 
+  &.selected + div,
   &.selected + div + div {
     button {
       animation: pulse 1.5s infinite;
-      
+
       @keyframes pulse {
         0% {
           box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.4);
@@ -204,7 +204,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-width: 150px;
   min-height: 100px;
-  
+
   .loading-spinner {
     width: 30px;
     height: 30px;
@@ -214,13 +214,13 @@
     animation: spinner 1s ease-in-out infinite;
     margin-bottom: 10px;
   }
-  
+
   .loading-text {
     font-size: 14px;
     color: #666;
     font-weight: 500;
   }
-  
+
   @keyframes spinner {
     to {
       transform: rotate(360deg);
@@ -232,7 +232,7 @@
 .custom-node[data-loading="true"] {
   pointer-events: none;
   opacity: 0.8;
-  
+
   .loading-node {
     margin: 0;
     padding: 10px;
@@ -254,13 +254,13 @@
   font-size: 16px;
   cursor: pointer;
   user-select: none;
-  
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.7);
     transform: scale(1.1);
     transition: all 0.2s ease;
   }
-  
+
   &.remove-image {
     font-size: 20px;
   }
@@ -269,7 +269,7 @@
 // Node genel stilleri
 .custom-node {
   transition: all 0.2s ease;
-  
+
   &.selected {
     box-shadow: 0 0 0 2px #1890ff;
   }

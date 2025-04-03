@@ -1,0 +1,88 @@
+// Image node styles
+.image-node-container {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  
+  img.node-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.2s ease;
+    transform-origin: center center;
+  }
+  
+  .image-controls {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    padding: 2px;
+    z-index: 10;
+    
+    .image-control {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      user-select: none;
+      border-radius: 2px;
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      
+      &.remove-image {
+        color: #f5222d;
+        font-size: 16px;
+      }
+      
+      &.zoom-in, &.zoom-out {
+        color: #1890ff;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Loading node styles
+.loading-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background-color: #f0f2f5;
+  border-radius: 6px;
+  min-width: 120px;
+  
+  .loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(24, 144, 255, 0.2);
+    border-left-color: #1890ff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 8px;
+  }
+  
+  .loading-text {
+    font-size: 12px;
+    color: #8c8c8c;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
