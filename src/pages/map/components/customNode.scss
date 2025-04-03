@@ -122,3 +122,155 @@
     }
   }
 }
+
+// For selected image nodes
+.custom-node.selected.image-node {
+  border: 2px dashed #1890ff !important;
+  background-color: transparent !important;
+  border-radius: 4px;
+  
+  .image-controls {
+    opacity: 1 !important;
+  }
+}
+
+.custom-node.image-node {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  overflow: hidden;
+  
+  .image-node-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    
+    .node-image {
+      width: auto;
+      height: auto; 
+      display: block;
+      max-width: 100%;
+      border-radius: 4px;
+      object-fit: contain;
+      transition: transform 0.2s ease;
+    }
+    
+    .image-controls {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      display: flex;
+      gap: 5px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+  }
+  
+  &:hover .image-controls {
+    opacity: 1;
+  }
+  
+  // Resimli düğüm seçildiğinde ekleme düğmelerini daha belirgin yap
+  &.selected + div, 
+  &.selected + div + div {
+    button {
+      animation: pulse 1.5s infinite;
+      
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 6px rgba(82, 196, 26, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(82, 196, 26, 0);
+        }
+      }
+    }
+  }
+}
+
+// Loading spinner
+.loading-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  min-height: 100px;
+  
+  .loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #1890ff;
+    animation: spinner 1s ease-in-out infinite;
+    margin-bottom: 10px;
+  }
+  
+  .loading-text {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+  }
+  
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+// Düğümler için yükleme göstergesi
+.custom-node[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.8;
+  
+  .loading-node {
+    margin: 0;
+    padding: 10px;
+    min-width: 120px;
+    min-height: 80px;
+  }
+}
+
+// Kontrol butonları
+.image-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  user-select: none;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+  }
+  
+  &.remove-image {
+    font-size: 20px;
+  }
+}
+
+// Node genel stilleri
+.custom-node {
+  transition: all 0.2s ease;
+  
+  &.selected {
+    box-shadow: 0 0 0 2px #1890ff;
+  }
+}
