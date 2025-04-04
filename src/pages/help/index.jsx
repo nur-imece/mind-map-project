@@ -8,7 +8,7 @@ import PageContainer from "../../components/PageContainer";
 import DefaultImage from "../../styles/img/foramind-video.png";
 import videoInfoService from "../../services/api/videoinfo";
 
-import "./help.css";
+import "./index.css";
 
 const Help = () => {
     const { t } = useTranslation();

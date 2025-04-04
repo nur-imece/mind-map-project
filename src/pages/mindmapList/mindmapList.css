@@ -2,7 +2,7 @@
 .mind-map-list-layout {
     display: flex;
     min-height: 100vh;
-    background: linear-gradient(135deg, #f0f5ff, #e6f7ff);
+    background-color: transparent;
 }
 
 /* Sidebar Styles */
