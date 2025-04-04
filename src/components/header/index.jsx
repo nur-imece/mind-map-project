@@ -94,12 +94,13 @@ const Header = () => {
       }
     }
 
+    // Sidebar hover etkinlikleri
     const leftMenu = document.querySelector("#leftMenu");
     if (leftMenu) {
-      leftMenu.addEventListener("mouseover", function () {
+      leftMenu.addEventListener("mouseenter", function () {
         leftMenu.classList.add("wide");
       });
-      leftMenu.addEventListener("mouseout", function () {
+      leftMenu.addEventListener("mouseleave", function () {
         leftMenu.classList.remove("wide");
       });
     }
@@ -107,10 +108,10 @@ const Header = () => {
     return () => {
       const leftMenuEl = document.querySelector("#leftMenu");
       if (leftMenuEl) {
-        leftMenuEl.removeEventListener("mouseover", function () {
+        leftMenuEl.removeEventListener("mouseenter", function () {
           leftMenuEl.classList.add("wide");
         });
-        leftMenuEl.removeEventListener("mouseout", function () {
+        leftMenuEl.removeEventListener("mouseleave", function () {
           leftMenuEl.classList.remove("wide");
         });
       }

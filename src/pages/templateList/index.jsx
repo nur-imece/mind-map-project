@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 
 import Header from "../../components/header";
+import PageContainer from "../../components/PageContainer";
 import SubHeader from "../../components/subHeader.jsx";
 import TemplateListService from "../../services/api/template";
 import MapService from "../../services/api/mindmap";
@@ -318,7 +319,7 @@ const TemplateList = () => {
     return (
         <>
             <Header />
-            <div className="template-list-container">
+            <PageContainer>
                 {isAddCategoryModal && (
                     <AddCategoryModal
                         sharedClick={sharedClick}
@@ -526,7 +527,7 @@ const TemplateList = () => {
                             </section>
                         </div>
                     )}
-
+                    
                     <Row gutter={[16, 16]}>
                         <Col xs={24} sm={12} md={8} lg={6} xl={6}>
                             <Card 
@@ -636,7 +637,7 @@ const TemplateList = () => {
                         )}
                     </Row>
                 </div>
-            </div>
+            </PageContainer>
         </>
     );
 };

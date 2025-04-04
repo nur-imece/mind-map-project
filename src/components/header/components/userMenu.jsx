@@ -5,6 +5,8 @@ import {
   SettingOutlined,
   LogoutOutlined,
   MailOutlined,
+  DownOutlined,
+  UpOutlined
 } from "@ant-design/icons";
 import ProfileIcon from "@/styles/img/profile-icon.png";
 import ChatGptIcon from "@/styles/img/gpt-icon.png";
@@ -25,144 +27,124 @@ const UserMenu = ({ isUserMenuOpen, isAccountMenuOpen, setIsAccountMenuOpen }) =
   return (
     isUserMenuOpen && (
       <div className="dropdown-menu-wrapper">
-        <div
-          className="dropdown-menu menu right-menu-toggle"
-          aria-labelledby="navbarDropdown"
-        >
-          <ul className="">
+        <div className="dropdown-menu menu right-menu-toggle">
+          <div className="arrow"></div>
+          <ul className="user-menu-list">
             {/* Account Settings */}
-            <li className="sub-menu-toggle">
-              <a
-                className="dropdown-item up-menu"
+            <li className="user-menu-item">
+              <div
+                className="menu-link"
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsAccountMenuOpen(!isAccountMenuOpen);
                 }}
               >
-                <SettingOutlined className="ant-icon" />
-                {t("accountsettingsMsgTxt")}
-                <i
-                  className="animate-icon fa fa-chevron-up arrow-up arrow-size"
-                  aria-hidden="true"
-                ></i>
-              </a>
+                <SettingOutlined className="menu-icon" />
+                <span className="menu-text">{t("accountsettingsMsgTxt")}</span>
+                {isAccountMenuOpen ? 
+                  <UpOutlined className="menu-arrow" /> : 
+                  <DownOutlined className="menu-arrow" />
+                }
+              </div>
 
-              {/* Account Settings alt menüsü */}
+              {/* Account Settings submenu */}
               {isAccountMenuOpen && (
                 <ul className="sub-menu">
-                  <li>
-                    <a
-                      className="dropdown-item"
+                  <li className="sub-menu-item">
+                    <div
+                      className="sub-menu-link"
                       onClick={() => navigate("/profile")}
                     >
-                      <i className="header-icons">
-                        <img src={ProfileIcon} alt="Profile icon" />
-                      </i>
-                      {t("profileMsgTxt")}
-                    </a>
+                      <div className="menu-icon-wrapper">
+                        <img src={ProfileIcon} alt="Profile" className="sub-menu-icon" />
+                      </div>
+                      <span className="menu-text">{t("profileMsgTxt")}</span>
+                    </div>
                   </li>
 
-                  {JSON.parse(localStorage.getItem("iFU0") || "false") ===
-                    false &&
+                  {JSON.parse(localStorage.getItem("iFU0") || "false") === false &&
                     JSON.parse(
-                      localStorage.getItem("userCompanyInformation") ||
-                      '{"id": 0}'
+                      localStorage.getItem("userCompanyInformation") || '{"id": 0}'
                     ).id === 12 &&
                     localStorage.getItem("hw8w0") !== "0" && (
-                      <li>
-                        <a
-                          className="dropdown-item"
+                      <li className="sub-menu-item">
+                        <div
+                          className="sub-menu-link"
                           onClick={() => navigate("/ai-payment")}
                         >
-                          <i className="header-icons">
-                            <img
-                              src={ChatGptIcon}
-                              alt="ChatGPT icon"
-                            />
-                          </i>
-                          {t("chatGptPayment")}
-                        </a>
+                          <div className="menu-icon-wrapper">
+                            <img src={ChatGptIcon} alt="ChatGPT" className="sub-menu-icon" />
+                          </div>
+                          <span className="menu-text">{t("chatGptPayment")}</span>
+                        </div>
                       </li>
                     )}
 
-                  {JSON.parse(localStorage.getItem("c65s1") || "null") !==
-                    null &&
+                  {JSON.parse(localStorage.getItem("c65s1") || "null") !== null &&
                     JSON.parse(
-                      localStorage.getItem("c65s1") ||
-                      '{"companyRemainingProductDays": 0}'
+                      localStorage.getItem("c65s1") || '{"companyRemainingProductDays": 0}'
                     ).companyRemainingProductDays > 0 ? null : (
                     <>
-                      <li>
-                        <a
-                          className="dropdown-item"
+                      <li className="sub-menu-item">
+                        <div
+                          className="sub-menu-link"
                           onClick={() => navigate("/payment")}
                         >
-                          <i className="header-icons">
-                            <img
-                              src={SubsrictionIcon}
-                              alt="Subscription icon"
-                            />
-                          </i>
-                          {t("paymentPageMsgTxt")}
-                        </a>
+                          <div className="menu-icon-wrapper">
+                            <img src={SubsrictionIcon} alt="Subscription" className="sub-menu-icon" />
+                          </div>
+                          <span className="menu-text">{t("paymentPageMsgTxt")}</span>
+                        </div>
                       </li>
-                      <li>
-                        <a
-                          className="dropdown-item"
-                          onClick={() =>
-                            navigate("/subscription-detail")
-                          }
+                      <li className="sub-menu-item">
+                        <div
+                          className="sub-menu-link"
+                          onClick={() => navigate("/subscription-detail")}
                         >
-                          <i className="header-icons">
-                            <img
-                              src={VerifiedIcon}
-                              alt="Verified icon"
-                            />
-                          </i>
-                          {t("subscriptionMenuTitleMsgTxt")}
-                        </a>
+                          <div className="menu-icon-wrapper">
+                            <img src={VerifiedIcon} alt="Verified" className="sub-menu-icon" />
+                          </div>
+                          <span className="menu-text">{t("subscriptionMenuTitleMsgTxt")}</span>
+                        </div>
                       </li>
                     </>
                   )}
 
-                  <li>
-                    <a
-                      className="dropdown-item change-password"
+                  <li className="sub-menu-item">
+                    <div
+                      className="sub-menu-link"
                       onClick={() => navigate("/change-password")}
                     >
-                      <i className="header-icons">
-                        <img
-                          src={PasswordIcon}
-                          alt="Password icon"
-                        />
-                      </i>
-                      {t("passwordMsgTxt")}
-                    </a>
+                      <div className="menu-icon-wrapper">
+                        <img src={PasswordIcon} alt="Password" className="sub-menu-icon" />
+                      </div>
+                      <span className="menu-text">{t("passwordMsgTxt")}</span>
+                    </div>
                   </li>
                 </ul>
               )}
             </li>
 
             {/* Contact */}
-            <li>
-              <a
-                className="dropdown-item up-menu"
+            <li className="user-menu-item">
+              <div
+                className="menu-link"
                 onClick={() => navigate("/contact")}
               >
-                <MailOutlined className="ant-icon" />
-                {t("contactMsgTxt")}
-              </a>
+                <MailOutlined className="menu-icon" />
+                <span className="menu-text">{t("contactMsgTxt")}</span>
+              </div>
             </li>
 
             {/* Logout */}
-            <li>
-              <a
-                className="dropdown-item up-menu"
+            <li className="user-menu-item">
+              <div
+                className="menu-link"
                 onClick={handleLogout}
               >
-                <LogoutOutlined className="ant-icon" />
-                {t("logoutMsgTxt")}
-              </a>
+                <LogoutOutlined className="menu-icon" />
+                <span className="menu-text">{t("logoutMsgTxt")}</span>
+              </div>
             </li>
           </ul>
         </div>

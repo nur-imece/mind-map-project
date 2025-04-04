@@ -173,10 +173,6 @@
 
 // Mind Map Share List Styles
 .mind-map-share-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  
   .page-title {
     margin-bottom: 24px;
     font-size: 24px;
@@ -196,10 +192,6 @@
   }
   
   .view-container {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     min-height: 400px;
     
     .list-view-table {
@@ -268,10 +260,7 @@
   
   // Responsive adjustments
   @media (max-width: 576px) {
-    padding: 10px;
-    
     .view-container {
-      padding: 10px;
     }
     
     .filter-bar {

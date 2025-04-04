@@ -184,11 +184,13 @@
 
 /* Table Container Styles */
 .table-container {
+    /* Removed:
     padding: 24px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     margin: 16px;
+    */
 }
 
 /* Table Header with Filters */
@@ -401,5 +403,5 @@
     line-height: 1 !important;
     padding: 0 8px !important;
     /* Eğer text yukarı-aşağı ortalanmazsa, align-items center ile birlikte
-       height’ı biraz daha büyütebilir veya input’un line-height’ını ayarlayabilirsiniz. */
+       height'ı biraz daha büyütebilir veya input'un line-height'ını ayarlayabilirsiniz. */
 }

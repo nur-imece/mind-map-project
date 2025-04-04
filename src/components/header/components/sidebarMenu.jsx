@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  PlusCircleOutlined,
-  FileOutlined,
-  ShareAltOutlined,
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
+
+// SVG dosyalarını normal şekilde içe aktar
+import createNewMapIcon from "@/icons/createNewMap.svg";
+import mindMapsIcon from "@/icons/mindMaps.svg";
+import sharedMapIcon from "@/icons/sharedMap.svg";
+import helpIcon from "@/icons/help.svg";
+
 import foramindLogoBig from "@/styles/img/foramind_logo.png";
 import foramindLogoSmall from "@/styles/img/foramind-beta-logo-small.png";
 
@@ -39,14 +40,14 @@ const SidebarMenu = ({ currentUrl, userCompanyLogo, userCompanyName }) => {
               }`}
             >
               <a onClick={() => navigate("/template-list")}>
-                <PlusCircleOutlined className="ant-sidebar-icon same-color" />
+                <img src={createNewMapIcon} className="ant-sidebar-icon same-color" alt="Create New Map" />
               </a>
-              <a
+              <span
                 className="title"
                 onClick={() => navigate("/template-list")}
               >
                 {t("createNewMapMsgTxt")}
-              </a>
+              </span>
             </li>
             <li
               className={`sub-bar${
@@ -54,11 +55,11 @@ const SidebarMenu = ({ currentUrl, userCompanyLogo, userCompanyName }) => {
               }`}
             >
               <a onClick={() => navigate("/mind-map-list")}>
-                <FileOutlined className="ant-sidebar-icon same-color" />
+                <img src={mindMapsIcon} className="ant-sidebar-icon same-color" alt="Mind Maps" />
               </a>
-              <a className="title" onClick={() => navigate("/mind-map-list")}>
+              <span className="title" onClick={() => navigate("/mind-map-list")}>
                 {t("mindMapsMsgTxt")}
-              </a>
+              </span>
             </li>
             <li
               className={`sub-bar${
@@ -66,14 +67,14 @@ const SidebarMenu = ({ currentUrl, userCompanyLogo, userCompanyName }) => {
               }`}
             >
               <a onClick={() => navigate("/mind-map-share-list")}>
-                <ShareAltOutlined className="ant-sidebar-icon same-color" />
+                <img src={sharedMapIcon} className="ant-sidebar-icon same-color" alt="Shared Maps" />
               </a>
-              <a
+              <span
                 className="title"
                 onClick={() => navigate("/mind-map-share-list")}
               >
                 {t("mindMapsShareMsgTxt")}
-              </a>
+              </span>
             </li>
             <li
               className={`sub-bar${
@@ -81,11 +82,11 @@ const SidebarMenu = ({ currentUrl, userCompanyLogo, userCompanyName }) => {
               }`}
             >
               <a onClick={() => navigate("/help")}>
-                <QuestionCircleOutlined className="ant-sidebar-icon same-color" />
+                <img src={helpIcon} className="ant-sidebar-icon same-color" alt="Help" />
               </a>
-              <a className="title" onClick={() => navigate("/help")}>
+              <span className="title" onClick={() => navigate("/help")}>
                 {t("helpMenuMsgTxt")}
-              </a>
+              </span>
             </li>
           </ul>
         </div>

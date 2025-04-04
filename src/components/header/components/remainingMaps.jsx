@@ -10,14 +10,14 @@ const RemainingMaps = ({ gptMapNumbers }) => {
     if (isFreeUser === true) {
       return (
         <div className="remaining-maps-container">
+          <span className="remaining-maps-text">
+            {t("remainingMapsTxt")} {gptMapNumbers}
+          </span>
           <img
             src={RemainingMapsIcon}
             alt="Remaining maps"
             className="remaining-maps-icon"
           />
-          <span className="remaining-maps-text">
-            {t("remainingMapsTxt")} {gptMapNumbers}
-          </span>
         </div>
       );
     } else if (isFreeUser === false) {
@@ -28,14 +28,14 @@ const RemainingMaps = ({ gptMapNumbers }) => {
         if (JSON.parse(localStorage.getItem("hw8w0")) !== 0) {
           return (
             <div className="remaining-maps-container">
+              <span className="remaining-maps-text">
+                {t("remainingMapsTxt")} {gptMapNumbers}
+              </span>
               <img
                 src={RemainingMapsIcon}
                 alt="Remaining maps"
                 className="remaining-maps-icon"
               />
-              <span className="remaining-maps-text">
-                {t("remainingMapsTxt")} {gptMapNumbers}
-              </span>
             </div>
           );
         }
@@ -50,14 +50,14 @@ const RemainingMaps = ({ gptMapNumbers }) => {
         } else {
           return (
             <div className="remaining-maps-container">
+              <span className="remaining-maps-text">
+                {t("remainingMapsTxt")} {gptMapNumbers}
+              </span>
               <img
                 src={RemainingMapsIcon}
                 alt="Remaining maps"
                 className="remaining-maps-icon"
               />
-              <span className="remaining-maps-text">
-                {t("remainingMapsTxt")} {gptMapNumbers}
-              </span>
             </div>
           );
         }

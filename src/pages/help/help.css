@@ -1,11 +1,4 @@
-.help-container {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
+/* Removed .help-container styles since we're using PageContainer */
 
 .help-title {
   display: flex;

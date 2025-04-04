@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Table, Space, Button, Modal, message, Tooltip, Input, Tag, Select } from 'antd';
 import { HeartOutlined, HeartFilled, DeleteOutlined, EyeOutlined, SearchOutlined, ClearOutlined, UnorderedListOutlined, AppstoreOutlined } from '@ant-design/icons';
 import Header from "../../components/header";
+import PageContainer from "../../components/PageContainer";
 import SubHeader from "../../components/subHeader";
 import SharedMapService from "../../services/api/mindmap";
 import Utils from "../../utils";
@@ -332,128 +333,119 @@ const MindMapShare = () => {
     return (
         <>
             <Header />
-            <div className="template-list-container">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-12 col-md-12 col-lg-12">
-                            <div className="template-panel">
-                                <div className="title-wrapper">
-                                    <div className="px-3">
-                                        <SubHeader
-                                            title={t("sharedWithMeMsgTxt")}
-                                            iconName="icon-share_list_icon"
+            <PageContainer>
+                <div className="title-wrapper">
+                    <div className="px-3">
+                        <SubHeader
+                            title={t("sharedWithMeMsgTxt")}
+                            iconName="icon-share_list_icon"
+                        />
+                    </div>
+                    <div className="view-controls">
+                        <Tooltip title={t("showFavoritesMsgTxt")}>
+                            <Button
+                                type="text"
+                                icon={isFavFilter ? <HeartFilled /> : <HeartOutlined />}
+                                onClick={toggleFavFilter}
+                                className={`view-control-btn ${isFavFilter ? 'active' : ''}`}
+                            />
+                        </Tooltip>
+                        <Tooltip title={t("showAsListMsgTxt")}>
+                            <Button
+                                type="text"
+                                icon={<UnorderedListOutlined />}
+                                onClick={() => toggleLayout('list')}
+                                className={`view-control-btn ${activeLayout === 'list' ? 'active' : ''}`}
+                            />
+                        </Tooltip>
+                        <Tooltip title={t("showAsGridMsgTxt")}>
+                            <Button
+                                type="text"
+                                icon={<AppstoreOutlined />}
+                                onClick={() => toggleLayout('grid')}
+                                className={`view-control-btn ${activeLayout === 'grid' ? 'active' : ''}`}
+                            />
+                        </Tooltip>
+                    </div>
+                </div>
+
+                <div className="col-md-12 px-3 pb-3">
+                    {/* Filter bar */}
+                    {renderFilterBar()}
+
+                    {/* List layout */}
+                    <div
+                        className={`table-list layout-option-content${activeLayout === 'list' ? ' show' : ''}`}
+                        data-layout="list"
+                    >
+                        <div className="map-table">
+                            <Table
+                                columns={columns}
+                                dataSource={filteredData}
+                                loading={isLoading}
+                                pagination={{
+                                    pageSize: pageSize,
+                                    current: currentPage,
+                                    onChange: (page) => setCurrentPage(page),
+                                    onShowSizeChange: (current, size) => {
+                                        setCurrentPage(1);
+                                        setPageSize(size);
+                                    },
+                                    showSizeChanger: true,
+                                    pageSizeOptions: [10, 20, 50],
+                                    showTotal: (total, range) =>
+                                        `${t("pageTextMsgTxt")} ${range[0]}-${range[1]} ${t("ofTextMsgTxt")} ${total}`
+                                }}
+                                locale={{
+                                    emptyText: t("noDataTextMsgTxt"),
+                                    triggerDesc: t("triggerDescMsgTxt"),
+                                    triggerAsc: t("triggerAscMsgTxt"),
+                                    cancelSort: t("cancelSortMsgTxt")
+                                }}
+                                className="-striped -highlight"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Grid layout */}
+                    <div
+                        className={`table-grid layout-option-content${activeLayout === 'grid' ? ' show' : ''}`}
+                        data-layout="grid"
+                    >
+                        <div className="grid-items">
+                            {filteredData.length > 0 && filteredData.map(item => (
+                                <div className="grid-item" key={item.id} title={item.name}>
+                                    <a
+                                        onClick={() => addRemoveFavorite(item.id, !item.isFavorite)}
+                                        className={`fav-action${item.isFavorite ? ' active' : ''}`}
+                                        title={item.isFavorite ? t("removeFromFavListMsgTxt") : t("addToFavListMsgTxt")}
+                                    >
+                                        <i className="icon-favorite-icon"></i>
+                                    </a>
+                                    {item.isMapShared && (
+                                        <img
+                                            src={iconShared}
+                                            className="shared-icon"
+                                            alt={t("sharedMapMsgTxt")}
                                         />
-                                    </div>
-                                    <div className="view-controls">
-                                        <Tooltip title={t("showFavoritesMsgTxt")}>
-                                            <Button
-                                                type="text"
-                                                icon={isFavFilter ? <HeartFilled /> : <HeartOutlined />}
-                                                onClick={toggleFavFilter}
-                                                className={`view-control-btn ${isFavFilter ? 'active' : ''}`}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip title={t("showAsListMsgTxt")}>
-                                            <Button
-                                                type="text"
-                                                icon={<UnorderedListOutlined />}
-                                                onClick={() => toggleLayout('list')}
-                                                className={`view-control-btn ${activeLayout === 'list' ? 'active' : ''}`}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip title={t("showAsGridMsgTxt")}>
-                                            <Button
-                                                type="text"
-                                                icon={<AppstoreOutlined />}
-                                                onClick={() => toggleLayout('grid')}
-                                                className={`view-control-btn ${activeLayout === 'grid' ? 'active' : ''}`}
-                                            />
-                                        </Tooltip>
-                                    </div>
+                                    )}
+                                    <a
+                                        onClick={() => {
+                                            clickOpenUrl(item.id, item.name, item.mapPermissionId);
+                                            localStorage.setItem("mapJsonObj", JSON.stringify(item));
+                                            localStorage.setItem('mapPermission', item.mapPermissionId);
+                                        }}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <img src={iconGridFile} alt={item.name} />
+                                        <div className="name">{item.name}</div>
+                                    </a>
                                 </div>
-                                <div>
-                                    <div className="col-md-12 px-3 pb-3">
-                                        {/* Filter bar */}
-                                        {renderFilterBar()}
-
-                                        {/* List layout */}
-                                        <div
-                                            className={`table-list layout-option-content${activeLayout === 'list' ? ' show' : ''}`}
-                                            data-layout="list"
-                                        >
-                                            <div className="map-table">
-                                                <Table
-                                                    columns={columns}
-                                                    dataSource={filteredData}
-                                                    loading={isLoading}
-                                                    pagination={{
-                                                        pageSize: pageSize,
-                                                        current: currentPage,
-                                                        onChange: (page) => setCurrentPage(page),
-                                                        onShowSizeChange: (current, size) => {
-                                                            setCurrentPage(1);
-                                                            setPageSize(size);
-                                                        },
-                                                        showSizeChanger: true,
-                                                        pageSizeOptions: [10, 20, 50],
-                                                        showTotal: (total, range) =>
-                                                            `${t("pageTextMsgTxt")} ${range[0]}-${range[1]} ${t("ofTextMsgTxt")} ${total}`
-                                                    }}
-                                                    locale={{
-                                                        emptyText: t("noDataTextMsgTxt"),
-                                                        triggerDesc: t("triggerDescMsgTxt"),
-                                                        triggerAsc: t("triggerAscMsgTxt"),
-                                                        cancelSort: t("cancelSortMsgTxt")
-                                                    }}
-                                                    className="-striped -highlight"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* Grid layout */}
-                                        <div
-                                            className={`table-grid layout-option-content${activeLayout === 'grid' ? ' show' : ''}`}
-                                            data-layout="grid"
-                                        >
-                                            <div className="grid-items">
-                                                {filteredData.length > 0 && filteredData.map(item => (
-                                                    <div className="grid-item" key={item.id} title={item.name}>
-                                                        <a
-                                                            onClick={() => addRemoveFavorite(item.id, !item.isFavorite)}
-                                                            className={`fav-action${item.isFavorite ? ' active' : ''}`}
-                                                            title={item.isFavorite ? t("removeFromFavListMsgTxt") : t("addToFavListMsgTxt")}
-                                                        >
-                                                            <i className="icon-favorite-icon"></i>
-                                                        </a>
-                                                        {item.isMapShared && (
-                                                            <img
-                                                                src={iconShared}
-                                                                className="shared-icon"
-                                                                alt={t("sharedMapMsgTxt")}
-                                                            />
-                                                        )}
-                                                        <a
-                                                            onClick={() => {
-                                                                clickOpenUrl(item.id, item.name, item.mapPermissionId);
-                                                                localStorage.setItem("mapJsonObj", JSON.stringify(item));
-                                                                localStorage.setItem('mapPermission', item.mapPermissionId);
-                                                            }}
-                                                            style={{ cursor: 'pointer' }}
-                                                        >
-                                                            <img src={iconGridFile} alt={item.name} />
-                                                            <div className="name">{item.name}</div>
-                                                        </a>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
-            </div>
+            </PageContainer>
         </>
     );
 };

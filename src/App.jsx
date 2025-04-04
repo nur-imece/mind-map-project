@@ -5,6 +5,7 @@ import AppRoutes from "./routes";
 import { LanguageProvider } from "./context/languageContext";
 import { AuthProvider } from "./context/authContext";
 import './i18n/i18n';
+import './index.css'
 
 const App = () => {
   return (

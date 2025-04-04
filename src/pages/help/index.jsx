@@ -4,6 +4,7 @@ import { Input } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 import Header from "../../components/header";
+import PageContainer from "../../components/PageContainer";
 import DefaultImage from "../../styles/img/foramind-video.png";
 import videoInfoService from "../../services/api/videoinfo";
 
@@ -54,7 +55,7 @@ const Help = () => {
     return (
         <>
             <Header />
-            <div className="help-container">
+            <PageContainer>
                 <div className="help-title">
                     <QuestionCircleOutlined className="icon" />
                     <h2>Yardım</h2>
@@ -131,7 +132,7 @@ const Help = () => {
                         </a>
                     </div>
                 )}
-            </div>
+            </PageContainer>
         </>
     );
 };

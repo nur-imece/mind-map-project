@@ -9,6 +9,7 @@ import './mindmapList.css';
 
 // Components
 import Header from '../../components/header';
+import PageContainer from "../../components/PageContainer";
 import MindMapContent from './components/content';
 
 // Services
@@ -188,27 +189,27 @@ const MindMapList = () => {
     };
 
     return (
-        <Spin spinning={spinLoading} size="large">
             <Layout className="mind-map-list-layout">
                 <Header/>
-                <MindMapContent
-                    viewType={viewType}
-                    setViewType={setViewType}
-                    data={data}
-                    loading={loading}
-                    searchText={searchText}
-                    handleSearch={handleSearch}
-                    currentPage={currentPage}
-                    pageSize={pageSize}
-                    setCurrentPage={setCurrentPage}
-                    setPageSize={setPageSize}
-                    actions={actions}
-                    filterType={filterType}
-                    setFilterType={setFilterType}
-                />
+                <PageContainer>
+                    <MindMapContent
+                        viewType={viewType}
+                        setViewType={setViewType}
+                        data={data}
+                        loading={loading}
+                        searchText={searchText}
+                        handleSearch={handleSearch}
+                        currentPage={currentPage}
+                        pageSize={pageSize}
+                        setCurrentPage={setCurrentPage}
+                        setPageSize={setPageSize}
+                        actions={actions}
+                        filterType={filterType}
+                        setFilterType={setFilterType}
+                    />
+                </PageContainer>
                 <ToastContainer />
             </Layout>
-        </Spin>
     );
 };
 

@@ -134,17 +134,8 @@
   cursor: not-allowed !important;
 }
 
-/* New Template List Styles */
-.template-list-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  min-height: 90vh;
-}
+/* Template list styles - modified to work with PageContainer */
+/* Removed .template-list-container since we're using PageContainer */
 
 .template-header {
   display: flex;
@@ -397,3 +388,5 @@
     }
   }
 }
+
+// Remaining maps styling removed - now using global styles from index.css
