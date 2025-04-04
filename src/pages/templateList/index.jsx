@@ -5,7 +5,6 @@ import { message } from "antd";
 
 import Header from "../../components/header";
 import PageContainer from "../../components/PageContainer";
-import SubHeader from "../../components/subHeader.jsx";
 import TemplateListService from "../../services/api/template";
 import MapService from "../../services/api/mindmap";
 import AddCategoryModal from "../../helpers/add-category-modal";
@@ -13,15 +12,13 @@ import ChatGptService from "../../services/api/chatgpt";
 import AiPackages from "../../services/api/mapaipackage";
 import DocumentsServices from "../../services/api/document";
 
-// images
-import blankTemplateLogo from "@/styles/img/plus-icon.png";
 import moreOptionsIcon from "@/styles/img/more-options-icon.png";
 import gptModalImage from "@/styles/img/gpt-modal.png";
 import robotImage from "@/styles/img/Robot.png";
 import closeImage from "@/styles/img/close.png";
 
 import "./index.scss";
-import { Button, Modal, Input, Switch, Select, Radio, Space, Card, Row, Col, Typography } from "antd";
+import { Button, Modal, Input, Card, Row, Col, Typography } from "antd";
 
 const { Title, Text } = Typography;
 

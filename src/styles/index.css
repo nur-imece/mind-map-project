@@ -42,6 +42,11 @@ body {
   position: absolute;
   top: 10px;
   margin-right: 100px;
+  .ant-select-selector {
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 0 !important;
+
+  }
 }
 
 .remember-forgot-wrapper {

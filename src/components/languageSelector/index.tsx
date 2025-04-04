@@ -1,12 +1,8 @@
-import React from 'react';
-import { Select, Space } from 'antd';
+import React, { useContext } from 'react';
+import { Select, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useContext } from 'react';
 import { LanguageContext } from '../../context/languageContext';
-import britishFlag from '../../styles/img/icon-british-flag.svg';
-import turkishFlag from '../../styles/img/icon-turkish-flag.svg';
-
-const { Option } = Select;
+import './languageSelector.css';
 
 const LanguageSelector: React.FC = () => {
     const { i18n } = useTranslation();
@@ -17,26 +13,33 @@ const LanguageSelector: React.FC = () => {
         i18n.changeLanguage(value);
     };
 
+    const languageOptions = [
+        { value: 'tr', label: 'Türkçe' },
+        { value: 'en', label: 'English' }
+    ];
+
     return (
         <div className="language-selector">
             <Select
                 value={selectedLanguage}
                 onChange={handleLanguageChange}
-                style={{ width: 120 }}
+                bordered={false}
                 dropdownStyle={{ minWidth: '120px' }}
+                popupClassName="language-dropdown"
+                size="middle"
+                placement="bottomLeft"
+                getPopupContainer={triggerNode => triggerNode.parentNode}
+                dropdownAlign={{ offset: [0, 4] }}
+                style={{ display: 'flex', alignItems: 'center' }}
+                showArrow={true}
             >
-                <Option value="tr">
-                    <Space>
-                        <img src={turkishFlag} alt="TR" style={{ width: '16px', height: '16px' }} />
-                        Türkçe
-                    </Space>
-                </Option>
-                <Option value="en">
-                    <Space>
-                        <img src={britishFlag} alt="EN" style={{ width: '16px', height: '16px' }} />
-                        English
-                    </Space>
-                </Option>
+                {languageOptions.map(option => (
+                    <Select.Option key={option.value} value={option.value}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                            <Typography.Text strong>{option.label}</Typography.Text>
+                        </span>
+                    </Select.Option>
+                ))}
             </Select>
         </div>
     );

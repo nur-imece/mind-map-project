@@ -1,0 +1,101 @@
+.language-selector {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  position: relative;
+}
+
+.language-selector .ant-select {
+  min-width: 50px !important;
+  font-size: 14px;
+  background: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
+}
+
+.language-selector .ant-select-selector {
+  padding: 0 !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: auto !important;
+}
+
+/* Override any specific styles applied elsewhere */
+.language-selector .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.language-selector .ant-select-arrow {
+  margin-left: 4px !important;
+  color: black !important;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  transform: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.language-selector .ant-select-selection-item {
+  padding-right: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 4px !important;
+}
+
+.language-selector .ant-select:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.language-dropdown .ant-select-item {
+  padding: 8px 12px;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-dropdown .ant-select-item-option-selected {
+  font-weight: 500;
+  background-color: rgba(24, 144, 255, 0.1);
+}
+
+.language-selector .ant-typography {
+  font-size: 14px;
+  display: inline-block;
+  text-align: center;
+  width: auto !important;
+  color: #454242;
+  margin-right: 4px !important;
+}
+
+.language-selector .ant-space {
+  justify-content: center;
+  width: 100%;
+}
+
+.language-dropdown .ant-select-dropdown {
+  position: absolute !important;
+  margin-top: 4px !important;
+  min-width: 100px !important;
+  left: auto !important;
+  top: auto !important;
+}
+
+@media (max-width: 768px) {
+  .language-selector .ant-select {
+    min-width: auto;
+  }
+} 
