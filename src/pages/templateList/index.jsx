@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { message } from "antd";
 
 import Header from "../../components/header";
@@ -12,20 +12,24 @@ import ChatGptService from "../../services/api/chatgpt";
 import AiPackages from "../../services/api/mapaipackage";
 import DocumentsServices from "../../services/api/document";
 import { LanguageContext } from "../../context/languageContext";
+import request from "../../services/api/request";
+import { PATHS } from "../../services/api/paths";
 
 import moreOptionsIcon from "@/styles/img/more-options-icon.png";
 import gptModalImage from "@/styles/img/gpt-modal.png";
 import robotImage from "@/styles/img/Robot.png";
 import closeImage from "@/styles/img/close.png";
+import createNewMapIcon from "@/icons/createNewMap.svg";
 
 import "./index.scss";
-import { Button, Modal, Input, Card, Row, Col, Typography } from "antd";
+import { Button, Modal, Input, Card, Row, Col, Typography, Tag } from "antd";
 
 const { Title, Text } = Typography;
 
 const TemplateList = () => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
     const { selectedLanguage } = useContext(LanguageContext);
 
     const [templateData, setTemplateData] = useState([]);
@@ -34,6 +38,7 @@ const TemplateList = () => {
     const [isUpdateProcess, setIsUpdateProcess] = useState(false);
     const [isUserHasPermissionForOptions, setIsUserHasPermissionForOptions] = useState(false);
     const [tags, setTags] = useState([]);
+    const [inputValue, setInputValue] = useState('');
     const [documents, setDocuments] = useState([]);
     const [inputModal, setInputModal] = useState(false);
     const [gptSubject, setGptSubject] = useState("");
@@ -46,7 +51,6 @@ const TemplateList = () => {
     const [userRole, setUserRole] = useState(JSON.parse(localStorage.getItem("userRoleIdList")) || []);
     const [type, setType] = useState("0");
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [filterText, setFilterText] = useState("");
 
     useEffect(() => {
         document.title = `Foramind | ${t("createMindMapMsgTxt")}`;
@@ -61,7 +65,7 @@ const TemplateList = () => {
             setDocuments(responseData);
         });
 
-        // user role control for edilt/delete permission
+        // user role control for edit/delete permission
         if (localStorage.getItem("userRoleIdList")) {
             JSON.parse(localStorage.getItem("userRoleIdList")).forEach((role) => {
                 if (role === 3 || role === 1 || role === 4) {
@@ -71,15 +75,47 @@ const TemplateList = () => {
         }
     }, [t]);
 
+    // Parse URL for tags when component mounts
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const tagParams = searchParams.getAll('name');
+        if (tagParams.length > 0) {
+            setTags(tagParams);
+        }
+    }, [location.search]);
+
     // Effect to update chatGptMapLanguage when selectedLanguage changes
     useEffect(() => {
         setChatGptMapLanguage(selectedLanguage);
     }, [selectedLanguage]);
  
-    // Effect to fetch template list when language changes
+    // Effect to fetch template list when language changes or tags change
     useEffect(() => {
         getTemplateList();
-    }, [selectedLanguage]);
+    }, [selectedLanguage, tags]);
+
+    // Update URL when tags change
+    useEffect(() => {
+        const params = new URLSearchParams();
+        const recordSize = 1000;
+        const languageId = selectedLanguage || "en";
+        const companyId = JSON.parse(localStorage.getItem("userInformation"))?.companyId;
+        
+        params.append('recordSize', recordSize);
+        params.append('languageId', languageId);
+        if (companyId) params.append('companyId', companyId);
+
+        console.log("tags",tags)
+        tags.forEach(tag => {
+            params.append('name', tag);
+        });
+        
+        const newSearch = params.toString();
+        const newUrl = `${location.pathname}?${newSearch}`;
+        
+        // Use replace state to avoid adding to browser history
+        window.history.replaceState(null, '', newUrl);
+    }, [tags, selectedLanguage]);
 
     const openChatGptModal = () => {
         setInputModal(true);
@@ -107,14 +143,22 @@ const TemplateList = () => {
     const getTemplateList = async () => {
         const recordSize = 1000;
         const languageId = selectedLanguage || "en";
+        const companyId = JSON.parse(localStorage.getItem("userInformation"))?.companyId;
 
         try {
-            console.log(`Fetching template list with language: ${languageId}`);
-            const templates = await TemplateListService.getTemplateList(
-                recordSize,
-                languageId,
-                tags.length > 0 ? tags : undefined
-            );
+            console.log(`Fetching template list with language: ${languageId} and tags:`, tags);
+            // URL parametrelerini oluştur
+            let url = `${PATHS.TEMPLATE.GET_TEMPLATE_LIST}?recordSize=${recordSize}&languageId=${languageId}`;
+            if (companyId) url += `&companyId=${companyId}`;
+            
+            // Tagları ekle
+            tags.forEach(tag => {
+                url += `&name=${encodeURIComponent(tag)}`;
+            });
+            
+            console.log("API request URL:", url);
+            
+            const templates = await request.get(url);
             if (templates.data?.templateList) {
                 setTemplateData(templates.data.templateList);
             }
@@ -181,23 +225,16 @@ const TemplateList = () => {
                 languageId: 1
             };
             
-            // API'ye istek at
-            console.log("Calling MapService.createMindMap with data:", data);
             const response = await MapService.createMindMap(data);
             console.log("Create mind map response:", response);
             
-            // Response yapısı kontrol ediliyor ve mapId alınıyor
             if (response && response.data) {
-                // data içindeki mindMap'i kontrol et
                 if (response.data.mindMap && response.data.mindMap.id) {
-                    // Başarılı cevap - Map ID ile yönlendirme yap
                     const mapId = response.data.mindMap.id;
                     console.log("Successfully created mind map with ID:", mapId);
                     navigate(`/map?mapId=${mapId}`);
                     return;
                 } 
-                
-                // Eski yapı kontrolü (response.data.id)
                 else if (response.data.id) {
                     console.log("Successfully created mind map with ID:", response.data.id);
                     navigate(`/map?mapId=${response.data.id}`);
@@ -205,7 +242,6 @@ const TemplateList = () => {
                 }
             }
             
-            // Hiçbir durum uymadıysa hata göster
             console.error("Failed to create mind map or get map ID:", response);
             message.error(t("errorCreatingMapMsgTxt"));
             
@@ -250,28 +286,6 @@ const TemplateList = () => {
         }
     };
 
-    const errorModal = () => {
-        Utils.modalm().open({
-            exitButtonText: Resources.getValue("exitMsgTxt"),
-            title: Resources.getValue("errorMsgTxt"),
-            bodyContent:
-                "<p>" + Resources.getValue("templatelistmapnameMsgTxt") + "</p>",
-            buttons: [
-                {
-                    text: Resources.getValue("okMsgTxt"),
-                    class: "button yellow-button confirm-button",
-                    href: "",
-                },
-            ],
-        });
-    };
-
-    const createMap = () => {
-        document.querySelector("#create-map").addEventListener("click", function () {
-            document.querySelector(".new-map-wrapper").classList.remove("none");
-        });
-    };
-
     const deleteCategoryTemplate = async (id) => {
         await TemplateListService.deleteTemplate(id, getTemplateList, this);
     };
@@ -289,22 +303,29 @@ const TemplateList = () => {
         });
     };
 
-    const removeTag = (i) => {
-        const newTags = [...tags];
-        newTags.splice(i, 1);
+    // Tag işlemleri
+    const removeTag = (tag) => {
+        const newTags = tags.filter(t => t !== tag);
         setTags(newTags);
     };
 
-    const inputKeyDown = (e) => {
-        const val = e.target.value;
-        if (e.key === "Enter" && val) {
-            if (tags.find((tag) => tag.toLowerCase() === val.toLowerCase())) {
-                return;
+    const handleInputChange = (e) => {
+        setInputValue(e.target.value);
+    };
+
+    const handleInputKeyDown = (e) => {
+        if (e.key === 'Enter' && inputValue.trim()) {
+            if (!tags.includes(inputValue.trim())) {
+                setTags([...tags, inputValue.trim()]);
             }
-            setTags([...tags, val]);
-            e.target.value = null;
-        } else if (e.key === "Backspace" && !val && tags.length > 0) {
-            removeTag(tags.length - 1);
+            setInputValue('');
+        }
+    };
+
+    const addTag = () => {
+        if (inputValue.trim() && !tags.includes(inputValue.trim())) {
+            setTags([...tags, inputValue.trim()]);
+            setInputValue('');
         }
     };
 
@@ -336,18 +357,34 @@ const TemplateList = () => {
                         selectedCategoryName={selectedCategoryName}
                     />
                 )}
-                
+
                 <div className="template-header">
                     <div className="icon-container">
-                        <i className="icon icon-create_new_map_icon"></i>
+                        <img src={createNewMapIcon} alt="Create new map"/>
                     </div>
                     <Title level={3}>{t("createMindMapMsgTxt")}</Title>
-                    <Input 
-                        placeholder={t("categoryFilterMsgTxt")}
-                        value={filterText}
-                        onChange={(e) => setFilterText(e.target.value)}
-                        style={{ width: 200, marginLeft: 'auto' }}
-                    />
+
+                    <div className="tag-filter-container">
+                        <div className="tags-wrapper">
+                            {tags.map(tag => (
+                                <Tag
+                                    key={tag}
+                                    closable
+                                    onClose={() => removeTag(tag)}
+                                >
+                                    {tag}
+                                </Tag>
+                            ))}
+                        </div>
+                        <Input
+                            className="custom-input"
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            onKeyDown={handleInputKeyDown}
+                            placeholder={t("filterByTagOrNameMsgTxt")}
+                        />
+                    </div>
+
                 </div>
 
                 <div className="templates-grid">
@@ -569,7 +606,6 @@ const TemplateList = () => {
                         
                         {templateData
                             .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
-                            .filter(item => !filterText || item.name.toLowerCase().includes(filterText.toLowerCase()))
                             .map((catItem) => {
                                 const userInfo = JSON.parse(localStorage.getItem("userInformation") || "{}");
                                 const canEdit = isUserHasPermissionForOptions && userInfo.companyId === catItem.companyId;
