@@ -1,12 +1,14 @@
 import request from './request';
 import { PATHS } from './paths';
 import {
+  AzureLoginResponse,
   BaseResponse,
   ChangePasswordRequest,
   ChangePasswordResponse,
   ConfirmTokenEmailRequest,
   EmailConfirmRequest,
   GetAccountDetailResponse,
+  GoogleLoginResponse,
   ResetPasswordRequest,
   ResetPasswordTokenEmailRequest,
   UpdateAccountDetailRequest,
@@ -112,7 +114,7 @@ const accountService = {
 
   googleLogin: async (
     token: string
-  ): Promise<{ data?: BaseResponse; error?: string }> => {
+  ): Promise<{ data?: GoogleLoginResponse; error?: string }> => {
     const response = await request.post(
       `${PATHS.ACCOUNT.GOOGLE_LOGIN}?token=${encodeURIComponent(token)}`
     );
@@ -121,7 +123,7 @@ const accountService = {
 
   azureLogin: async (
     token: string
-  ): Promise<{ data?: BaseResponse; error?: string }> => {
+  ): Promise<{ data?: AzureLoginResponse; error?: string }> => {
     const response = await request.post(
       `${PATHS.ACCOUNT.AZURE_LOGIN}?token=${encodeURIComponent(token)}`
     );

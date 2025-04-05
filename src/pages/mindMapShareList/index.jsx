@@ -9,7 +9,7 @@ import SubHeader from "../../components/subHeader";
 import SharedMapService from "../../services/api/mindmap";
 import Utils from "../../utils";
 import "../templateList/index.scss"
-import "./styles.scss";
+import "./index.scss";
 import iconShared from "../../styles/img/shared-icon.png";
 import iconGridFile from "../../styles/img/grid-file-icon.png";
 

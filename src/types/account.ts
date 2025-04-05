@@ -245,4 +245,42 @@ export interface ProductModel {
 export interface RefreshTokenRequest {
   token?: string;
   refreshToken?: string;
+}
+
+export interface GoogleLoginResponse extends BaseResponse {
+  token?: string;
+  refreshToken?: string;
+  freeDays?: number;
+  productId?: number;
+  remainingProductDays?: number;
+  productDay?: number;
+  trialDay?: number;
+  roleIdList?: number[];
+  companyId?: number;
+  id?: number;
+  email?: string;
+  companyName?: string;
+  companyLogo?: string;
+  companySubscriptionInfo?: CompanySubscriptionInfo;
+  isShowTrialDayPopup?: boolean;
+  statusCode?: string;
+}
+
+export interface AzureLoginResponse extends BaseResponse {
+  token?: string;
+  refreshToken?: string;
+  freeDays?: number;
+  productId?: number;
+  remainingProductDays?: number;
+  productDay?: number;
+  trialDay?: number;
+  roleIdList?: number[];
+  companyId?: number;
+  id?: number;
+  email?: string;
+  companyName?: string;
+  companyLogo?: string;
+  companySubscriptionInfo?: CompanySubscriptionInfo;
+  isShowTrialDayPopup?: boolean;
+  statusCode?: string;
 } 

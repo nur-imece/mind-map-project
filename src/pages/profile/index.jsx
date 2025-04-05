@@ -16,7 +16,7 @@ import accountService from "../../services/api/account";
 import Header from "../../components/header";
 import ClarifyingText from "../../components/profile-clarifying-text";
 import ExplicitConsentText from "../../components/profile-explicit-consent-text";
-import './profile.css';
+import './index.scss';
 
 const Profile = () => {
 	const { t } = useTranslation();

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Layout, Modal, message, Spin } from "antd";
 
 // Styles
-import './mindmapList.css';
+import './index.scss';
 
 // Components
 import Header from '../../components/header';

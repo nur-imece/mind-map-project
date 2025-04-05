@@ -3,6 +3,8 @@ import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import Login from '../pages/login';
 import Register from '../pages/register';
+import GoogleCallback from '../pages/google-callback';
+import MicrosoftCallback from '../pages/microsoft-callback';
 import MindMapList from '../pages/mindmapList';
 import TemplateList from '../pages/templateList';
 import MindMapShareList from "pages/mindMapShareList";
@@ -40,6 +42,8 @@ const AppRoutes = () => {
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/google-callback" element={<GoogleCallback />} />
+      <Route path="/microsoft-callback" element={<MicrosoftCallback />} />
       
       {/* Private routes without payment requirement */}
       <Route element={<PrivateRoute requiresPayment={false} />}>

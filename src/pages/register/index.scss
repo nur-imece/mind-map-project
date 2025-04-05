@@ -1,0 +1,314 @@
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 1600px;
+    position: relative;
+}
+
+.register-container .ant-select {
+    min-width: 120px;
+}
+
+.register-container .ant-select-selector {
+    background-color: #f5f5f5 !important;
+    border: none !important;
+    border-radius: 28px !important;
+    height: 40px !important;
+    padding: 0 15px !important;
+}
+
+.register-container .ant-select-selection-item {
+    color: #393939 !important;
+    font-size: 16px !important;
+    line-height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.register-container .ant-select-selection-item img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.register-container .ant-select-arrow {
+    color: #393939 !important;
+}
+
+.register-container .ant-select-dropdown {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.register-container .ant-select-item {
+    padding: 8px 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.register-container .ant-select-item img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.register-container .ant-select-item-option-selected {
+    background-color: #f5f5f5 !important;
+}
+
+.register-container .ant-select-item-option-active {
+    background-color: #f0f0f0 !important;
+}
+
+.register-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    padding: 0 40px;
+}
+
+.illustration-left,
+.illustration-right {
+    flex: 1;
+    max-width: 400px;
+    display: none;
+}
+
+.register-form {
+    padding: 60px 70px;
+    border-radius: 30px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    background: white;
+}
+
+.form-logo {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.form-logo img {
+    max-width: 250px;
+    height: auto;
+}
+
+.register-form .ant-form-item {
+    margin-bottom: 30px;
+}
+
+.register-form .ant-input-affix-wrapper {
+    background-color: #f5f5f5 !important;
+    border: 0;
+    border-radius: 28px;
+    color: #393939 !important;
+    font-size: 16px;
+    line-height: 20px;
+    padding-left: 52px;
+    padding-right: 35px;
+    transition: all .15s ease-in-out;
+    width: 100%;
+}
+
+.register-form .ant-input {
+    border: 0;
+    border-radius: 28px;
+    color: #393939 !important;
+    font-size: 16px;
+    height: 60px;
+    line-height: 20px;
+    padding-left: 52px;
+    padding-right: 35px;
+    transition: all .15s ease-in-out;
+    width: 100%;
+}
+
+.agreement-item {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.agreement-item a {
+    color: #1890ff;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.login-button {
+    background-color: #ffba00 !important;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    height: 60px;
+    width: 100%;
+    border: none;
+    border-radius: 28px;
+    margin-bottom: 30px;
+}
+
+.login-button:hover {
+    background-color: #ffb300 !important;
+    border: none;
+}
+
+.login-link-container {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.login-link {
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.social-register-container {
+    margin-top: 24px;
+}
+
+.social-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.social-buttons .ant-btn {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: none;
+    border-radius: 28px;
+    font-size: 16px;
+}
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    margin-right: 8px;
+}
+
+.google-register-button,
+.microsoft-register-button {
+    background-color: #f5f5f5 !important;
+    color: #393939 !important;
+    border: none;
+    border-radius: 28px;
+}
+
+.google-register-button:hover,
+.microsoft-register-button:hover {
+    background-color: #e8e8e8 !important;
+    border: none;
+}
+
+.agreement-modal .ant-modal-content {
+    border-radius: 10px;
+}
+
+.agreement-modal .ant-modal-header {
+    border-radius: 10px 10px 0 0;
+    background-color: #f8f9fa;
+    padding: 16px 24px;
+}
+
+.agreement-modal .ant-modal-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.agreement-modal .ant-modal-body {
+    padding: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.agreement-modal .ant-modal-footer {
+    border-radius: 0 0 10px 10px;
+    padding: 16px 24px;
+}
+
+.agreement-modal .ant-btn-primary {
+    background-color: #ffba00;
+    border-color: #ffba00;
+}
+
+.agreement-modal .ant-btn-primary:hover,
+.agreement-modal .ant-btn-primary:focus {
+    background-color: #f0ad00;
+    border-color: #f0ad00;
+}
+
+.agreement-content {
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+@media (min-width: 1200px) {
+    .illustration-left,
+    .illustration-right {
+        display: block;
+    }
+
+    .register-form {
+        margin: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .register-container {
+        padding: 1rem;
+        max-width: 100%;
+        margin: 0 1rem;
+    }
+
+    .register-form-container {
+        padding: 1rem;
+    }
+
+    .social-register-container {
+        p {
+            &:before,
+            &:after {
+                width: 20%;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .register-container {
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .form-logo img {
+        max-width: 150px;
+    }
+
+    .social-register-container {
+        p {
+            &:before,
+            &:after {
+                width: 15%;
+            }
+        }
+    }
+} 

@@ -7,6 +7,8 @@
   "registerMsgTxt": "Kayıt Ol",
   "googleLoginMsgTxt": "Google ile Giriş Yap",
   "azureLoginMsgTxt": "Microsoft ile Giriş Yap",
+  "googleRegisterMsgTxt": "Google ile Kayıt Ol",
+  "azureRegisterMsgTxt": "Microsoft ile Kayıt Ol",
   "invalidEmailMsgTxt": "Geçersiz e-posta adresi",
   "requiredMsgTxt": "Bu alan zorunludur.",
   "validEmailMsgTxt": "Lütfen e-posta formatını kontrol edin.",
@@ -20,10 +22,17 @@
   "warningmodalForEmailRegexMsgTxt": "Lütfen e-posta formatını kontrol edin.",
   "successforgetpasswordMsgTxt": "Şifre sıfırlama bilgisi e-posta adresinize gönderildi.",
   "registersuccessMsgTxt": "Kayıt işleminiz başarıyla tamamlandı! Lütfen e-posta adresinize gelen bağlantıya tıklayarak hesabınızı aktif edin.",
+  "registrationSuccessMsgTxt": "Kayıt işleminiz başarıyla tamamlandı! Lütfen e-posta adresinize gelen bağlantıya tıklayarak hesabınızı aktif edin.",
+  "registrationErrorMsgTxt": "Kayıt işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+  "loginErrorMsgTxt": "Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.",
   "welcomeMsgTxt": "Hoş geldiniz",
   "languageTurkish": "Türkçe",
   "languageEnglish": "İngilizce",
   "languageSelect": "Dil Seçin",
+  "firstNameMsgTxt": "Adınız",
+  "lastNameMsgTxt": "Soyadınız",
+  "confirmPasswordMsgTxt": "Şifre Tekrar",
+  "acceptTermsMsgTxt": "Üyelik sözleşmesini ve aydınlatma metnini okudum ve kabul ediyorum.",
 
   "informationModalTitleMsgTxt": "Bilgi",
   "startTrialDayInfoAndWelcomePopupContentMsgTxt": "Deneme sürenize hoş geldiniz! Sınırlı bir süre için tüm özellikleri keşfedebilirsiniz.",
@@ -255,9 +264,9 @@
   
   "feedbackClarifyingText": "<p>Geri bildiriminizi bizimle paylaştığınız için teşekkür ederiz. Görüşlerinizi değerli buluyoruz çünkü hizmetlerimizi geliştirmemize ve ihtiyaçlarınızı daha iyi karşılamamıza yardımcı oluyor.</p><p>Geri bildirim gönderdiğinizde, adınız ve iletişim bilgileriniz gibi kişisel bilgilerinizi, yorumlarınız veya önerilerinizle birlikte topluyoruz. Bu bilgiler, yalnızca geri bildiriminizi anlamak ve ele almak, ürün ve hizmetlerimizi iyileştirmek ve takip gerekiyorsa sizinle iletişim kurmak amacıyla işlenir.</p><p>Geri bildiriminiz, iyileştirmeleri uygulamak için ilgili ekiplerle dahili olarak paylaşılabilir. Ayrıca anonim hale getirilmiş geri bildirimi kalite kontrol ve eğitim amaçları için kullanabiliriz.</p><p>Geri bildirim bilgilerinizi, uygun analiz ve iyileştirmelerin uygulanmasına olanak tanımak için makul bir süre boyunca saklarız. Kişisel verileriniz, Gizlilik Politikamız ve geçerli veri koruma yasaları uyarınca işlenir.</p>",
   
-  "MembershipAgreementText": "<p>Bu Üyelik Sözleşmesi ('Sözleşme'), siz ('Üye') ve Foramind ('Şirket') arasında yapılmıştır.</p><p><strong>1. Üyelik Koşulları:</strong> Kayıt olarak, platformumuzun üyesi olmayı ve bu Sözleşme'de belirtilen koşullara uymayı kabul edersiniz.</p><p><strong>2. Hesap Sorumlulukları:</strong> Hesap kimlik bilgilerinizin gizliliğini korumak ve hesabınız altında gerçekleşen tüm etkinliklerden sorumlusunuz.</p><p><strong>3. Abonelik ve Ödemeler:</strong> Üyelik, fiyatlandırma planlarımızda belirtilen abonelik ücretleri gerektirebilir. Aksi belirtilmedikçe tüm ödemeler iade edilmez.</p><p><strong>4. İçerik ve Fikri Mülkiyet:</strong> Platformumuz aracılığıyla sağlanan tüm içerik, fikri mülkiyet hakları ile korunmaktadır. Üyeler, izin olmadan içeriği çoğaltamaz, dağıtamaz veya türev eserler oluşturamaz.</p><p><strong>5. Gizlilik:</strong> Kişisel bilgileriniz Gizlilik Politikamız uyarınca işlenecektir.</p><p><strong>6. Fesih:</strong> Şirket, bu Sözleşme'yi ihlal eden veya takdiri doğrultusunda herhangi bir nedenle hesapları sonlandırma veya askıya alma hakkını saklı tutar.</p><p><strong>7. Değişiklikler:</strong> Bu Sözleşme'yi istediğimiz zaman değiştirebiliriz. Hizmeti kullanmaya devam etmeniz, değiştirilen koşulları kabul ettiğiniz anlamına gelir.</p>",
+  "MembershipAgreementText": "<h3>ÜYELİK SÖZLEŞMESİ</h3><p>Bu Üyelik Sözleşmesi, Foramind platformunu kullanacak olan siz değerli üyelerimizle Foramind arasındaki hak ve yükümlülükleri düzenlemektedir.</p><p><strong>1. Tanımlar</strong></p><p>'Foramind': Zihin haritası oluşturma ve paylaşma hizmeti sunan dijital platformdur.<br>'Üye': Platforma kayıt olan ve hizmetlerden yararlanan gerçek veya tüzel kişidir.<br>'Hizmet': Foramind'ın sunduğu tüm çevrimiçi hizmetler ve içeriklerdir.</p><p><strong>2. Üyelik</strong></p><p>2.1. Üyelik, 18 yaşından büyük gerçek kişiler ve tüzel kişiler tarafından gerçekleştirilebilir.<br>2.2. Üye kayıt formunda belirtilen tüm bilgilerin doğru olduğunu taahhüt eder.<br>2.3. Üye, kayıt bilgilerinin değişmesi halinde, bu bilgileri güncellemekle yükümlüdür.</p><p><strong>3. Şifre ve Güvenlik</strong></p><p>3.1. Üye, belirlediği şifrenin güvenliğinden kendisi sorumludur.<br>3.2. Üye, hesabı üzerinden gerçekleştirilen tüm işlemlerden şahsen sorumludur.<br>3.3. Üye, hesabının izinsiz kullanıldığını fark ettiğinde derhal Foramind'a bildirimde bulunmalıdır.</p><p><strong>4. Hizmetlerin Kullanımı</strong></p><p>4.1. Üye, Foramind hizmetlerini yasal amaçlar doğrultusunda kullanmayı kabul eder.<br>4.2. Üye, platformda yer alan içerikleri kopyalama, çoğaltma, yayınlama hakkına sahip değildir.<br>4.3. Üye, platformda paylaştığı tüm içeriklerden kendisi sorumludur.</p><p><strong>5. Fikri Mülkiyet Hakları</strong></p><p>5.1. Foramind'ın tüm içerik, grafik, tasarım, sistem ve logoları Foramind'ın fikri mülkiyetidir.<br>5.2. Üye, Foramind'ın yazılı izni olmadan bu fikri mülkiyet haklarını kullanamaz, kopyalayamaz.</p><p><strong>6. Üyeliğin Sona Ermesi</strong></p><p>6.1. Üye, dilediği zaman hesabını kapatabilir.<br>6.2. Foramind, üyenin sözleşme şartlarını ihlal etmesi halinde üyeliği askıya alabilir veya sonlandırabilir.</p><p><strong>7. Diğer Hükümler</strong></p><p>7.1. Foramind, bu sözleşmede tek taraflı değişiklik yapma hakkını saklı tutar.<br>7.2. Değişiklikler, platform üzerinden duyurulacaktır.</p><p>Bu sözleşme, kayıt sırasında onaylanmasıyla birlikte taraflar arasında geçerlilik kazanır.</p>",
   
-  "RegisterClarifyingText": "<p>Bu Kayıt Gizlilik Bildirimi, kayıt işlemi sırasında kişisel bilgilerinizi nasıl topladığımızı, kullandığımızı ve koruduğumuzu açıklar.</p><p>Bizimle bir hesap oluşturduğunuzda, adınız, e-posta adresiniz ve hesabınızı oluşturmak ve yönetmek için gerekli diğer bilgiler gibi kişisel bilgileri toplarız. Bu bilgiler, kimliğinizi doğrulamak, hizmetlerimize erişim sağlamak ve hesabınız hakkında önemli güncellemeleri iletmek için kullanılır.</p><p>Verilerinizi, kayıt olduğunuzda sizinle sözleşmemizi yerine getirme gerekliliğine dayanarak işleriz. Bilgileriniz güvenli bir şekilde saklanır ve yalnızca hizmetlerimizi sağlamak için ihtiyaç duyan yetkili personel tarafından erişilebilir.</p><p>Kayıt bilgileriniz, hizmetlerimizi sunmamıza yardımcı olan güvenilir üçüncü taraf hizmet sağlayıcılarla, her zaman katı gizlilik anlaşmaları altında paylaşılabilir. Kayıt bilgilerinizi, bizimle aktif bir hesap tuttuğunuz sürece saklarız, ardından güvenli bir şekilde silinir veya anonimleştirilir.</p>",
+  "RegisterClarifyingText": "<p>Foramind olarak, kişisel verilerinizin güvenliği konusunda büyük önem veriyoruz. 6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, kayıt sırasında topladığımız kişisel bilgileriniz sadece size hizmet verebilmemiz, hesabınızı oluşturabilmemiz ve yönetebilmemiz amacıyla işlenmektedir.</p><p>Kayıt formunda sağladığınız ad, soyad, e-posta, şifre gibi temel bilgiler, kullanıcı hesabınızın oluşturulması, kimliğinizin doğrulanması, size özel hizmetlerin sağlanması ve gerektiğinde sizinle iletişim kurabilmemiz için kullanılacaktır.</p><p>Kişisel verileriniz, hizmet sağlayıcılarımız dışında üçüncü taraflarla paylaşılmayacak, yasal zorunluluklar haricinde izniniz olmadan başka kurum ve kuruluşlara aktarılmayacaktır.</p><p>Foramind kullanıcısı olarak; kişisel verilerinize erişim, düzeltme, silme, işlemeye itiraz etme gibi haklarınız bulunmaktadır. Bu haklarınızı kullanmak istediğinizde bize iletişim kanallarımızdan ulaşabilirsiniz.</p>",
 
   "subscriptionDetailMsgTxt": "Abonelik Detayı",
   "membershipInfoMsgTxt": "Üyelik Bilgisi",
@@ -290,5 +299,7 @@
   "packageMapNumbers": "Paketteki Harita Sayısı",
   "packageBuyDate": "Paket Satın Alım Tarihi",
   "packagePrice": "Paket Fiyatı",
-  "numberMaps": "Adet"
+  "numberMaps": "Adet",
+  "accountContactClarifyAgreementTitle": "İletişim Formu Aydınlatma Metni"
+
 }

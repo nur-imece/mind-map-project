@@ -5,12 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Utils from '../../utils';
 import loginRegisterLogo from '../../styles/img/foramind_logo.png';
-import googleBtnImage from '../../styles/img/google-btn-image.png';
-import microsoftBtnImage from '@/styles/img/microsoft-btn.svg';
 import loginRegisterBg from '../../styles/img/form-bg.png';
 import LanguageSelector from '../../components/languageSelector';
+import SocialLogin from '../../components/socialLogin';
 import { useAuth } from '../../context/authContext';
-import './login.css';
+import './index.scss';
 
 const { Text } = Typography;
 
@@ -19,7 +18,6 @@ const Login = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { login } = useAuth();
-    const [passwordVisible, setPasswordVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -81,6 +79,10 @@ const Login = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleLoginSuccess = () => {
+        navigate('/');
     };
 
     return (
@@ -160,25 +162,7 @@ const Login = () => {
                             </Button>
                         </Form.Item>
 
-                        <div className="social-login-buttons">
-                            <Button
-                                type="default"
-                                block
-                                className="google-login"
-                                icon={<img src={googleBtnImage} alt="Google" className="social-icon" />}
-                            >
-                                {t("googleLoginMsgTxt")}
-                            </Button>
-
-                            <Button
-                                type="default"
-                                block
-                                className="microsoft-login"
-                                icon={<img src={microsoftBtnImage} alt="Microsoft" className="social-icon" />}
-                            >
-                                {t("azureLoginMsgTxt")}
-                            </Button>
-                        </div>
+                        <SocialLogin onLoginSuccess={handleLoginSuccess} />
                     </Form>
 
                     <div className="illustration-right">
