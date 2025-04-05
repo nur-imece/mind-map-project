@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
@@ -11,6 +11,7 @@ import AddCategoryModal from "../../helpers/add-category-modal";
 import ChatGptService from "../../services/api/chatgpt";
 import AiPackages from "../../services/api/mapaipackage";
 import DocumentsServices from "../../services/api/document";
+import { LanguageContext } from "../../context/languageContext";
 
 import moreOptionsIcon from "@/styles/img/more-options-icon.png";
 import gptModalImage from "@/styles/img/gpt-modal.png";
@@ -25,6 +26,7 @@ const { Title, Text } = Typography;
 const TemplateList = () => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const { selectedLanguage } = useContext(LanguageContext);
 
     const [templateData, setTemplateData] = useState([]);
     const [selectedCategoryName, setSelectedCategoryName] = useState("");
@@ -35,7 +37,7 @@ const TemplateList = () => {
     const [documents, setDocuments] = useState([]);
     const [inputModal, setInputModal] = useState(false);
     const [gptSubject, setGptSubject] = useState("");
-    const [chatGptMapLanguage, setChatGptMapLanguage] = useState(localStorage.getItem("siteLanguage") || "en");
+    const [chatGptMapLanguage, setChatGptMapLanguage] = useState(selectedLanguage || "en");
     const [isLanguageTurkish, setIsLanguageTurkish] = useState(false);
     const [isLanguageEnglish, setIsLanguageEnglish] = useState(false);
     const [gptMapNumbers, setGptMapNumbers] = useState(0);
@@ -48,8 +50,6 @@ const TemplateList = () => {
 
     useEffect(() => {
         document.title = `Foramind | ${t("createMindMapMsgTxt")}`;
-
-        getTemplateList();
 
         const userId = JSON.parse(localStorage.getItem("userInformation")).id;
         const componyId = JSON.parse(localStorage.getItem("userInformation")).companyId;
@@ -71,6 +71,16 @@ const TemplateList = () => {
         }
     }, [t]);
 
+    // Effect to update chatGptMapLanguage when selectedLanguage changes
+    useEffect(() => {
+        setChatGptMapLanguage(selectedLanguage);
+    }, [selectedLanguage]);
+ 
+    // Effect to fetch template list when language changes
+    useEffect(() => {
+        getTemplateList();
+    }, [selectedLanguage]);
+
     const openChatGptModal = () => {
         setInputModal(true);
 
@@ -87,7 +97,6 @@ const TemplateList = () => {
         setGptSubject("");
         setIsDocument(false);
         setDocumentId(null);
-        setChatGptMapLanguage(localStorage.getItem("siteLanguage") || "en");
     };
 
     const documentSwitchHandle = (value) => {
@@ -97,9 +106,10 @@ const TemplateList = () => {
 
     const getTemplateList = async () => {
         const recordSize = 1000;
-        const languageId = localStorage.getItem("siteLanguage") || "en";
+        const languageId = selectedLanguage || "en";
 
         try {
+            console.log(`Fetching template list with language: ${languageId}`);
             const templates = await TemplateListService.getTemplateList(
                 recordSize,
                 languageId,
@@ -228,6 +238,7 @@ const TemplateList = () => {
                 language: gptLanguageService,
                 documentIds: [docId],
             };
+        console.log(`Creating ChatGPT map with language: ${gptLanguageService}`);
         if (isDocument === false) {
             await ChatGptService.getChatResponse(JSON.stringify(data), function () {
                 ChatGptService.redirectMap(localStorage.getItem("openedMapId"));

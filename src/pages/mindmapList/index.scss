@@ -1,0 +1,407 @@
+/* Mind Map List Layout */
+.mind-map-list-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: transparent;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+    z-index: 10;
+}
+
+.logo {
+    padding: 24px 16px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.logo h3 {
+    color: #5b21b6;
+    margin: 0;
+}
+
+.sidebar-menu {
+    padding-top: 16px;
+}
+
+.sidebar-menu .ant-menu-item {
+    font-size: 16px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.sidebar-menu .ant-menu-item-selected {
+    background-color: #f0ecfe;
+    color: #5b21b6;
+}
+
+/* Header Styles */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left .ant-typography {
+    margin: 0;
+    margin-right: 16px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-avatar {
+    cursor: pointer;
+    background-color: #5b21b6;
+}
+
+/* Content Area Styles */
+.content {
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.search-section {
+    margin-bottom: 32px;
+}
+
+.maps-grid {
+    padding: 12px 0;
+}
+
+/* Map Cards Styles */
+.map-card {
+    height: 150px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.map-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.map-card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.map-card-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+    color: #5b21b6;
+}
+
+.map-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.map-card-header h5 {
+    margin: 0;
+    flex: 1;
+}
+
+.map-card-date {
+    font-size: 12px;
+    color: #888;
+    margin-top: auto;
+}
+
+.map-card-shared-icon {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    color: #1890ff;
+    font-size: 16px;
+}
+
+/* Special Card Styles */
+.create-map-card {
+    background: linear-gradient(135deg, #e9f8ff 0%, #d3e8ff 100%);
+    text-align: center;
+}
+
+.ai-map-card {
+    background: linear-gradient(135deg, #f0ecfe 0%, #e2d5f8 100%);
+    text-align: center;
+}
+
+.admin-category-card {
+    background: linear-gradient(135deg, #fff6e5 0%, #ffeacf 100%);
+    text-align: center;
+}
+
+.user-map-card {
+    background: #fff;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .map-card {
+        height: 130px;
+    }
+}
+
+@media (max-width: 576px) {
+    .app-header {
+        padding: 16px;
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .header-right {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+/* Table Container Styles */
+.table-container {
+    /* Removed:
+    padding: 24px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin: 16px;
+    */
+}
+
+/* Table Header with Filters */
+.table-header {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.table-filters {
+    margin-bottom: 16px;
+}
+
+/* Table Styles */
+.mind-map-table {
+    width: 100%;
+}
+
+.mind-map-table .ant-table {
+    background: white;
+    border-radius: 8px;
+}
+
+.mind-map-table .ant-table-thead > tr > th {
+    background: #fafafa;
+    padding: 16px;
+    font-weight: 600;
+}
+
+.mind-map-table .ant-table-tbody > tr > td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mind-map-table .ant-table-tbody > tr:hover > td {
+    background: #f5f5f5;
+}
+
+/* View Type and Filter Styles */
+.filter-group,
+.view-type-group {
+    margin-right: 16px;
+}
+
+/* Column Styles */
+.column-header-with-search {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.table-search-input {
+    width: 90%;
+    border-radius: 20px;
+    margin-top: 8px;
+}
+
+.map-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.map-name {
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.map-name:hover {
+    color: #1890ff;
+}
+
+.shared-badge {
+    margin-left: 8px;
+}
+
+.date-column {
+    text-align: right;
+}
+
+.status-column,
+.actions-column {
+    width: 150px;
+    text-align: center;
+}
+
+/* Icon Button Styles */
+.status-icons,
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.status-icons .ant-btn,
+.action-buttons .ant-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+/* Status Icons Styles */
+.public-icon, .private-icon, .shared-icon, .not-shared-icon, .favorite-icon, .not-favorite-icon {
+    font-size: 16px;
+}
+
+.shared-icon img, .not-shared-icon img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.public-icon, .shared-icon {
+    color: #1890ff;
+}
+
+.private-icon, .not-shared-icon {
+    color: #bfbfbf;
+}
+
+.favorite-icon {
+    color: #faad14;
+}
+
+.not-favorite-icon {
+    color: #bfbfbf;
+}
+
+/* Action Buttons Styles */
+.action-button {
+    color: #1890ff;
+}
+
+.action-button:hover {
+    color: #40a9ff;
+    background: #e6f7ff;
+}
+
+.action-button.delete-button {
+    color: #ff4d4f;
+}
+
+.action-button.delete-button:hover {
+    color: #ff7875;
+    background: #fff1f0;
+}
+
+/* Pagination Styles */
+.ant-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.ant-pagination-item {
+    border-radius: 4px;
+}
+
+.ant-pagination-item-active {
+    background: #1890ff;
+    border-color: #1890ff;
+}
+
+.ant-pagination-item-active a {
+    color: white;
+}
+
+.ant-pagination-options {
+    margin-left: 16px;
+}
+
+.ant-pagination-options-size-changer {
+    margin-right: 0;
+}
+
+.ant-select-selection-item {
+    font-size: 14px;
+}
+.column-header-with-search {
+    display: flex;
+    flex-direction: row;    /* Yan yana dizmek için */
+    align-items: center;    /* Dikey hizalama */
+    gap: 8px;               /* Aralarında boşluk */
+    white-space: nowrap;    /* İçerik kaydırma yapmasın, aynı satırda kalsın */
+
+    /* Gerekirse sütun başlığının taşmasını engellemek için max-width tanımlayabilirsiniz */
+    /* max-width: 250px;
+       overflow: hidden;
+       text-overflow: ellipsis; */
+}
+
+/* "Name" yazısının stili (isteğe bağlı) */
+.column-name {
+    display: inline-block;
+    margin: 0;
+    font-weight: 500; /* Örnek kalınlık */
+}
+
+/* Arama kutusunu (input) küçültmek için */
+.small-input {
+    width: 130px !important;  /* Genişliği azalttık */
+    height: 28px !important;  /* Yüksekliği azalttık */
+    font-size: 12px !important;
+    line-height: 1 !important;
+    padding: 0 8px !important;
+    /* Eğer text yukarı-aşağı ortalanmazsa, align-items center ile birlikte
+       height'ı biraz daha büyütebilir veya input'un line-height'ını ayarlayabilirsiniz. */
+}
