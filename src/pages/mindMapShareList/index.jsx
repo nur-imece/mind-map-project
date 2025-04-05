@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Table, Space, Button, Modal, message, Tooltip, Input, Tag, Select } from 'antd';
-import { HeartOutlined, HeartFilled, DeleteOutlined, EyeOutlined, SearchOutlined, ClearOutlined, UnorderedListOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { Table, Space, Button, Modal, message, Tooltip, Input, Card } from 'antd';
+import { HeartOutlined, HeartFilled, DeleteOutlined, EyeOutlined, UnorderedListOutlined, AppstoreOutlined } from '@ant-design/icons';
 import Header from "../../components/header";
 import PageContainer from "../../components/PageContainer";
 import SubHeader from "../../components/subHeader";
 import SharedMapService from "../../services/api/mindmap";
 import Utils from "../../utils";
-import "../templateList/index.scss"
 import "./index.scss";
 import iconShared from "../../styles/img/shared-icon.png";
 import iconGridFile from "../../styles/img/grid-file-icon.png";
-
-const { Option } = Select;
 
 const MindMapShare = () => {
     const { t } = useTranslation();
@@ -26,7 +23,6 @@ const MindMapShare = () => {
     const [isFavFilter, setIsFavFilter] = useState(false);
     const [activeLayout, setActiveLayout] = useState('list');
     const [searchText, setSearchText] = useState("");
-    const [sharedFilter, setSharedFilter] = useState(null);
     const [filteredData, setFilteredData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -45,28 +41,23 @@ const MindMapShare = () => {
     }, []);
 
     useEffect(() => {
-        // Filter data when search text or shared filter changes
+        // Filter data when search text changes
         if (data.length > 0) {
             filterData();
         }
-    }, [searchText, sharedFilter, data, isFavFilter]);
+    }, [searchText, data, isFavFilter]);
 
     const filterData = () => {
-        // Apply text search, shared status filters, and favorite filter if enabled
+        // Apply text search and favorite filter if enabled
         const filtered = data.filter(item => {
             // Text search
             const matchesText = searchText === "" ||
                 item.name.toLowerCase().includes(searchText.toLowerCase());
 
-            // Shared status filter
-            const matchesShared = sharedFilter === null ||
-                (sharedFilter === true && item.isMapShared) ||
-                (sharedFilter === false && !item.isMapShared);
-
             // Favorite filter
             const matchesFavorite = !isFavFilter || item.isFavorite;
 
-            return matchesText && matchesShared && matchesFavorite;
+            return matchesText && matchesFavorite;
         });
 
         setFilteredData(filtered);
@@ -77,15 +68,6 @@ const MindMapShare = () => {
 
     const handleSearch = (value) => {
         setSearchText(value);
-    };
-
-    const handleSharedFilterChange = (value) => {
-        setSharedFilter(value);
-    };
-
-    const clearAllFilters = () => {
-        setSearchText("");
-        setSharedFilter(null);
     };
 
     const getMindMapShare = async () => {
@@ -101,7 +83,7 @@ const MindMapShare = () => {
                     ...item,
                     modifiedDate: item.modifiedDate ? Utils.formatDateWithMonthName(item.modifiedDate) : '',
                     creationDate: item.creationDate || '',
-                    key: item.id // Adding a key for antd Table
+                    key: item.id
                 }));
 
                 setData(mindMapList);
@@ -118,9 +100,16 @@ const MindMapShare = () => {
         }
     };
 
-    const deleteMindMap = async () => {
+    const deleteMindMap = async (id) => {
+        // Ensure id exists and is not null
+        if (!id) {
+            console.error("Map ID is missing");
+            message.error(t("errormodalMsgTxt"));
+            return;
+        }
+
         try {
-            await SharedMapService.deleteSharedMindMapFile(deletedMapId);
+            await SharedMapService.deleteSharedMindMapFile(id);
             getMindMapShare();
             message.success(t("successMsgTxt"));
         } catch (error) {
@@ -130,18 +119,25 @@ const MindMapShare = () => {
     };
 
     const deleteRow = (id) => {
+        // Check if ID is valid
+        if (!id) {
+            console.error("Invalid map ID for deletion");
+            message.error(t("errormodalMsgTxt"));
+            return;
+        }
+        
         setDeletedMapId(id);
-        showDeleteConfirmModal();
+        showDeleteConfirmModal(id);
     };
 
-    const showDeleteConfirmModal = () => {
+    const showDeleteConfirmModal = (id) => {
         Modal.confirm({
             title: t("areyousureMsgTxt"),
             content: t('deleteMapApproveWithPermissionModalMsgTxt'),
             okText: t("yesMsgTxt"),
             okType: 'danger',
             cancelText: t("noMsgTxt"),
-            onOk: deleteMindMap
+            onOk: () => deleteMindMap(id)
         });
     };
 
@@ -183,74 +179,10 @@ const MindMapShare = () => {
         setIsFavFilter(!isFavFilter);
     };
 
-    const renderFilterBar = () => (
-        <div className="filter-bar" style={{
-            marginBottom: '20px',
-            padding: '15px',
-            background: '#f9f9f9',
-            borderRadius: '5px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-        }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Input
-                        placeholder={t("searchMsgTxt")}
-                        value={searchText}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        prefix={<SearchOutlined />}
-                        allowClear
-                        style={{ width: '250px' }}
-                    />
-                    <Select
-                        placeholder={t("statusMsgTxt")}
-                        value={sharedFilter}
-                        onChange={handleSharedFilterChange}
-                        style={{ width: '180px' }}
-                        allowClear
-                    >
-                        <Option value={true}>{t("sharedMapMsgTxt")}</Option>
-                        <Option value={false}>{t("notSharedMsgTxt")}</Option>
-                    </Select>
-                </div>
-                {(searchText || sharedFilter !== null) && (
-                    <Button
-                        icon={<ClearOutlined />}
-                        onClick={clearAllFilters}
-                        type="link"
-                    >
-                        {t("clearFilters")}
-                    </Button>
-                )}
-            </div>
-            <div className="filters-applied" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {searchText && (
-                    <Tag closable onClose={() => setSearchText("")} color="blue">
-                        {t("searchMsgTxt")}: {searchText}
-                    </Tag>
-                )}
-                {sharedFilter !== null && (
-                    <Tag closable onClose={() => setSharedFilter(null)} color="green">
-                        {sharedFilter ? t("sharedMapMsgTxt") : t("notSharedMsgTxt")}
-                    </Tag>
-                )}
-                {isFavFilter && (
-                    <Tag closable onClose={() => setIsFavFilter(false)} color="gold">
-                        {t("favoriteMsgTxt")}
-                    </Tag>
-                )}
-                {(searchText || sharedFilter !== null || isFavFilter) && (
-                    <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#666' }}>
-                        {filteredData.length} {t("totalItemsMsgTxt")}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-
     // Columns configuration for the table
     const columns = [
         {
-            title: t("nameMsgTxt"),
+            title: t("isim"),
             dataIndex: "name",
             key: "name",
             sorter: (a, b) => a.name.localeCompare(b.name),
@@ -264,7 +196,6 @@ const MindMapShare = () => {
                                 localStorage.setItem('mapPermission', record.mapPermissionId);
                             }}
                             title={record.name}
-                            style={{ cursor: 'pointer' }}
                         >
                             {text}
                         </a>
@@ -288,22 +219,18 @@ const MindMapShare = () => {
             className: "name-column",
         },
         {
-            title: t("creationDateMsgTxt"),
+            title: t("olusturmaTarihi"),
             dataIndex: "creationDate",
             key: "creationDate",
             sorter: (a, b) => new Date(a.creationDate) - new Date(b.creationDate),
-            render: (text, record) => (
-                <div>
-                    {Utils.formatDateWithMonthName(record.creationDate)}
-                </div>
-            ),
+            render: (text) => <div>{Utils.formatDateWithMonthName(text)}</div>,
             className: "date-column",
         },
         {
             title: "",
             key: "actions",
             render: (_, record) => (
-                <Space size="middle">
+                <Space size="middle" className="action-buttons">
                     <Tooltip title={t("showMsgTxt")}>
                         <Button
                             type="link"
@@ -330,14 +257,72 @@ const MindMapShare = () => {
         }
     ];
 
+    // Function to render grid items
+    const renderGridItems = () => {
+        return (
+            <div className="grid-items">
+                {filteredData.map(item => (
+                    <Card 
+                        key={item.id} 
+                        className="grid-item" 
+                        hoverable
+                        cover={<img src={iconGridFile} alt={item.name} />}
+                        actions={[
+                            <Tooltip title={t("showMsgTxt")}>
+                                <EyeOutlined 
+                                    onClick={() => {
+                                        clickOpenUrl(item.id, item.name, item.mapPermissionId);
+                                        localStorage.setItem("mapJsonObj", JSON.stringify(item));
+                                        localStorage.setItem('mapPermission', item.mapPermissionId);
+                                    }}
+                                />
+                            </Tooltip>,
+                            <Tooltip title={item.isFavorite ? t("removeFromFavListMsgTxt") : t("addToFavListMsgTxt")}>
+                                {item.isFavorite ? 
+                                    <HeartFilled 
+                                        className="favorite-active" 
+                                        onClick={() => addRemoveFavorite(item.id, !item.isFavorite)} 
+                                    /> : 
+                                    <HeartOutlined 
+                                        onClick={() => addRemoveFavorite(item.id, !item.isFavorite)} 
+                                    />
+                                }
+                            </Tooltip>,
+                            <Tooltip title={t("deleteMsgTxt")}>
+                                <DeleteOutlined onClick={() => deleteRow(item.id)} />
+                            </Tooltip>
+                        ]}
+                    >
+                        <Card.Meta 
+                            title={item.name}
+                            description={
+                                <div className="grid-item-meta">
+                                    {item.isMapShared && (
+                                        <div className="shared-indicator">
+                                            <img src={iconShared} alt={t("sharedMapMsgTxt")} />
+                                            <span>{t("sharedMapMsgTxt")}</span>
+                                        </div>
+                                    )}
+                                    <div className="creation-date">
+                                        {Utils.formatDateWithMonthName(item.creationDate)}
+                                    </div>
+                                </div>
+                            }
+                        />
+                    </Card>
+                ))}
+            </div>
+        );
+    };
+
     return (
         <>
             <Header />
             <PageContainer>
                 <div className="title-wrapper">
-                    <div className="px-3">
+                    <div className="title-left">
                         <SubHeader
-                            title={t("sharedWithMeMsgTxt")}
+                            title={t("benimlePaylasilanlar")}
                             iconName="icon-share_list_icon"
                         />
                     </div>
@@ -369,81 +354,47 @@ const MindMapShare = () => {
                     </div>
                 </div>
 
-                <div className="col-md-12 px-3 pb-3">
-                    {/* Filter bar */}
-                    {renderFilterBar()}
+                <div className="search-section">
+                    <Input
+                        placeholder={t("ara")}
+                        value={searchText}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        className="search-input"
+                    />
+                </div>
 
-                    {/* List layout */}
-                    <div
-                        className={`table-list layout-option-content${activeLayout === 'list' ? ' show' : ''}`}
-                        data-layout="list"
-                    >
-                        <div className="map-table">
-                            <Table
-                                columns={columns}
-                                dataSource={filteredData}
-                                loading={isLoading}
-                                pagination={{
-                                    pageSize: pageSize,
-                                    current: currentPage,
-                                    onChange: (page) => setCurrentPage(page),
-                                    onShowSizeChange: (current, size) => {
-                                        setCurrentPage(1);
-                                        setPageSize(size);
-                                    },
-                                    showSizeChanger: true,
-                                    pageSizeOptions: [10, 20, 50],
-                                    showTotal: (total, range) =>
-                                        `${t("pageTextMsgTxt")} ${range[0]}-${range[1]} ${t("ofTextMsgTxt")} ${total}`
-                                }}
-                                locale={{
-                                    emptyText: t("noDataTextMsgTxt"),
-                                    triggerDesc: t("triggerDescMsgTxt"),
-                                    triggerAsc: t("triggerAscMsgTxt"),
-                                    cancelSort: t("cancelSortMsgTxt")
-                                }}
-                                className="-striped -highlight"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Grid layout */}
-                    <div
-                        className={`table-grid layout-option-content${activeLayout === 'grid' ? ' show' : ''}`}
-                        data-layout="grid"
-                    >
-                        <div className="grid-items">
-                            {filteredData.length > 0 && filteredData.map(item => (
-                                <div className="grid-item" key={item.id} title={item.name}>
-                                    <a
-                                        onClick={() => addRemoveFavorite(item.id, !item.isFavorite)}
-                                        className={`fav-action${item.isFavorite ? ' active' : ''}`}
-                                        title={item.isFavorite ? t("removeFromFavListMsgTxt") : t("addToFavListMsgTxt")}
-                                    >
-                                        <i className="icon-favorite-icon"></i>
-                                    </a>
-                                    {item.isMapShared && (
-                                        <img
-                                            src={iconShared}
-                                            className="shared-icon"
-                                            alt={t("sharedMapMsgTxt")}
-                                        />
-                                    )}
-                                    <a
-                                        onClick={() => {
-                                            clickOpenUrl(item.id, item.name, item.mapPermissionId);
-                                            localStorage.setItem("mapJsonObj", JSON.stringify(item));
-                                            localStorage.setItem('mapPermission', item.mapPermissionId);
-                                        }}
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        <img src={iconGridFile} alt={item.name} />
-                                        <div className="name">{item.name}</div>
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                <div className="maps-content">
+                    {activeLayout === 'list' ? (
+                        <Table
+                            columns={columns}
+                            dataSource={filteredData}
+                            loading={isLoading}
+                            pagination={{
+                                pageSize: pageSize,
+                                current: currentPage,
+                                onChange: (page) => setCurrentPage(page),
+                                onShowSizeChange: (current, size) => {
+                                    setCurrentPage(1);
+                                    setPageSize(size);
+                                },
+                                showSizeChanger: true,
+                                pageSizeOptions: [10, 20, 50],
+                                showTotal: (total, range) =>
+                                    `${range[0]}-${range[1]} / ${total}`,
+                                size: "small",
+                                showQuickJumper: false
+                            }}
+                            locale={{
+                                emptyText: t("noDataTextMsgTxt"),
+                                triggerDesc: t("triggerDescMsgTxt"),
+                                triggerAsc: t("triggerAscMsgTxt"),
+                                cancelSort: t("cancelSortMsgTxt")
+                            }}
+                            className="maps-table"
+                        />
+                    ) : (
+                        renderGridItems()
+                    )}
                 </div>
             </PageContainer>
         </>
