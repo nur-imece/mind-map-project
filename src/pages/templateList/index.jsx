@@ -7,7 +7,7 @@ import Header from "../../components/header";
 import PageContainer from "../../components/PageContainer";
 import TemplateListService from "../../services/api/template";
 import MapService from "../../services/api/mindmap";
-import AddCategoryModal from "../../helpers/add-category-modal";
+import AddCategoryModal from "./components/categoryModal";
 import ChatGptService from "../../services/api/chatgpt";
 import AiPackages from "../../services/api/mapaipackage";
 import DocumentsServices from "../../services/api/document";
@@ -187,8 +187,11 @@ const TemplateList = () => {
     };
 
     const sharedClick = (isOpen) => {
-        setIsAddCategoryModal(isOpen);
-        setIsUpdateProcess(isOpen);
+        setIsAddCategoryModal(false);
+        
+        if (isOpen === true) {
+            getTemplateList();
+        }
     };
 
     const newMap = async (templateData, templateName) => {
@@ -297,8 +300,10 @@ const TemplateList = () => {
             content: <span><b>{name}</b>: {t("categoryWillRemoveWithSubsAreYouSureMsgTxt")}</span>,
             okText: t("yesMsgTxt"),
             cancelText: t("noMsgTxt"),
-            onOk: () => {
-                deleteCategoryTemplate(id);
+            onOk: async () => {
+                await deleteCategoryTemplate(id);
+                // Silme işlemi tamamlandıktan sonra listeyi yenile
+                getTemplateList();
             }
         });
     };

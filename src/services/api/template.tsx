@@ -17,7 +17,7 @@ const templateService = {
   updateTemplate: async (
     data: UpdateTemplateRequestModel
   ): Promise<{ data?: TemplateResponseDto; error?: string }> => {
-    return await request.put(PATHS.TEMPLATE.UPDATE_TEMPLATE, data);
+    return await request.post(PATHS.TEMPLATE.UPDATE_TEMPLATE, data);
   },
 
   getTemplate: async (
@@ -52,7 +52,7 @@ const templateService = {
   deleteTemplate: async (
     id: string
   ): Promise<{ data?: any; error?: string }> => {
-    return await request.delete(`${PATHS.TEMPLATE.DELETE_TEMPLATE}?id=${id}`);
+    return await request.post(`${PATHS.TEMPLATE.DELETE_TEMPLATE}?templateId=${id}`);
   }
 };
 

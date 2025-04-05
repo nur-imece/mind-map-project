@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 // Services
 import accountService from "../../services/api/account";
@@ -21,6 +23,12 @@ const Header = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const [userAvatar, setUserAvatar] = useState({ 
+    src: null, 
+    text: "",
+    hasImage: false,
+    backgroundColor: "#00ceff" 
+  });
   const { t } = useTranslation();
 
   const infoPopupWhenUserTrialDayStart = () => {
@@ -40,26 +48,31 @@ const Header = () => {
     const isFreeUser = userProfil?.isFreeUser;
     localStorage.setItem("iFU0", isFreeUser);
 
-    const headerImage = document.querySelector("#headerImage");
-    const nameLatter = document.querySelector("#nameLatter");
+    if (!userProfil.user) return;
+
+    // Handle user avatar
+    const avatarData = {
+      src: null,
+      text: "",
+      hasImage: false,
+      backgroundColor: userProfil.user.avatarColorCode || "#00ceff"
+    };
 
     if (userProfil.user.avatarImagePath === null) {
-      if (headerImage) headerImage.style.display = "none";
+      // No avatar image - use initials from first and last name
+      const firstInitial = userProfil.user.firstName?.charAt(0) || "";
+      const lastInitial = userProfil.user.lastName?.charAt(0) || "";
+      avatarData.text = (firstInitial + lastInitial).toUpperCase();
+    } else if (userProfil.user.hasProfileImage) {
+      // User has profile image
+      avatarData.src = userProfil.user.avatarImagePath;
+      avatarData.hasImage = true;
     } else {
-      if (userProfil.user.hasProfileImage) {
-        if (headerImage) {
-          headerImage.src = userProfil.user.avatarImagePath;
-          headerImage.style.display = "block";
-        }
-        if (nameLatter) nameLatter.style.display = "none";
-      } else {
-        if (nameLatter) {
-          nameLatter.innerHTML = userProfil.user.avatarImagePath;
-          nameLatter.style.display = "block";
-        }
-        if (headerImage) headerImage.style.display = "none";
-      }
+      // User has text avatar
+      avatarData.text = userProfil.user.avatarImagePath;
     }
+
+    setUserAvatar(avatarData);
   };
 
   useEffect(() => {
@@ -160,9 +173,21 @@ const Header = () => {
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               style={{ cursor: "pointer" }}
             >
-              <a className="" role="button" onClick={(e) => e.preventDefault()}>
-                <img id="headerImage" src="" alt="" />
-                <div id="nameLatter" className="user-name-letters"></div>
+              <a className="user-avatar-wrapper" role="button" onClick={(e) => e.preventDefault()}>
+                <Avatar 
+                  size={40}
+                  icon={!userAvatar.src && !userAvatar.text ? <UserOutlined /> : null}
+                  src={userAvatar.hasImage ? userAvatar.src : null}
+                  style={{ 
+                    backgroundColor: userAvatar.backgroundColor,
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  {!userAvatar.hasImage && userAvatar.text}
+                </Avatar>
               </a>
 
               <UserMenu

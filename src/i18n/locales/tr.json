@@ -300,6 +300,22 @@
   "packageBuyDate": "Paket Satın Alım Tarihi",
   "packagePrice": "Paket Fiyatı",
   "numberMaps": "Adet",
-  "accountContactClarifyAgreementTitle": "İletişim Formu Aydınlatma Metni"
+  "accountContactClarifyAgreementTitle": "İletişim Formu Aydınlatma Metni",
 
+  "updateCategoryMapMsgTxt": "Kategori Haritasını Güncelle",
+  "categoryNameMsgTxt": "Kategori Adı",
+  "categoryTagsMsgTxt": "Kategori Etiketleri",
+  "chooseCoverImageMsgTxt": "Kapak Görseli Seç",
+  "uploadFromComputerMsgTxt": "Bilgisayardan Yükle",
+  "uploadFromLibraryMsgTxt": "Kütüphaneden Yükle",
+  "previewImageMsgTxt": "Görsel Önizleme",
+  "saveSmallMsgTxt": "Kaydet",
+  "updateMsgTxt": "Güncelle",
+  "warningMsgTxt": "Uyarı",
+  "missingDataForAddCategoryMsgTxt": "Kategori eklemek için tüm gerekli alanları doldurmalısınız.",
+  "templateCreatedSuccessfully": "Şablon başarıyla oluşturuldu.",
+  "errorCreatingTemplate": "Şablon oluşturulurken hata oluştu.",
+  "noCategorySelectedError": "Seçili kategori bulunamadı.",
+  "templateUpdatedSuccessfully": "Şablon başarıyla güncellendi.",
+  "errorUpdatingTemplate": "Şablon güncellenirken hata oluştu."
 }
