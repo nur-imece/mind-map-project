@@ -8,7 +8,7 @@ import PageContainer from "../../components/PageContainer";
 import TemplateListService from "../../services/api/template";
 import MapService from "../../services/api/mindmap";
 import AddCategoryModal from "./components/categoryModal";
-import ChatGptService from "../../services/api/chatgpt";
+import ChatGptModal from "./components/chatGptModal";
 import AiPackages from "../../services/api/mapaipackage";
 import DocumentsServices from "../../services/api/document";
 import { LanguageContext } from "../../context/languageContext";
@@ -16,9 +16,7 @@ import request from "../../services/api/request";
 import { PATHS } from "../../services/api/paths";
 
 import moreOptionsIcon from "@/styles/img/more-options-icon.png";
-import gptModalImage from "@/styles/img/gpt-modal.png";
 import robotImage from "@/styles/img/Robot.png";
-import closeImage from "@/styles/img/close.png";
 import createNewMapIcon from "@/icons/createNewMap.svg";
 
 import "./index.scss";
@@ -41,15 +39,8 @@ const TemplateList = () => {
     const [inputValue, setInputValue] = useState('');
     const [documents, setDocuments] = useState([]);
     const [inputModal, setInputModal] = useState(false);
-    const [gptSubject, setGptSubject] = useState("");
-    const [chatGptMapLanguage, setChatGptMapLanguage] = useState(selectedLanguage || "en");
-    const [isLanguageTurkish, setIsLanguageTurkish] = useState(false);
-    const [isLanguageEnglish, setIsLanguageEnglish] = useState(false);
     const [gptMapNumbers, setGptMapNumbers] = useState(0);
-    const [isDocument, setIsDocument] = useState(false);
-    const [documentId, setDocumentId] = useState(null);
     const [userRole, setUserRole] = useState(JSON.parse(localStorage.getItem("userRoleIdList")) || []);
-    const [type, setType] = useState("0");
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     useEffect(() => {
@@ -83,11 +74,6 @@ const TemplateList = () => {
             setTags(tagParams);
         }
     }, [location.search]);
-
-    // Effect to update chatGptMapLanguage when selectedLanguage changes
-    useEffect(() => {
-        setChatGptMapLanguage(selectedLanguage);
-    }, [selectedLanguage]);
  
     // Effect to fetch template list when language changes or tags change
     useEffect(() => {
@@ -119,25 +105,10 @@ const TemplateList = () => {
 
     const openChatGptModal = () => {
         setInputModal(true);
-
-        if (chatGptMapLanguage === "tr") {
-            setIsLanguageTurkish(true);
-        }
-        if (chatGptMapLanguage === "en") {
-            setIsLanguageEnglish(true);
-        }
     };
 
-    const handleClose = () => {
+    const closeChatGptModal = () => {
         setInputModal(false);
-        setGptSubject("");
-        setIsDocument(false);
-        setDocumentId(null);
-    };
-
-    const documentSwitchHandle = (value) => {
-        if (isDocument === true) setDocumentId(null);
-        setIsDocument(value);
     };
 
     const getTemplateList = async () => {
@@ -254,41 +225,6 @@ const TemplateList = () => {
         }
     };
 
-    const createChatGptMap = async () => {
-        const question = gptSubject;
-        const gptLanguage = chatGptMapLanguage;
-        const docId = documentId === null || undefined ? null : documentId;
-        let gptLanguageService;
-        if (gptLanguage === "tr") {
-            gptLanguageService = "Türkçe";
-        }
-        if (gptLanguage === "en") {
-            gptLanguageService = "English";
-        }
-        const mapType = type || "0";
-        const data = isDocument === false
-            ? {
-                question: question,
-                language: gptLanguageService,
-                type: mapType
-            }
-            : {
-                question: question,
-                language: gptLanguageService,
-                documentIds: [docId],
-            };
-        console.log(`Creating ChatGPT map with language: ${gptLanguageService}`);
-        if (isDocument === false) {
-            await ChatGptService.getChatResponse(JSON.stringify(data), function () {
-                ChatGptService.redirectMap(localStorage.getItem("openedMapId"));
-            });
-        } else {
-            await ChatGptService.getEmbedingChatResponse(JSON.stringify(data), function () {
-                DocumentsServices.redirectMap(localStorage.getItem("resposeDataDocumentId"));
-            });
-        }
-    };
-
     const deleteCategoryTemplate = async (id) => {
         await TemplateListService.deleteTemplate(id, getTemplateList, this);
     };
@@ -363,6 +299,13 @@ const TemplateList = () => {
                     />
                 )}
 
+                <ChatGptModal 
+                    isOpen={inputModal}
+                    onClose={closeChatGptModal}
+                    documents={documents}
+                    gptMapNumbers={gptMapNumbers}
+                />
+
                 <div className="template-header">
                     <div className="icon-container">
                         <img src={createNewMapIcon} alt="Create new map"/>
@@ -389,195 +332,9 @@ const TemplateList = () => {
                             placeholder={t("filterByTagOrNameMsgTxt")}
                         />
                     </div>
-
                 </div>
 
                 <div className="templates-grid">
-                    {inputModal && (
-                        <div className="gpt-modal">
-                            <section className="modal-main custom-modal-main">
-                                <div className="chat-gpt-header">
-                                    <img
-                                        src={gptModalImage}
-                                        alt="Foramind, Zihin Haritası, Mind Map"
-                                    />
-                                    <h1>{t("chatGPTCreate")}</h1>
-                                    <button
-                                        onClick={handleClose}
-                                        type="button"
-                                        className="close"
-                                        aria-label="Close"
-                                    >
-                                        <img
-                                            src={closeImage}
-                                            alt="Foramind, Zihin Haritası, Mind Map"
-                                        />
-                                    </button>
-                                </div>
-
-                                <form>
-                                    <label htmlFor="gpt-subject">
-                                        {t("chatGptMapSubject")}
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder={t("fillSubject")}
-                                        onChange={(e) => setGptSubject(e.target.value)}
-                                        id="gpt-subject"
-                                    />
-
-                                    <div className="form-check">
-                                        {userRole.some(role => role !== 2) && (
-                                            <div className="switch-ai-or-documents-container">
-                                                <div>
-                                                    <label style={{fontSize: "15px"}}>
-                                                        {t("useDocumentMsgTxt")}
-                                                    </label>
-                                                </div>
-                                                <div className="switch-ai-or-documents-container__inner-container">
-                                                    <label className="switch document-switch" style={{marginRight: "none"}}>
-                                                        <input
-                                                            type="checkbox"
-                                                            onClick={(e) => documentSwitchHandle(e.target.checked)}
-                                                        />
-                                                        <span className="slider round"></span>
-                                                    </label>
-                                                    {isDocument === true && (
-                                                        <select
-                                                            className="custom-select-document"
-                                                            name="document"
-                                                            id="document"
-                                                            onChange={(e) => setDocumentId(Number(e.target.value))}
-                                                            defaultValue=""
-                                                        >
-                                                            <option value="" disabled>
-                                                                {t("pleaseSelectDocumentMsgTxt")}
-                                                            </option>
-                                                            {documents.map((document) => (
-                                                                <option
-                                                                    key={document.id}
-                                                                    value={document.id}
-                                                                >
-                                                                    {document.contentName}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-                                        {!isDocument && (
-                                            <div style={{marginBottom: "20px"}}>
-                                                <h5>Model Seçimi:</h5>
-                                                <select
-                                                    onChange={(e) => setType(e.target.value)}
-                                                    defaultValue="0"
-                                                >
-                                                    <option value="1">4o</option>
-                                                    <option value="0">4o mini</option>
-                                                </select>
-                                            </div>
-                                        )}
-
-                                        <div className="form-check__header">
-                                            <h5>{t("languageSelect")}:</h5>
-                                        </div>
-
-                                        <div className="language-options">
-                                            <div className="language-option">
-                                                <input
-                                                    className=""
-                                                    type="radio"
-                                                    name="flexRadioDefault"
-                                                    id="flexRadioDefault1"
-                                                    value="tr"
-                                                    checked={chatGptMapLanguage === "tr"}
-                                                    onChange={(e) => setChatGptMapLanguage(e.target.value)}
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor="flexRadioDefault1"
-                                                >
-                                                    {t("languageTurkish")}
-                                                </label>
-                                            </div>
-
-                                            <div className="language-option">
-                                                <input
-                                                    className=""
-                                                    type="radio"
-                                                    name="flexRadioDefault"
-                                                    id="flexRadioDefault2"
-                                                    value="en"
-                                                    checked={chatGptMapLanguage === "en"}
-                                                    onChange={(e) => setChatGptMapLanguage(e.target.value)}
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor="flexRadioDefault2"
-                                                >
-                                                    {t("languageEnglish")}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="action-buttons">
-                                        {!isDocument ? (
-                                            <>
-                                                <button
-                                                    type="button"
-                                                    id="cancel-gpt"
-                                                    onClick={handleClose}
-                                                >
-                                                    {t("cancelChatGpt")}
-                                                </button>
-
-                                                <button
-                                                    id="save-gpt"
-                                                    type="button"
-                                                    onClick={createChatGptMap}
-                                                    className={
-                                                        gptSubject.trim() === ""
-                                                            ? "create-mind-map-ai-passive"
-                                                            : "create-mind-map-ai-active"
-                                                    }
-                                                    disabled={gptSubject.trim() === ""}
-                                                >
-                                                    {t("createMap")}
-                                                </button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <button
-                                                    type="button"
-                                                    id="cancel-gpt"
-                                                    onClick={handleClose}
-                                                >
-                                                    {t("cancelChatGpt")}
-                                                </button>
-
-                                                <button
-                                                    id="save-gpt"
-                                                    type="button"
-                                                    onClick={createChatGptMap}
-                                                    className={
-                                                        documentId !== null && gptSubject.trim() !== ""
-                                                            ? "create-mind-map-ai-active"
-                                                            : "create-mind-map-ai-passive"
-                                                    }
-                                                    disabled={!(documentId !== null && gptSubject.trim() !== "")}
-                                                >
-                                                    {t("createMap")}
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </form>
-                            </section>
-                        </div>
-                    )}
-                    
                     <Row gutter={[16, 16]}>
                         <Col xs={24} sm={12} md={8} lg={6} xl={6}>
                             <Card 
