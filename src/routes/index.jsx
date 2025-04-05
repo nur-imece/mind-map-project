@@ -18,6 +18,8 @@ import SubscriptionDetail from "pages/SubscriptionDetail";
 import SubscriptionHistory from "pages/SubscriptionHistory";
 import SubscriptionAiDetail from "pages/subscriptionAiDetail";
 import Map from "pages/map";
+import SubTemplateList from "pages/subTemplate";
+
 
 // Define PrivateRoute directly here to avoid import/export issues
 const PrivateRoute = ({ requiresPayment }) => {
@@ -61,7 +63,8 @@ const AppRoutes = () => {
       <Route element={<PrivateRoute requiresPayment={true} />}>
         <Route path="/mind-map-list" element={<MindMapList />} />
         <Route path="/template-list" element={<TemplateList />} />
-        <Route path="/mind-map-share-list" element={<MindMapShareList />} />
+          <Route path="/sub-template-list" element={<SubTemplateList />} />
+          <Route path="/mind-map-share-list" element={<MindMapShareList />} />
         <Route path="/ai-payment" element={<AiPayment />} />
         <Route path="/map" element={<Map/>} />
         <Route path="/map/:mapId" element={<Map/>} />

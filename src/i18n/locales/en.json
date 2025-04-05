@@ -313,5 +313,14 @@
   "packageBuyDate": "Purchase Date",
   "packagePrice": "Price",
   "numberMaps": "Maps",
-  "accountContactClarifyAgreementTitle": "Contact Form Clarification Text"
+  "accountContactClarifyAgreementTitle": "Contact Form Clarification Text",
+
+  "mindMapMsgTxt": "Mind Map",
+  "categoryListMsgTxt": "Category List",
+  "addTemplateMsgTxt": "Add Template",
+  "createMsgTxt": "Create",
+  "noTemplateFoundMsgTxt": "No template found",
+  "templateWillRemoveAreYouSureMsgTxt": "will be removed. Are you sure?",
+  "createdMsgTxt": "created",
+  "deleteSuccessMsgTxt": "Template successfully deleted"
 }

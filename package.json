@@ -26,6 +26,7 @@
     "react-i18next": "^13.0.0",
     "react-image-crop": "^11.0.7",
     "react-image-file-resizer": "^0.4.8",
+    "react-modal-image": "^2.6.0",
     "react-router-dom": "^6.8.0",
     "react-toastify": "^11.0.5",
     "reactflow": "^11.11.4",

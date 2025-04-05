@@ -317,5 +317,14 @@
   "errorCreatingTemplate": "Şablon oluşturulurken hata oluştu.",
   "noCategorySelectedError": "Seçili kategori bulunamadı.",
   "templateUpdatedSuccessfully": "Şablon başarıyla güncellendi.",
-  "errorUpdatingTemplate": "Şablon güncellenirken hata oluştu."
+  "errorUpdatingTemplate": "Şablon güncellenirken hata oluştu.",
+
+  "mindMapMsgTxt": "Zihin Haritası",
+  "categoryListMsgTxt": "Kategori Listesi",
+  "addTemplateMsgTxt": "Şablon Ekle",
+  "createMsgTxt": "Oluştur",
+  "noTemplateFoundMsgTxt": "Şablon bulunamadı",
+  "templateWillRemoveAreYouSureMsgTxt": "silinecek. Emin misiniz?",
+  "createdMsgTxt": "oluşturuldu",
+  "deleteSuccessMsgTxt": "Şablon başarıyla silindi"
 }
