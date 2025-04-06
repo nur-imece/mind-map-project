@@ -1,6 +1,6 @@
 {
   "emailMsgTxt": "E-posta",
-  "passwordMsgTxt": "Şifre",
+  "passwordMsgTxt": "Parola",
   "loginMsgTxt": "Giriş Yap",
   "rememberMeMsgTxt": "Beni hatırla",
   "forgotpasswordMsgTxt": "Şifremi Unuttum",
@@ -42,8 +42,8 @@
   "accountsettingsMsgTxt": "Hesap Ayarları",
   "profileMsgTxt": "Profil",
   "chatGptPayment": "AI Paketi Satın Al",
-  "paymentPageMsgTxt": "Ödeme",
-  "subscriptionMenuTitleMsgTxt": "Aboneliğim",
+  "paymentPageMsgTxt": "Üyelik Paketleri",
+  "subscriptionMenuTitleMsgTxt": "Abonelik Bilgilerim",
   "contactMsgTxt": "İletişim",
   "logoutMsgTxt": "Çıkış Yap",
   "createNewMapMsgTxt": "Yeni Harita Oluştur",
