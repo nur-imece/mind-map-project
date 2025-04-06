@@ -8,7 +8,7 @@ import templateService from "../../services/api/template";
 import mindMapService from "../../services/api/mindmap";
 import Utils from "../../utils";
 import MapService from "../../services/api/mindmap";
-import AddTemplateModal from "../templateList/components/categoryModal";
+import TemplateModal from "./components/templateModal";
 import ModalImage from "react-modal-image";
 import { SearchOutlined, ZoomInOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { useLanguage } from "../../context/languageContext";
@@ -32,7 +32,7 @@ const SubTemplateList = () => {
     const [sharedMindMaps, setSharedMindMaps] = useState([]);
     const [subTemplateData, setSubTemplateData] = useState([]);
     const [selectedTemplateName, setSelectedTemplateName] = useState(localStorage.getItem("selectedTemplateName"));
-    const [isAddTemplateModal, setIsAddTemplateModal] = useState(JSON.parse(localStorage.getItem("isCustomModalOpen") || "false"));
+    const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
     const [isUpdateProcess, setIsUpdateProcess] = useState(false);
     const [isUserHasPermissionForOptions, setIsUserHasPermissionForOptions] = useState(false);
     const [isTeacherUserHasPermissionForOptions, setIsTeacherUserHasPermissionForOptions] = useState(false);
@@ -44,7 +44,7 @@ const SubTemplateList = () => {
     
     useEffect(() => {
         localStorage.removeItem("deletedTemplateId");
-        localStorage.setItem("isCustomModalOpen", "false");
+        localStorage.removeItem("isCustomModalOpen");
         localStorage.setItem("retrieveUrl", window.location.pathname);
         
         document.title = "Foramind | " + t("mindMapMsgTxt");
@@ -145,8 +145,27 @@ const SubTemplateList = () => {
         getSubTemplateList();
     }, [tags, selectedLanguage]);
 
+    // Add event listener to refresh template list
+    useEffect(() => {
+        // Make getSubTemplateList available globally for the modal component
+        window.getSubTemplateList = getSubTemplateList;
+        
+        // Add event listener for refreshing template list
+        const handleRefreshTemplateList = () => {
+            getSubTemplateList();
+        };
+        
+        window.addEventListener('refreshTemplateList', handleRefreshTemplateList);
+        
+        // Clean up
+        return () => {
+            delete window.getSubTemplateList;
+            window.removeEventListener('refreshTemplateList', handleRefreshTemplateList);
+        };
+    }, []);
+
     const sharedClick = (isOpen) => {
-        setIsAddTemplateModal(isOpen);
+        setIsTemplateModalOpen(isOpen);
         setIsUpdateProcess(isOpen);
     };
 
@@ -308,8 +327,8 @@ const SubTemplateList = () => {
         <>
             <Header />
             <div className="sub-template__container">
-                {isAddTemplateModal ? (
-                    <AddTemplateModal
+                {isTemplateModalOpen ? (
+                    <TemplateModal
                         sharedClick={sharedClick}
                         isUpdateProcess={isUpdateProcess}
                         selectedTemplate={selectedTemplate}
@@ -370,17 +389,16 @@ const SubTemplateList = () => {
                                 <Card 
                                     className="sub-template__add-card" 
                                     onClick={() => {
-                                        localStorage.setItem("isCustomModalOpen", "true");
-                                        setIsAddTemplateModal(true);
+                                        setIsTemplateModalOpen(true);
                                     }}
                                 >
                                     <div className="sub-template__add-content">
                                         <img
                                             src={blankTemplateLogo}
-                                            alt={t("addTemplateMsgTxt")}
+                                            alt={t("createTemplateMsgTxt")}
                                             className="sub-template__add-icon"
                                         />
-                                        <h3>{t("addTemplateMsgTxt")}</h3>
+                                        <h3>{t("createTemplateMsgTxt")}</h3>
                                     </div>
                                 </Card>
                             </Col>
@@ -410,8 +428,7 @@ const SubTemplateList = () => {
                                                     <div
                                                         className="sub-template__option-item"
                                                         onClick={() => {
-                                                            localStorage.setItem("isCustomModalOpen", "true");
-                                                            setIsAddTemplateModal(true);
+                                                            setIsTemplateModalOpen(true);
                                                             setIsUpdateProcess(true);
                                                             setSelectedTemplate(template);
                                                             setSelectedTemplateName(template.name);
