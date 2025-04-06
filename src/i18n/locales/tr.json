@@ -259,5 +259,7 @@
   "onceki": "Önceki",
   "sonraki": "Sonraki",
   "satirSayisi": "Satır Sayısı",
-  "userPaylastiText": "Kullanıcı paylaştı"
+  "userPaylastiText": "Kullanıcı paylaştı",
+  "aiGeneratedMsgTxt": "Yapay Zeka ile oluşturuldu",
+  "mapNameUpdatedSuccessfully":"Harita adı başarıyla güncellendi."
 }

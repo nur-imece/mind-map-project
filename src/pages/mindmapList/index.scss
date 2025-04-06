@@ -5,6 +5,85 @@
     background-color: transparent;
 }
 
+/* Title Wrapper Styles */
+.title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 20px;
+
+    .title-left {
+        .title-with-icon {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            
+            .page-icon {
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+            }
+            
+            h3.ant-typography {
+                margin: 0;
+            }
+        }
+    }
+
+    .view-controls {
+        display: flex;
+        gap: 10px;
+        
+        .view-control-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            height: 36px;
+            border-radius: 4px;
+            color: #888;
+            transition: all 0.3s;
+
+            &:hover {
+                color: #1890ff;
+                background-color: rgba(24, 144, 255, 0.1);
+            }
+
+            &.active {
+                color: #1890ff;
+                background-color: rgba(24, 144, 255, 0.15);
+            }
+
+            .anticon {
+                font-size: 18px;
+            }
+        }
+    }
+}
+
+/* Search Section Styles */
+.search-section {
+    margin-bottom: 20px;
+    
+    .search-input {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 6px;
+        
+        /* Fix for input placeholder position */
+        .ant-input {
+            height: 36px;
+            line-height: 36px;
+        }
+        
+        .ant-input-suffix {
+            line-height: 36px;
+        }
+    }
+}
+
 /* Sidebar Styles */
 .sidebar {
     background: #fff;
@@ -74,10 +153,6 @@
 .content {
     padding: 24px;
     overflow-y: auto;
-}
-
-.search-section {
-    margin-bottom: 32px;
 }
 
 .maps-grid {
@@ -404,4 +479,205 @@
     padding: 0 8px !important;
     /* Eğer text yukarı-aşağı ortalanmazsa, align-items center ile birlikte
        height'ı biraz daha büyütebilir veya input'un line-height'ını ayarlayabilirsiniz. */
+}
+
+/* Map Name Cell Styles */
+.map-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    .map-name {
+        cursor: pointer;
+        color: #1890ff;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    
+    .ai-badge, .shared-badge {
+        margin-left: 5px;
+    }
+
+    .edit-name-button {
+        opacity: 0.5;
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+/* Status Icons Styles */
+.status-icons {
+    .ai-icon {
+        color: #52c41a;
+        opacity: 1;
+    }
+    
+    .shared-icon {
+        color: #1890ff;
+    }
+    
+    .favorite-icon {
+        color: #faad14;
+    }
+}
+
+/* Grid View Styles */
+.maps-grid {
+    margin-top: 20px;
+    
+    .map-card {
+        position: relative;
+        
+        .map-card-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            
+            .map-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+
+                .map-title-wrapper {
+                    flex: 1;
+                    cursor: pointer;
+                }
+
+                .edit-name-button {
+                    opacity: 0.5;
+                    margin-left: 8px;
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+
+                .editable-card-title {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    margin-right: 8px;
+
+                    .ant-input {
+                        flex: 1;
+                    }
+
+                    .editable-buttons {
+                        display: flex;
+                        margin-left: 8px;
+                        
+                        .save-button {
+                            color: #52c41a;
+                            
+                            &:hover {
+                                background-color: rgba(82, 196, 26, 0.1);
+                            }
+                        }
+                        
+                        .cancel-button {
+                            color: #ff4d4f;
+                            
+                            &:hover {
+                                background-color: rgba(255, 77, 79, 0.1);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            .map-card-date {
+                margin-top: auto;
+                color: #888;
+                font-size: 12px;
+            }
+            
+            .map-card-status {
+                display: flex;
+                margin-top: 8px;
+                justify-content: flex-start;
+                align-items: center;
+                
+                .status-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    
+                    .ai-icon-container {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    
+                    .map-card-ai-icon {
+                        opacity: 0.8;
+                    }
+                    
+                    .map-card-fav-icon {
+                        color: #faad14;
+                        font-size: 16px;
+                    }
+                    
+                    .map-card-shared-icon {
+                        color: #1890ff;
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Pagination Container */
+.pagination-container {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 24px;
+    
+    .ant-pagination {
+        .ant-pagination-item-active {
+            border-color: #1890ff;
+            
+            a {
+                color: #1890ff;
+            }
+        }
+    }
+}
+
+/* Inline Editing Styles */
+.editable-cell {
+    display: flex;
+    align-items: center;
+    
+    .ant-input {
+        border-radius: 4px;
+        
+        &:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+    }
+    
+    .editable-buttons {
+        margin-left: 8px;
+        
+        .save-button {
+            color: #52c41a;
+            
+            &:hover {
+                background-color: rgba(82, 196, 26, 0.1);
+            }
+        }
+        
+        .cancel-button {
+            color: #ff4d4f;
+            
+            &:hover {
+                background-color: rgba(255, 77, 79, 0.1);
+            }
+        }
+    }
 }

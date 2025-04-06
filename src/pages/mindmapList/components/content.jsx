@@ -1,12 +1,10 @@
 import React from 'react';
-import { Layout, Input, Row, Col, Typography } from 'antd';
+import { Layout } from 'antd';
 import { useTranslation } from 'react-i18next';
 import MindMapTable from './mindmaptable';
 import MapCards from './mapcards';
 
 const { Content } = Layout;
-const { Search } = Input;
-const { Title } = Typography;
 
 const MindMapContent = ({
     viewType,
@@ -28,33 +26,19 @@ const MindMapContent = ({
     return (
         <Content className="content">
             {viewType === "card" ? (
-                <>
-                    <Row className="header-row" align="middle" justify="space-between">
-                        <Col>
-                            <Title level={4}>{t("mindmapsMsgTxt")}</Title>
-                        </Col>
-                        <Col>
-                            <Search
-                                placeholder={t("filterByTagOrNameMsgTxt")}
-                                allowClear
-                                size="middle"
-                                value={searchText}
-                                onSearch={handleSearch}
-                                onChange={(e) => handleSearch(e.target.value)}
-                                style={{ width: 250 }}
-                            />
-                        </Col>
-                    </Row>
-                    <div className="maps-grid">
-                        <MapCards
-                            data={data}
-                            searchText={searchText}
-                            clickOpenUrl={actions.clickOpenUrl}
-                            deleteRow={(id) => actions.deleteMapApproveModal(id, actions.getMindMap)}
-                            updateMapName={(record, newName) => actions.updateMapName(record, newName, actions.getMindMap)}
-                        />
-                    </div>
-                </>
+                <div className="maps-grid">
+                    <MapCards
+                        data={data}
+                        searchText={searchText}
+                        clickOpenUrl={actions.clickOpenUrl}
+                        deleteRow={actions.deleteRow}
+                        updateMapName={actions.updateMapName}
+                        currentPage={currentPage}
+                        pageSize={pageSize}
+                        setCurrentPage={setCurrentPage}
+                        setPageSize={setPageSize}
+                    />
+                </div>
             ) : (
                 <MindMapTable
                     data={data}
@@ -66,11 +50,11 @@ const MindMapContent = ({
                     searchText={searchText}
                     handleSearch={handleSearch}
                     clickOpenUrl={actions.clickOpenUrl}
-                    makePublicPrivate={(id, status) => actions.makePublicPrivate(id, status, actions.getMindMap)}
+                    makePublicPrivate={actions.makePublicPrivate}
                     handleShareMap={actions.handleShareMap}
-                    addRemoveFavorite={(id, status) => actions.addRemoveFavorite(id, status, actions.getMindMap)}
-                    deleteRow={(id) => actions.deleteMapApproveModal(id, actions.getMindMap)}
-                    updateMapName={(record, newName) => actions.updateMapName(record, newName, actions.getMindMap)}
+                    addRemoveFavorite={actions.addRemoveFavorite}
+                    deleteRow={actions.deleteRow}
+                    updateMapName={actions.updateMapName}
                     filterType={filterType}
                     setFilterType={setFilterType}
                     viewType={viewType}
