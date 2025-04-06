@@ -1,17 +1,19 @@
 import React from 'react';
 import { Button, Dropdown } from 'antd';
-import { PlusOutlined, PictureOutlined, FontSizeOutlined, BranchesOutlined } from '@ant-design/icons';
+import { PlusOutlined, PictureOutlined, FontSizeOutlined, BranchesOutlined, EditOutlined } from '@ant-design/icons';
 
 /**
  * Sol/sağ taraftaki + butonu ve dropdown menüsü.
  */
 const AddButtons = ({
-                        side,
-                        visibleDropdown,
-                        setVisibleDropdown,
-                        handleAddClick,
-                        handleOptionClick
-                    }) => {
+    side,
+    visibleDropdown,
+    setVisibleDropdown,
+    handleAddClick,
+    handleOptionClick,
+    handleEditClick,
+    selected
+}) => {
 
     const iconStyle = {
         fontSize: '16px',
@@ -20,7 +22,7 @@ const AddButtons = ({
         alignItems: 'center'
     };
 
-    // Dropdown item’ları
+    // Dropdown item'ları
     const dropdownItems = [
         {
             key: 'text',
@@ -85,31 +87,62 @@ const AddButtons = ({
     } else if (side === 'right') {
         containerStyle.right = '-30px';
     }
+    
+    // Edit butonu için stil
+    const editButtonStyle = {
+        position: 'absolute',
+        bottom: '-40px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 1000,
+        pointerEvents: 'all'
+    };
 
     return (
-        <div style={containerStyle}>
-            <Dropdown
-                {...dropdownProps}
-                placement={side === 'left' ? 'leftTop' : 'rightTop'}
-                open={visibleDropdown === side}
-                onOpenChange={(open) => !open && setVisibleDropdown(null)}
-                className="custom-node-dropdown"
-            >
-                <Button
-                    type="primary"
-                    shape="circle"
-                    size="large"
-                    style={{
-                        backgroundColor: '#52c41a',
-                        borderColor: '#52c41a',
-                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
-                        zIndex: 1000
-                    }}
-                    icon={<PlusOutlined />}
-                    onClick={() => handleAddClick(side)}
-                />
-            </Dropdown>
-        </div>
+        <>
+            <div style={containerStyle}>
+                <Dropdown
+                    {...dropdownProps}
+                    placement={side === 'left' ? 'leftTop' : 'rightTop'}
+                    open={visibleDropdown === side}
+                    onOpenChange={(open) => !open && setVisibleDropdown(null)}
+                    className="custom-node-dropdown"
+                >
+                    <Button
+                        type="primary"
+                        shape="circle"
+                        size="large"
+                        style={{
+                            backgroundColor: '#52c41a',
+                            borderColor: '#52c41a',
+                            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+                            zIndex: 1000
+                        }}
+                        icon={<PlusOutlined />}
+                        onClick={() => handleAddClick(side)}
+                    />
+                </Dropdown>
+            </div>
+            
+            {/* Edit butonu - Sadece right side için göster */}
+            {side === 'right' && (
+                <div style={editButtonStyle}>
+                    <Button
+                        type="primary"
+                        shape="circle"
+                        size="large"
+                        style={{
+                            backgroundColor: '#1890ff',
+                            borderColor: '#1890ff',
+                            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+                            zIndex: 1000
+                        }}
+                        icon={<EditOutlined />}
+                        onClick={handleEditClick}
+                    />
+                </div>
+            )}
+        </>
     );
 };
 

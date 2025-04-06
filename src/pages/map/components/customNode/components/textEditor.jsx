@@ -10,7 +10,8 @@ const TextEditor = ({
                         onBlur,
                         onKeyDown,
                         fontSize,
-                        color
+                        color,
+                        fontFamily
                     }) => {
     return (
         <Input.TextArea
@@ -24,6 +25,7 @@ const TextEditor = ({
             style={{
                 fontSize: fontSize ? `${fontSize}px` : '16px',
                 color: color || '#000000',
+                fontFamily: fontFamily,
                 background: 'transparent',
                 border: 'none',
                 boxShadow: 'none',

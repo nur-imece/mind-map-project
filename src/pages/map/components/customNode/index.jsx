@@ -3,31 +3,37 @@ import { useReactFlow } from 'reactflow';
 import Handles from './components/handles.jsx';
 import TextEditor from './components/textEditor.jsx';
 import AddButtons from './components/addButtons.jsx';
+import NodeEditOptions from './components/nodeEditOptions.jsx';
 
 import useImageHandler from '../imageHandler';
 import {
     findPositionWithoutOverlap,
     getPlainTextFromHTML,
-    getNodePosition
+    getNodePosition,
+    getRandomSoftColor,
+    NODE_SHAPES
 } from './components/utils.js';
 
 import './index.scss';
 
 const Index = memo(({ data, isConnectable, selected, id }) => {
     // ----------------------------------------------------------------
-    // State ve Ref’ler
+    // State ve Ref'ler
     // ----------------------------------------------------------------
     const [visibleDropdown, setVisibleDropdown] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editableText, setEditableText] = useState('');
     const [imageZoom, setImageZoom] = useState(100);
+    const [showEditOptions, setShowEditOptions] = useState(false);
+    const [selectedShape, setSelectedShape] = useState(NODE_SHAPES[0]);
+    const [selectedFontFamily, setSelectedFontFamily] = useState(null);
 
     const nodeRef = useRef(null);
     const fileInputRef = useRef(null);
 
     const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
-    // Image handler fonksiyonları (kendi hook’unuzdan gelenler)
+    // Image handler fonksiyonları (kendi hook'unuzdan gelenler)
     const {
         handleImageSelected,
         handlePasteEvent,
@@ -37,7 +43,7 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
     } = useImageHandler();
 
     // ----------------------------------------------------------------
-    // Effect’ler
+    // Effect'ler
     // ----------------------------------------------------------------
 
     // (1) Pano'ya (paste) bir resim yapıştırma olayını dinleme
@@ -60,7 +66,7 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
         }
     }, [selected, data, id, isEditing, handlePasteEvent]);
 
-    // (2) Image node ise nodeRef’e event listener bağlama
+    // (2) Image node ise nodeRef'e event listener bağlama
     useEffect(() => {
         if (data.isImageNode && nodeRef.current) {
             const cleanup = setupImageNodeEventListeners(nodeRef, id, setImageZoom);
@@ -76,10 +82,10 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
     }, [imageZoom, data.isImageNode, applyImageZoom]);
 
     // ----------------------------------------------------------------
-    // Callback’ler ve yardımcı fonksiyonlar
+    // Callback'ler ve yardımcı fonksiyonlar
     // ----------------------------------------------------------------
 
-    // ID’yi data’dan veya URL paramlarından alma
+    // ID'yi data'dan veya URL paramlarından alma
     const getMindMapId = useCallback(() => {
         if (data && data.mindMapId) {
             return data.mindMapId;
@@ -114,7 +120,7 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
         setIsEditing(false);
     };
 
-    // Metin değişikliğini state’e at
+    // Metin değişikliğini state'e at
     const handleTextChange = (e) => {
         setEditableText(e.target.value);
     };
@@ -150,15 +156,20 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
             nodes
         );
 
+        // Node için rastgele yumuşak renk oluştur
+        const randomColor = getRandomSoftColor();
+
         // Node verisi
         const newNode = {
             id: newNodeId,
             position: newPosition,
             data: {
                 label: content,
-                bgColor: currentNode.data.bgColor,
+                bgColor: randomColor, // Rastgele yumuşak renk
                 color: currentNode.data.color,
                 fontSize: currentNode.data.fontSize,
+                fontFamily: currentNode.data.fontFamily,
+                borderRadius: currentNode.data.borderRadius,
                 absPos: newPosition,
                 nodeType: position,
                 noBorder,
@@ -231,6 +242,205 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
         setVisibleDropdown(position);
     };
 
+    // Düzenleme seçeneklerini göster/gizle
+    const handleEditClick = () => {
+        setShowEditOptions(!showEditOptions);
+    };
+
+    // Modal kapatma fonksiyonu
+    const handleCloseEditOptions = () => {
+        setShowEditOptions(false);
+    };
+
+    // Yazı tipi değiştirme
+    const handleFontChange = (fontFamily) => {
+        const nodes = getNodes();
+        const updatedNodes = nodes.map(node => {
+            if (node.id === id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        fontFamily
+                    }
+                };
+            }
+            return node;
+        });
+        setNodes(updatedNodes);
+        setSelectedFontFamily(fontFamily);
+    };
+
+    // Metin stili değiştirme (bold, italic, underline)
+    const handleTextStyleChange = (styleType) => {
+        const nodes = getNodes();
+        let updatedLabel = '';
+        
+        // Mevcut etiketi alıp HTML formatında stilize et
+        const currentLabel = data.label;
+        
+        switch(styleType) {
+            case 'bold':
+                // Eğer etikette <b> varsa kaldır, yoksa ekle
+                if (currentLabel.includes('<b>') && currentLabel.includes('</b>')) {
+                    updatedLabel = currentLabel.replace(/<b>(.*?)<\/b>/g, '$1');
+                } else {
+                    updatedLabel = `<b>${currentLabel}</b>`;
+                }
+                break;
+            case 'italic':
+                // Eğer etikette <i> varsa kaldır, yoksa ekle
+                if (currentLabel.includes('<i>') && currentLabel.includes('</i>')) {
+                    updatedLabel = currentLabel.replace(/<i>(.*?)<\/i>/g, '$1');
+                } else {
+                    updatedLabel = `<i>${currentLabel}</i>`;
+                }
+                break;
+            case 'underline':
+                // Eğer etikette <u> varsa kaldır, yoksa ekle
+                if (currentLabel.includes('<u>') && currentLabel.includes('</u>')) {
+                    updatedLabel = currentLabel.replace(/<u>(.*?)<\/u>/g, '$1');
+                } else {
+                    updatedLabel = `<u>${currentLabel}</u>`;
+                }
+                break;
+            default:
+                return;
+        }
+        
+        // Düğümü güncelle
+        const updatedNodes = nodes.map(node => {
+            if (node.id === id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        label: updatedLabel
+                    }
+                };
+            }
+            return node;
+        });
+        
+        setNodes(updatedNodes);
+    };
+
+    // Renk değiştirme (yazı rengi veya arkaplan rengi)
+    const handleColorChange = (colorType, colorValue) => {
+        const nodes = getNodes();
+        const updatedNodes = nodes.map(node => {
+            if (node.id === id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        ...(colorType === 'textColor' 
+                            ? { color: colorValue } 
+                            : { bgColor: colorValue })
+                    }
+                };
+            }
+            return node;
+        });
+        setNodes(updatedNodes);
+    };
+
+    // İkon ekleme fonksiyonu yerine emoji ekleme fonksiyonu
+    const handleAddEmoji = (emoji) => {
+        const nodes = getNodes();
+        // Düğümün mevcut metnine emoji ekleyelim
+        const updatedNodes = nodes.map(node => {
+            if (node.id === id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        label: node.data.label + emoji
+                    }
+                };
+            }
+            return node;
+        });
+        setNodes(updatedNodes);
+    };
+
+    // Düğüm boyutunu değiştirme
+    const handleSizeChange = (dimension, value) => {
+        const nodes = getNodes();
+        const updatedNodes = nodes.map(node => {
+            if (node.id === id) {
+                if (dimension === 'reset') {
+                    // Boyutu sıfırlama - değerleri "auto" yerine null yaparak tam sıfırlama sağlıyoruz
+                    return {
+                        ...node,
+                        data: {
+                            ...node.data,
+                            style: {
+                                ...node.data.style,
+                                width: null,
+                                height: null,
+                                minWidth: null,
+                                minHeight: null
+                            }
+                        }
+                    };
+                } else if (dimension === 'auto') {
+                    // İçeriğe göre otomatik boyutlandırma (bir karakter sayısını temel alabilir)
+                    const textLength = node.data.label.length;
+                    const estimatedWidth = Math.max(160, Math.min(400, textLength * 10));
+                    return {
+                        ...node,
+                        data: {
+                            ...node.data,
+                            style: {
+                                ...node.data.style,
+                                width: estimatedWidth
+                            }
+                        }
+                    };
+                } else {
+                    // Boyutu belirli bir değere ayarlama (genişlik veya yükseklik)
+                    return {
+                        ...node,
+                        data: {
+                            ...node.data,
+                            style: {
+                                ...node.data.style,
+                                [dimension]: value
+                            }
+                        }
+                    };
+                }
+            }
+            return node;
+        });
+        setNodes(updatedNodes);
+    };
+
+    // Şekil değiştirme
+    const handleShapeChange = (shape) => {
+        const nodes = getNodes();
+        const updatedNodes = nodes.map(node => {
+            if (node.id === id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        borderRadius: shape.borderRadius,
+                        shape: shape.name,
+                        style: {
+                            ...node.data.style,
+                            customStyle: shape.customStyle || {}
+                        }
+                    }
+                };
+            }
+            return node;
+        });
+        setNodes(updatedNodes);
+        setSelectedShape(shape);
+    };
+
     // Node konumu (root/left/right?)
     const nodePosition = getNodePosition(getEdges(), id);
 
@@ -242,35 +452,64 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
     ${selected ? 'selected' : ''}
   `.trim();
 
-    const nodeStyle = {
-        background: data.bgColor || '#FFFFFF',
-        color: data.color || '#000000',
-        fontSize: data.fontSize ? `${data.fontSize}px` : '16px',
-        borderColor: data.color,
-        padding: '10px 16px',
-        borderRadius: '8px',
-        minWidth: data.isImageNode ? 'auto' : '160px',
-        minHeight: data.isImageNode ? 'auto' : '40px',
-        position: 'relative'
+    // Stil hesaplamaları
+    const getNodeStyle = () => {
+        const style = {
+            backgroundColor: data.bgColor || '#FFFFFF',
+            borderRadius: data.borderRadius || '8px',
+            fontFamily: data.fontFamily || 'inherit',
+            color: data.color || '#000000',
+            border: '1px solid #d9d9d9',
+            padding: '8px 12px',
+            position: 'relative',
+            transition: 'all 0.3s cubic-bezier(.08,.82,.17,1)',
+        };
+
+        // Genişlik, yükseklik ve minimum genişlik/yükseklik ayarları
+        if (data.style?.width) {
+            style.width = data.style.width;
+            style.minWidth = data.style.width;
+        } else {
+            style.minWidth = '160px';
+            style.width = 'auto';
+        }
+
+        if (data.style?.height) {
+            style.height = data.style.height;
+            style.minHeight = data.style.height;
+        } else {
+            style.minHeight = '40px';
+            style.height = 'auto';
+        }
+
+        // CustomStyle'ı ekle (varsa)
+        if (data.style?.customStyle) {
+            Object.assign(style, data.style.customStyle);
+        }
+
+        // NoBoard ve ImageNode durumları için ek stiller
+        if (data.noBorder) {
+            style.border = 'none';
+            style.boxShadow = 'none';
+            style.background = 'transparent';
+        }
+
+        if (data.isImageNode) {
+            style.background = 'transparent';
+            style.border = 'none';
+            style.padding = '0';
+            style.boxShadow = 'none';
+            if (selected) {
+                style.border = '2px dashed #1890ff';
+                style.padding = '5px';
+                style.borderRadius = '4px';
+            }
+        }
+
+        return style;
     };
 
-    if (data.noBorder) {
-        nodeStyle.border = 'none';
-        nodeStyle.boxShadow = 'none';
-        nodeStyle.background = 'transparent';
-    }
-
-    if (data.isImageNode) {
-        nodeStyle.background = 'transparent';
-        nodeStyle.border = 'none';
-        nodeStyle.padding = '0';
-        nodeStyle.boxShadow = 'none';
-        if (selected) {
-            nodeStyle.border = '2px dashed #1890ff';
-            nodeStyle.padding = '5px';
-            nodeStyle.borderRadius = '4px';
-        }
-    }
+    const nodeStyle = getNodeStyle();
 
     // Seçilmemiş halde butonları göstermeye gerek yok
     if (!selected) {
@@ -294,6 +533,7 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
                         onKeyDown={handleKeyDown}
                         fontSize={data.fontSize}
                         color={data.color}
+                        fontFamily={data.fontFamily}
                     />
                 ) : (
                     <div
@@ -335,11 +575,31 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
                         onKeyDown={handleKeyDown}
                         fontSize={data.fontSize}
                         color={data.color}
+                        fontFamily={data.fontFamily}
                     />
                 ) : (
                     <div
                         className="html-content"
                         dangerouslySetInnerHTML={{ __html: data.label }}
+                    />
+                )}
+
+                {/* Düzenleme paneli */}
+                {showEditOptions && !data.isImageNode && (
+                    <NodeEditOptions
+                        onFontChange={handleFontChange}
+                        onShapeChange={handleShapeChange}
+                        onTextStyleChange={handleTextStyleChange}
+                        onColorChange={handleColorChange}
+                        onAddEmoji={handleAddEmoji}
+                        onSizeChange={handleSizeChange}
+                        selectedFontFamily={selectedFontFamily}
+                        selectedShape={selectedShape}
+                        currentNodeSize={{
+                            width: data.style?.width || 160,
+                            height: data.style?.height || 40
+                        }}
+                        onClose={handleCloseEditOptions}
                     />
                 )}
             </div>
@@ -352,6 +612,8 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
                     setVisibleDropdown={setVisibleDropdown}
                     handleAddClick={handleAddClick}
                     handleOptionClick={handleOptionClick}
+                    handleEditClick={handleEditClick}
+                    selected={selected}
                 />
             )}
 
@@ -363,6 +625,8 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
                     setVisibleDropdown={setVisibleDropdown}
                     handleAddClick={handleAddClick}
                     handleOptionClick={handleOptionClick}
+                    handleEditClick={handleEditClick}
+                    selected={selected}
                 />
             )}
         </>

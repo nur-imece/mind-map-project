@@ -1,8 +1,9 @@
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Spin } from 'antd';
-import { useNodesState, useEdgesState } from 'reactflow';
+import { Spin, Empty } from 'antd';
+import { useNodesState, useEdgesState, Background, Controls, MiniMap, ReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
+import { useTranslation } from 'react-i18next';
 
 import './index.scss';
 
@@ -12,7 +13,9 @@ import CustomEdge from './components/custom-edge';
 import MapHeader from './components/mapHeader';
 import MapContainer from './components/map-container';
 import ErrorView from './components/error-view';
+import BackgroundChanger from './components/backgroundChanger';
 import useMapDataProvider from './components/map-data-provider';
+import Header from "../../components/header";
 
 const mindMapPage = () => {
   const [searchParams] = useSearchParams();
@@ -20,6 +23,7 @@ const mindMapPage = () => {
   const navigate = useNavigate();
   const updateTriggerRef = useRef(0);
   const nodePositionChangeTimeoutRef = useRef(null);
+  const { t } = useTranslation();
 
   // Use the map data provider hook
   const {
@@ -55,19 +59,28 @@ const mindMapPage = () => {
   const handleNodesChange = (changes) => {
     onNodesChange(changes);
     
-    // Pozisyon değişikliği varsa, 1 saniye sonra otomatik kaydet
-    const hasPositionChange = changes.some(change => change.type === 'position');
+    // Detect position changes for saving
+    const hasPositionChange = changes.some(change => 
+      change.type === 'position' && (change.position?.x !== undefined || change.position?.y !== undefined)
+    );
+    
     if (hasPositionChange) {
-      // Önceki timeout'u temizle
+      // Clear previous timeout to prevent multiple calls
       if (nodePositionChangeTimeoutRef.current) {
         clearTimeout(nodePositionChangeTimeoutRef.current);
       }
       
-      // Yeni timeout ayarla
+      // Debounce position changes
       nodePositionChangeTimeoutRef.current = setTimeout(() => {
-        saveChanges();
-        nodePositionChangeTimeoutRef.current = null;
-      }, 1000);
+        if (mindMapData && !saveInProgress && saveMapFnRef.current) {
+          // Trigger a save with latest node positions
+          saveMapFnRef.current({ 
+            nodes, 
+            edges,
+            name: mindMapData.name
+          });
+        }
+      }, 500); // 500ms debounce
     }
   };
 
@@ -170,16 +183,29 @@ const mindMapPage = () => {
               onSave={() => saveChanges()}
               saveInProgress={saveInProgress}
             />
-            <MapContainer 
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={handleNodesChange}
-              onEdgesChange={onEdgesChange}
-              onEdgeClick={handleEdgeClick}
-              onNodeClick={(e, node) => console.log('Node clicked:', node)}
-              nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
-            />
+            <div style={{ width: '100%', height: 'calc(100vh - 120px)' }}>
+              <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={handleNodesChange}
+                onEdgesChange={onEdgesChange}
+                onEdgeClick={handleEdgeClick}
+                onNodeClick={(e, node) => console.log('Node clicked:', node)}
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
+                fitView
+                proOptions={{ hideAttribution: true }}
+              >
+                <Background color="#ccc" style={{ backgroundImage: 'none' }} />
+                <Controls />
+                <MiniMap
+                  nodeStrokeColor={(n) => n.data?.color || '#eee'}
+                  nodeColor={(n) => n.data?.bgColor || '#fff'}
+                  nodeBorderRadius={4}
+                />
+              </ReactFlow>
+            </div>
+            <BackgroundChanger />
           </>
         )}
       </Spin>
