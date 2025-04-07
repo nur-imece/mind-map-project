@@ -224,6 +224,13 @@
   &:hover .react-flow__handle, &.selected .react-flow__handle {
     opacity: 0.7; /* Show handles on hover */
   }
+  
+  &.highlighted {
+    box-shadow: 0 0 0 3px #1890ff, 0 0 20px rgba(24, 144, 255, 0.5) !important;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
 }
 
 /* Custom styling for edges */
@@ -299,4 +306,17 @@
 @keyframes node-pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.02) translate(0, -2px); }
+}
+
+/* Add pulse animation for highlighted nodes */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(24, 144, 255, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(24, 144, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(24, 144, 255, 0);
+  }
 }

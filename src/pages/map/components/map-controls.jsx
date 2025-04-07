@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import { Button, Space, Tooltip, Modal, Form, Radio, Select, Input, Tabs, Dropdown } from 'antd';
+import { Button, Space, Tooltip, Modal, Form, Radio, Select, Input, Tabs, Dropdown, message } from 'antd';
 import { 
   HeartOutlined, 
   HeartFilled,
   ShareAltOutlined, 
   CopyOutlined, 
   DownloadOutlined,
-  SaveOutlined
+  SaveOutlined,
+  PlayCircleOutlined,
+  DesktopOutlined
 } from '@ant-design/icons';
 import SharedUsersList from './shared-users-list';
 import BackgroundChanger from './backgroundChanger';
 import './map-controls.css';
 import mindMapService from '../../../services/api/mindmap';
 import SaveTemplateModal from './save-template-modal.jsx';
+import MindMapPresentation, { initPresentation } from './mind-map-presentation';
+import PresentationNodeSelector from './presentation-node-selector';
 
 const MapControls = ({ 
   mapData, 
@@ -22,11 +26,14 @@ const MapControls = ({
   onDownloadMap,
   sharedUsers,
   onRemoveSharedUser,
-  onBackgroundChange
+  onBackgroundChange,
+  nodes,
+  reactFlowInstance
 }) => {
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
   const [saveTemplateModalVisible, setSaveTemplateModalVisible] = useState(false);
+  const [presentationSelectorVisible, setPresentationSelectorVisible] = useState(false);
   const [shareType, setShareType] = useState('private');
   const [shareEmail, setShareEmail] = useState('');
   const [sharePermission, setSharePermission] = useState('Görüntüleyen');
@@ -132,6 +139,200 @@ const MapControls = ({
     setSaveTemplateModalVisible(false);
   };
 
+  const showPresentationSelector = () => {
+    setPresentationSelectorVisible(true);
+  };
+
+  const handlePresentationSelectorClose = () => {
+    setPresentationSelectorVisible(false);
+  };
+
+  const handlePresentationCreated = () => {
+    setPresentationSelectorVisible(false);
+  };
+
+  // Sunum başlatma fonksiyonu
+  const startPresentation = () => {
+    console.log('Sunum başlatma isteği yapıldı:', mapData?.id, reactFlowInstance);
+    if (!mapData?.id) {
+      console.error('mapData.id bulunamadı');
+      message.error('Harita ID\'si bulunamadı');
+      return;
+    }
+    
+    if (!reactFlowInstance) {
+      console.error('reactFlowInstance bulunamadı');
+      message.error('Harita henüz tam olarak yüklenmedi. Lütfen tekrar deneyin.');
+      return;
+    }
+
+    const allNodes = reactFlowInstance.getNodes();
+    if (!allNodes || allNodes.length === 0) {
+      console.error('Haritada düğüm bulunamadı');
+      message.error('Haritada gösterilecek düğüm bulunamadı');
+      return;
+    }
+    
+    console.log('reactFlowInstance OK, nodlar:', allNodes.length);
+    console.log('Örnek node ID\'leri:', allNodes.slice(0, 3).map(n => n.id));
+    
+    message.loading({ content: 'Sunum başlatılıyor...', key: 'presentationLoading' });
+    
+    // Önce sunum verilerini getir ve node eşleşmesini kontrol et
+    mindMapService.getPresentationByMindMapId(mapData.id)
+      .then(response => {
+        console.log('Sunumu getir yanıtı:', response);
+        
+        if (response.data && response.data.data && 
+            response.data.data.presentationNodes && 
+            response.data.data.presentationNodes.length > 0) {
+          
+          console.log('Sunum verileri alındı, node kontrolü yapılıyor...');
+          const allMapNodes = allNodes.map(n => n.id);
+          const presentationNodes = response.data.data.presentationNodes.map(n => n.nodeId);
+          
+          // Eksik node kontrolü
+          const missingNodes = presentationNodes.filter(id => !allMapNodes.includes(id));
+          
+          if (missingNodes.length > 0) {
+            console.warn('Sunumda var olan ancak haritada bulunmayan nodeler:', missingNodes);
+            message.destroy('presentationLoading');
+            Modal.confirm({
+              title: 'Sunum Güncel Değil',
+              content: 'Bu sunum güncel değil. Haritada artık bulunmayan düğümler içeriyor. Yeni bir sunum oluşturmak ister misiniz?',
+              okText: 'Evet, Yeniden Oluştur',
+              cancelText: 'Hayır, Bu Sunumu Kullan',
+              onOk: () => {
+                showPresentationSelector();
+              },
+              onCancel: () => {
+                // Kullanıcı mevcut sunumu kullanmak istiyorsa
+                console.log('Kullanıcı eksik nodelarla devam etmek istiyor');
+                
+                const validNodes = presentationNodes.filter(id => allMapNodes.includes(id));
+                if (validNodes.length === 0) {
+                  message.error('Haritayla eşleşen hiçbir sunum düğümü kalmadı. Lütfen yeni bir sunum oluşturun.');
+                  return;
+                }
+                
+                // Eğer hala geçerli node varsa devam et
+                message.loading({ content: 'Sunum başlatılıyor...', key: 'presentationLoading' });
+                initPresentation(mapData.id, reactFlowInstance)
+                  .then(success => {
+                    console.log('initPresentation sonucu:', success);
+                    message.destroy('presentationLoading');
+                    if (success) {
+                      // Doğrudan odaklanmayı tetikle - ek yardımcı kod
+                      const presentationFirstNode = response.data.data.presentationNodes[0].nodeId;
+                      const node = reactFlowInstance.getNode(presentationFirstNode);
+                      if (node) {
+                        // Önce genel görünüm
+                        reactFlowInstance.fitView({ duration: 800 });
+                        
+                        // Sonra düğüme odaklan
+                        setTimeout(() => {
+                          reactFlowInstance.fitView({
+                            nodes: [node],
+                            padding: 0.1,
+                            duration: 800,
+                            maxZoom: 3.5
+                          });
+                          
+                          // Düğümü vurgula
+                          reactFlowInstance.setNodes((nds) => 
+                            nds.map((n) => ({
+                              ...n,
+                              data: { 
+                                ...n.data,
+                                isHighlighted: n.id === presentationFirstNode
+                              }
+                            }))
+                          );
+                          
+                          // UI'ı temizle
+                          document.body.classList.add('presentation-mode');
+                          console.log('Sunum modu (doğrudan) aktif edildi');
+                        }, 100);
+                      }
+                      
+                      message.success('Sunum başlatıldı');
+                    } else {
+                      message.warning('Sunum başlatılırken uyarı oluştu');
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Sunum başlatma hatası:', error);
+                    message.destroy('presentationLoading');
+                    message.error('Sunum başlatılamadı');
+                  });
+              }
+            });
+            return;
+          }
+          
+          // Eğer eksik node yoksa direkt başlat
+          console.log('Nodeler eşleşti, sunum başlatılıyor...');
+          initPresentation(mapData.id, reactFlowInstance)
+            .then(success => {
+              console.log('initPresentation sonucu:', success);
+              message.destroy('presentationLoading');
+              if (success) {
+                // Doğrudan odaklanmayı tetikle - ek yardımcı kod
+                const presentationFirstNode = response.data.data.presentationNodes[0].nodeId;
+                const node = reactFlowInstance.getNode(presentationFirstNode);
+                if (node) {
+                  // Önce genel görünüm
+                  reactFlowInstance.fitView({ duration: 800 });
+                  
+                  // Sonra düğüme odaklan
+                  setTimeout(() => {
+                    reactFlowInstance.fitView({
+                      nodes: [node],
+                      padding: 0.1,
+                      duration: 800,
+                      maxZoom: 3.5
+                    });
+                    
+                    // Düğümü vurgula
+                    reactFlowInstance.setNodes((nds) => 
+                      nds.map((n) => ({
+                        ...n,
+                        data: { 
+                          ...n.data,
+                          isHighlighted: n.id === presentationFirstNode
+                        }
+                      }))
+                    );
+                    
+                    // UI'ı temizle
+                    document.body.classList.add('presentation-mode');
+                    console.log('Sunum modu (doğrudan) aktif edildi');
+                  }, 100);
+                }
+                
+                message.success('Sunum başlatıldı');
+              }
+            })
+            .catch(error => {
+              console.error('Sunum başlatma hatası:', error);
+              message.destroy('presentationLoading');
+              message.error('Sunum başlatılırken bir hata oluştu');
+            });
+        } else {
+          // Hiç sunum yoksa seçici göster
+          console.log('Daha önce oluşturulmuş sunum bulunamadı.');
+          message.destroy('presentationLoading');
+          message.info('Bu harita için oluşturulmuş bir sunum bulunmamaktadır. Yeni bir sunum oluşturun.');
+          showPresentationSelector();
+        }
+      })
+      .catch(error => {
+        console.error('Sunum veri kontrolü hatası:', error);
+        message.destroy('presentationLoading');
+        message.error('Sunum verisi kontrol edilirken bir hata oluştu');
+      });
+  };
+
   return (
     <>
       <div className="map-controls-container">
@@ -188,6 +389,39 @@ const MapControls = ({
         </Space>
       </div>
 
+      {/* Sunum Başlatma/Oluşturma Butonları - Alt Merkez */}
+      <div className="presentation-controls-container">
+        <div className="presentation-buttons-wrapper">
+          <Tooltip title="Video Sunum">
+            <div 
+              className="presentation-mode-button"
+              onClick={startPresentation}
+            >
+              <span className="presentation-icon video-icon"></span>
+            </div>
+          </Tooltip>
+
+          <Tooltip title="Ekran Sunumu">
+            <div 
+              className="presentation-mode-button"
+              onClick={showPresentationSelector}
+            >
+              <span className="presentation-icon screen-icon"></span>
+            </div>
+          </Tooltip>
+        </div>
+      </div>
+
+      {/* Mevcut MindMapPresentation bileşenini koşullu olarak göster */}
+      {mapData?.id && !presentationSelectorVisible && (
+        <MindMapPresentation 
+          mindMapId={mapData.id} 
+          reactFlowInstance={reactFlowInstance}
+          onEditPresentation={showPresentationSelector}
+        />
+      )}
+
+      {/* Modallar */}
       {/* Share Modal */}
       <Modal
         title="Haritayı Paylaş"
@@ -297,6 +531,16 @@ const MapControls = ({
           </Form.Item>
         </Form>
       </Modal>
+
+      {/* Presentation Selector Modal */}
+      {presentationSelectorVisible && nodes && (
+        <PresentationNodeSelector 
+          mindMapId={mapData?.id}
+          nodes={nodes}
+          onSuccess={handlePresentationCreated}
+          onCancel={handlePresentationSelectorClose}
+        />
+      )}
 
       {/* Save Template Modal */}
       {saveTemplateModalVisible && (

@@ -39,6 +39,7 @@ const MindMapContent = () => {
   const { t } = useTranslation();
   const [sharedUsers, setSharedUsers] = useState([]);
   const fileDownloadRef = useRef(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   // Use the map data provider hook
   const {
@@ -500,10 +501,11 @@ const MindMapContent = () => {
                   nodeTypes={nodeTypes}
                   edgeTypes={edgeTypes}
                   fitView
+                  onInit={setReactFlowInstance}
                   proOptions={{ hideAttribution: true }}
                   defaultViewport={{ x: 0, y: 0, zoom: 1 }}
                   minZoom={0.1}
-                  maxZoom={2}
+                  maxZoom={4}
                   translateExtent={[[-5000, -5000], [5000, 5000]]}
                 >
                   <Controls />
@@ -522,6 +524,8 @@ const MindMapContent = () => {
                   sharedUsers={sharedUsers}
                   onRemoveSharedUser={handleRemoveSharedUser}
                   onBackgroundChange={handleBackgroundChange}
+                  nodes={nodes}
+                  reactFlowInstance={reactFlowInstance}
                 />
               </div>
             </div>

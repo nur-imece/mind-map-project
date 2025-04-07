@@ -99,4 +99,14 @@ export function convertMindMapToReactFlow(node, parentNode = null, nodesAcc = []
   }
 
   return { nodes: nodesAcc, edges: edgesAcc };
-} 
+}
+
+/**
+ * Removes HTML tags from a string
+ * @param {string} html - String containing HTML
+ * @returns {string} Text without HTML tags
+ */
+export const stripHtmlTags = (html) => {
+  if (!html) return '';
+  return html.replace(/<\/?[^>]+(>|$)/g, '');
+}; 

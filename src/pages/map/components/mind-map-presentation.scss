@@ -1,0 +1,116 @@
+.start-presentation-button {
+  padding: 0 20px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  
+  .anticon {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Sunum modu - diğer tüm UI öğelerini gizler */
+body.presentation-mode {
+  /* MiniMap, Controls ve Header gibi ReactFlow elemanlarını gizler */
+  .react-flow__minimap,
+  .react-flow__controls,
+  .map-header,
+  .react-flow__attribution,
+  .react-flow__panel,
+  .react-flow__background {
+    display: none !important;
+  }
+  
+  /* Sadece harita ve sunum kontrol butonlarını göster */
+  .react-flow__viewport {
+    z-index: 5;
+  }
+  
+  /* Arka planı transparan yap */
+  .react-flow__container {
+    background-color: transparent !important;
+  }
+  
+  /* Ekranın kenarlarındaki tüm kontrolleri gizler */
+  .map-controls-container,
+  .presentation-controls-container {
+    display: none !important;
+  }
+  
+  /* Okunabilirlik için arka planı transparan yap */
+  .mind-map-page {
+    background: transparent !important;
+  }
+  
+  /* Sayfa üzerindeki tüm header ve diğer UI elementlerini gizle */
+  .app-header,
+  .site-header,
+  header,
+  .ant-layout-header {
+    display: none !important;
+  }
+  
+  /* Sunum butonları her zaman görünür olsun */
+  .map-presentation-controls {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 9999 !important;
+  }
+}
+
+.map-presentation-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  
+  .presentation-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
+    .nav-buttons-container {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+    }
+    
+    .presentation-nav-button {
+      margin: 0;
+    }
+    
+    .presentation-close-button {
+      font-size: 10px;
+      box-shadow: 0 2px 6px rgba(255, 0, 0, 0.2);
+    }
+  }
+  
+  .presentation-loading {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.presentation-loading {
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+} 
