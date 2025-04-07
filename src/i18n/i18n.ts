@@ -15,8 +15,8 @@ i18n
         translation: trJSON,
       },
     },
-    lng: "en",
-    fallbackLng: "en",
+    lng: "tr",
+    fallbackLng: "tr",
   });
  
 export { i18n };

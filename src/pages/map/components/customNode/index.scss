@@ -397,6 +397,28 @@
       &:hover {
         background-color: #f0f0f0;
       }
+
+      &.active {
+        background-color: #1890ff;
+        color: white;
+        border-color: #1890ff;
+
+        &:hover {
+          background-color: #40a9ff;
+          border-color: #40a9ff;
+        }
+      }
+
+      &[type="primary"] {
+        background-color: #1890ff;
+        color: white;
+        border-color: #1890ff;
+
+        &:hover {
+          background-color: #40a9ff;
+          border-color: #40a9ff;
+        }
+      }
     }
   }
   

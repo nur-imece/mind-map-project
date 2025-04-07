@@ -36,6 +36,7 @@ const NodeEditOptions = ({
     selectedFontFamily,
     selectedShape,
     currentNodeSize,
+    currentStyles = {}, // Mevcut stilleri props olarak al
     onClose
 }) => {
     const [activeTab, setActiveTab] = useState('1');
@@ -81,19 +82,22 @@ const NodeEditOptions = ({
     const textStyleButtons = (
         <div className="text-style-buttons">
             <Button 
-                type="text" 
+                type={currentStyles.isBold ? "primary" : "text"}
                 icon={<BoldOutlined />} 
                 onClick={() => onTextStyleChange('bold')}
+                className={currentStyles.isBold ? 'active' : ''}
             />
             <Button 
-                type="text" 
+                type={currentStyles.isItalic ? "primary" : "text"}
                 icon={<ItalicOutlined />} 
                 onClick={() => onTextStyleChange('italic')}
+                className={currentStyles.isItalic ? 'active' : ''}
             />
             <Button 
-                type="text" 
+                type={currentStyles.isUnderline ? "primary" : "text"}
                 icon={<UnderlineOutlined />} 
                 onClick={() => onTextStyleChange('underline')}
+                className={currentStyles.isUnderline ? 'active' : ''}
             />
         </div>
     );

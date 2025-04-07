@@ -64,8 +64,10 @@ export function getNodePosition(edges, nodeId) {
 
     // 2. Bağlı olduğu düğüme göre konum belirleme
     const sourceHandle = incomingEdge.sourceHandle;
-    if (sourceHandle === 'sourceRight') return 'right';
-    if (sourceHandle === 'sourceLeft') return 'left';
+
+    if (sourceHandle === 'sourceRight' || sourceHandle === 'sourceTop') return 'right';
+    if (sourceHandle === 'sourceLeft' || sourceHandle === 'sourceBottom') return 'left';
+
 
     // 3. Handle belirtilmemişse, varsayılan değerlere dönüş
     return 'none';
@@ -76,14 +78,33 @@ export function getNodePosition(edges, nodeId) {
  * Pastel ve rahat görünen renkler üretir
  */
 export function getRandomSoftColor() {
-    // Pastel renkler için HSL kullanma (daha parlak ve soft renkler)
-    // Hue: 0-360 (ton), Saturation: 25-50% (soft), Lightness: 75-85% (parlak)
-    const hue = Math.floor(Math.random() * 360);
-    const saturation = Math.floor(Math.random() * 25) + 25; // %25-%50 aralığı
-    const lightness = Math.floor(Math.random() * 10) + 75;  // %75-%85 aralığı
-    
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    const colorPalette = [
+        '#80DEEA', // Canlı Açık Turkuaz
+        '#64B5F6', // Pastel Mavi
+        '#81C784', // Açık Yeşil
+        '#AED581', // Limon Yeşili
+        '#FFB74D', // Kavun Turuncu
+        '#FF8A65', // Kayısı
+        '#F06292', // Pastel Fuşya
+        '#E57373', // Pastel Kırmızı
+        '#BA68C8', // Orkide Moru
+        '#9575CD', // Lavanta
+        '#4FC3F7', // Gök Mavisi
+        '#4DB6AC', // Adaçayı Yeşili
+        '#7986CB', // Menekşe
+        '#F48FB1', // Pembe Şeker
+        '#26C6DA', // Turkuaz
+        '#FFA726', // Mandalina
+        '#A1887F', // Yumuşak Kahve
+        '#90CAF9', // Açık Mavi
+        '#A5D6A7', // Mint Yeşili
+        '#CE93D8'  // Açık Eflatun
+    ];
+
+    const randomIndex = Math.floor(Math.random() * colorPalette.length);
+    return colorPalette[randomIndex];
 }
+
 
 /**
  * Kutu şekilleri

@@ -129,29 +129,27 @@ const AddButtons = ({
                 </Dropdown>
             </div>
             
-            {/* Edit butonu - Sadece right side için göster */}
-            {side === 'right' && (
-                <div style={editButtonStyle}>
-                    <Button
-                        type="primary"
-                        shape="circle"
-                        size="small"
-                        style={{
-                            backgroundColor: '#1890ff',
-                            borderColor: '#1890ff',
-                            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
-                            zIndex: 1000,
-                            width: '24px',
-                            height: '24px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}
-                        icon={<EditOutlined style={{ fontSize: '12px' }} />}
-                        onClick={handleEditClick}
-                    />
-                </div>
-            )}
+            {/* Edit butonu - Her zaman göster */}
+            <div style={editButtonStyle}>
+                <Button
+                    type="primary"
+                    shape="circle"
+                    size="small"
+                    style={{
+                        backgroundColor: '#1890ff',
+                        borderColor: '#1890ff',
+                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+                        zIndex: 1000,
+                        width: '24px',
+                        height: '24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                    icon={<EditOutlined style={{ fontSize: '12px' }} />}
+                    onClick={handleEditClick}
+                />
+            </div>
         </>
     );
 };

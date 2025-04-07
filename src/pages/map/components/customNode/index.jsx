@@ -81,6 +81,29 @@ const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
         }
     }, [imageZoom, data.isImageNode, applyImageZoom]);
 
+    // Yazı rengini düzeltme fonksiyonu
+    const fixTextColor = () => {
+        const nodes = getNodes();
+        const updatedNodes = nodes.map(node => {
+            if (node.data.color === node.data.bgColor) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        color: '#000000' // Yazı rengini siyah yap
+                    }
+                };
+            }
+            return node;
+        });
+        setNodes(updatedNodes);
+    };
+
+    // Component mount olduğunda yazı rengini düzelt
+    useEffect(() => {
+        fixTextColor();
+    }, []);
+
     // ----------------------------------------------------------------
     // Callback'ler ve yardımcı fonksiyonlar
     // ----------------------------------------------------------------
@@ -174,6 +197,8 @@ const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
         
         // Renk belirleme - Sadece kök düğümden ekleniyorsa yeni renk oluştur, değilse parent'ın rengini kullan
         const nodeColor = isRootNode ? getRandomSoftColor() : currentNode.data.bgColor;
+        // Yazı rengi için kontrast renk oluştur
+        const textColor = '#000000'; // Varsayılan olarak siyah
 
         // Node verisi
         const newNode = {
@@ -182,7 +207,7 @@ const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
             data: {
                 label: content,
                 bgColor: nodeColor, // Parent'ın rengini kullan veya kök ise yeni renk
-                color: nodeColor, // Metin rengi de aynı olsun
+                color: textColor, // Metin rengi siyah olarak ayarla
                 fontSize: currentNode.data.fontSize,
                 fontFamily: currentNode.data.fontFamily,
                 borderRadius: currentNode.data.borderRadius,
@@ -344,6 +369,7 @@ const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
     // Renk değiştirme (yazı rengi veya arkaplan rengi)
     const handleColorChange = (colorType, colorValue) => {
         const nodes = getNodes();
+        const edges = getEdges();
         const updatedNodes = nodes.map(node => {
             if (node.id === id) {
                 return {
@@ -358,7 +384,36 @@ const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
             }
             return node;
         });
+
+        // Eğer arkaplan rengi değiştiyse, bu node'a bağlı edge'lerin rengini de güncelle
+        let updatedEdges = edges;
+        if (colorType === 'bgColor') {
+            updatedEdges = edges.map(edge => {
+                if (edge.source === id || edge.target === id) {
+                    return {
+                        ...edge,
+                        style: {
+                            ...edge.style,
+                            stroke: colorValue
+                        }
+                    };
+                }
+                return edge;
+            });
+            setEdges(updatedEdges);
+        }
+
         setNodes(updatedNodes);
+
+        // Değişiklikleri kaydet
+        if (saveMapFnRef && saveMapFnRef.current) {
+            setTimeout(() => {
+                saveMapFnRef.current({
+                    nodes: updatedNodes,
+                    edges: updatedEdges
+                });
+            }, 100);
+        }
     };
 
     // İkon ekleme fonksiyonu yerine emoji ekleme fonksiyonu
@@ -478,6 +533,7 @@ const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
 
     // Node konumu (root/left/right?)
     const nodePosition = getNodePosition(getEdges(), id);
+    console.log("nodePosition", nodePosition)
 
     // Stil düzenlemeleri
     const nodeClassName = `
@@ -545,6 +601,16 @@ const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
     };
 
     const nodeStyle = getNodeStyle();
+
+    // Mevcut yazı stillerini kontrol et
+    const getCurrentStyles = () => {
+        const label = data.label || '';
+        return {
+            isBold: label.includes('<b>') && label.includes('</b>'),
+            isItalic: label.includes('<i>') && label.includes('</i>'),
+            isUnderline: label.includes('<u>') && label.includes('</u>')
+        };
+    };
 
     // Seçilmemiş halde butonları göstermeye gerek yok
     if (!selected) {
@@ -638,6 +704,7 @@ const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
                             width: data.style?.width || 160,
                             height: data.style?.height || 40
                         }}
+                        currentStyles={getCurrentStyles()}
                         onClose={handleCloseEditOptions}
                     />
                 )}

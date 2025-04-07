@@ -5,13 +5,14 @@ import {
   HeartFilled,
   ShareAltOutlined, 
   CopyOutlined, 
-  DownloadOutlined
+  DownloadOutlined,
+  SaveOutlined
 } from '@ant-design/icons';
 import SharedUsersList from './shared-users-list';
 import BackgroundChanger from './backgroundChanger';
 import './map-controls.css';
 import mindMapService from '../../../services/api/mindmap';
-
+import SaveTemplateModal from './save-template-modal.jsx';
 
 const MapControls = ({ 
   mapData, 
@@ -25,6 +26,7 @@ const MapControls = ({
 }) => {
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [saveTemplateModalVisible, setSaveTemplateModalVisible] = useState(false);
   const [shareType, setShareType] = useState('private');
   const [shareEmail, setShareEmail] = useState('');
   const [sharePermission, setSharePermission] = useState('Görüntüleyen');
@@ -122,6 +124,14 @@ const MapControls = ({
     }
   };
 
+  const showSaveTemplateModal = () => {
+    setSaveTemplateModalVisible(true);
+  };
+
+  const handleSaveTemplateModalClose = () => {
+    setSaveTemplateModalVisible(false);
+  };
+
   return (
     <>
       <div className="map-controls-container">
@@ -164,6 +174,15 @@ const MapControls = ({
               type="text"
               icon={<DownloadOutlined style={{ fontSize: '20px' }} />}
               onClick={showDownloadModal}
+            />
+          </Tooltip>
+          
+          <Tooltip title="Şablon Olarak Kaydet">
+            <Button 
+              className="control-button"
+              type="text"
+              icon={<SaveOutlined style={{ fontSize: '20px' }} />}
+              onClick={showSaveTemplateModal}
             />
           </Tooltip>
         </Space>
@@ -278,8 +297,17 @@ const MapControls = ({
           </Form.Item>
         </Form>
       </Modal>
+
+      {/* Save Template Modal */}
+      {saveTemplateModalVisible && (
+        <SaveTemplateModal 
+          visible={saveTemplateModalVisible}
+          onClose={handleSaveTemplateModalClose}
+          mapData={mapData}
+        />
+      )}
     </>
   );
 };
 
-export default MapControls; 
+export default MapControls;

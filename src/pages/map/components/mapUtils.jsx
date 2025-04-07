@@ -1,6 +1,11 @@
 /* Yardımcı Fonksiyonlar */
 import { EDGE_STYLES } from '@/pages/map/components/edge-utils.js';
 
+// Clean color strings by removing "!important" and trimming whitespace
+function cleanColor(color) {
+  return typeof color === 'string' ? color.replace('!important', '').trim() : color;
+}
+
 // 1) computeAbsolutePos: child = parent + childRelative
 export function computeAbsolutePos(nodePos, parentAbsPos) {
   if (!parentAbsPos) {
@@ -24,27 +29,13 @@ export function computeAbsolutePos(nodePos, parentAbsPos) {
 export function getClosestHandles(parentPos, childPos) {
   // parentPos, childPos => mutlak (x,y)
   const dx = childPos.x - parentPos.x;
-  const dy = childPos.y - parentPos.y;
 
-  // Hangisi büyük? x mi y mi
-  if (Math.abs(dx) > Math.abs(dy)) {
-    // Yatay baskın
-    if (dx < 0) {
-      // parent sourceLeft => child targetRight
-      return { sourceHandle: 'sourceLeft', targetHandle: 'targetRight' };
-    } else {
-      // parent sourceRight => child targetLeft
-      return { sourceHandle: 'sourceRight', targetHandle: 'targetLeft' };
-    }
+  if (dx < 0) {
+    // child solda
+    return { sourceHandle: 'sourceLeft', targetHandle: 'targetRight' };
   } else {
-    // Dikey baskın
-    if (dy < 0) {
-      // parent sourceTop => child targetBottom
-      return { sourceHandle: 'sourceTop', targetHandle: 'targetBottom' };
-    } else {
-      // parent sourceBottom => child targetTop
-      return { sourceHandle: 'sourceBottom', targetHandle: 'targetTop' };
-    }
+    // child sağda veya hizalı
+    return { sourceHandle: 'sourceRight', targetHandle: 'targetLeft' };
   }
 }
 
@@ -124,6 +115,11 @@ export function convertMindMapToReactFlow(node, parentNode = null, nodesAcc = []
         ...(savedEdgeStyle.style || {}), // Saved style props (dasharray, etc.)
       };
       
+      // Clean stroke color if it exists
+      if (edgeStyle.stroke) {
+        edgeStyle.stroke = cleanColor(edgeStyle.stroke);
+      }
+      
       // Find edge style info from predefined styles
       const matchedStyle = EDGE_STYLES.find(style => {
         // Check type match first
@@ -146,8 +142,8 @@ export function convertMindMapToReactFlow(node, parentNode = null, nodesAcc = []
       }
     }
 
-    // Add parent's color to edge style
-    edgeStyle.stroke = parentNode.data.color || '#1890ff';
+    // Use saved stroke color if available, otherwise fall back to cleaned parent's color
+    edgeStyle.stroke = edgeStyle.stroke || cleanColor(parentNode.data.color) || '#1890ff';
 
     edgesAcc.push({
       id: `edge-${parentNode.id}-${node.id}`,

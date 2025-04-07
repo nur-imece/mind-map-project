@@ -1,0 +1,92 @@
+.template-modal__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.template-modal__form-item {
+  margin-bottom: 16px;
+}
+
+.template-modal__label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.template-modal__input,
+.template-modal__select {
+  width: 100%;
+}
+
+.template-modal__radio-group {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+}
+
+.template-modal__tag-container {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-height: 32px;
+}
+
+.template-modal__tag-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.template-modal__search-icon {
+  color: #bfbfbf;
+  margin-right: 4px;
+}
+
+.template-modal__tag-input {
+  flex: 1;
+  min-width: 100px;
+}
+
+.template-modal__tag {
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.template-modal__upload {
+  width: 100%;
+}
+
+.template-modal__upload-btn {
+  width: 100%;
+}
+
+.template-modal__current-image {
+  margin-top: 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 8px;
+  text-align: center;
+}
+
+.template-modal__preview-img {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+}
+
+.template-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.template-modal__cancel-btn {
+  min-width: 80px;
+}
+
+.template-modal__save-btn {
+  min-width: 80px;
+}
