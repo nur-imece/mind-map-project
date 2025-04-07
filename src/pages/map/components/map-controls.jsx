@@ -5,19 +5,13 @@ import {
   HeartFilled,
   ShareAltOutlined, 
   CopyOutlined, 
-  DownloadOutlined,
-  PictureOutlined
+  DownloadOutlined
 } from '@ant-design/icons';
 import SharedUsersList from './shared-users-list';
 import BackgroundChanger from './backgroundChanger';
 import './map-controls.css';
+import mindMapService from '../../../services/api/mindmap';
 
-const backgroundOptions = [
-  { key: 'dots', label: 'Noktalar' },
-  { key: 'lines', label: 'Çizgiler' },
-  { key: 'cross', label: 'Çapraz Çizgiler' },
-  { key: 'none', label: 'Arkaplan Yok' }
-];
 
 const MapControls = ({ 
   mapData, 
@@ -87,11 +81,27 @@ const MapControls = ({
     setDownloadModalVisible(false);
   };
 
-  const handleDownloadSubmit = () => {
-    if (typeof onDownloadMap === 'function') {
-      onDownloadMap(downloadFormat);
+  const handleDownloadSubmit = async () => {
+    try {
+      const response = await mindMapService.isMapDownloadable(mapData.id);
+      console.log("response", response);
+      
+      if (response.data.isSuccess) {
+        onDownloadMap(downloadFormat);
+        setDownloadModalVisible(false);
+      } else {
+        Modal.error({
+          title: 'İndirme Hatası',
+          content: 'Bu harita indirilebilir değil.',
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Modal.error({
+        title: 'İndirme Hatası',
+        content: 'Bir hata oluştu.',
+      });
     }
-    setDownloadModalVisible(false);
   };
 
   const handleDuplicateMap = () => {
@@ -245,22 +255,12 @@ const MapControls = ({
             İptal
           </Button>,
           <Button 
-            key="a4-download" 
+            key="download" 
             type="primary" 
             icon={<DownloadOutlined />}
-            onClick={() => {
-              setDownloadFormat('A4');
-              handleDownloadSubmit();
-            }}
-          >
-            A4 Olarak İndir
-          </Button>,
-          <Button 
-            key="custom-download" 
-            type="primary"
             onClick={handleDownloadSubmit}
           >
-            Seçili Format ile İndir
+            İndir
           </Button>
         ]}
       >
@@ -269,19 +269,13 @@ const MapControls = ({
             <Radio.Group 
               value={downloadFormat} 
               onChange={(e) => setDownloadFormat(e.target.value)}
+              style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
             >
-              <Radio value="A2">A2</Radio>
-              <Radio value="A3">A3</Radio>
-              <Radio value="A4">A4</Radio>
+              <Radio value="A4">A4 (210×297mm) - Standart kağıt boyutu</Radio>
+              <Radio value="A3">A3 (297×420mm) - Orta büyüklükteki haritalar için</Radio>
+              <Radio value="A2">A2 (420×594mm) - Çok büyük haritalar için</Radio>
             </Radio.Group>
           </Form.Item>
-          <div style={{ marginTop: 16 }}>
-            <ul>
-              <li><strong>A2:</strong> Çok büyük haritalar için (420×594mm)</li>
-              <li><strong>A3:</strong> Orta büyüklükteki haritalar için (297×420mm)</li>
-              <li><strong>A4:</strong> Standart kağıt boyutu (210×297mm)</li>
-            </ul>
-          </div>
         </Form>
       </Modal>
     </>

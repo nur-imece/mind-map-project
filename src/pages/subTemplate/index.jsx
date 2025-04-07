@@ -219,7 +219,7 @@ const SubTemplateList = () => {
 
     const createMapWithTemplateEvent = (id, content, name) => {
         try {
-            localStorage.setItem("mapPermission", "0");
+            localStorage.setItem("mapPermission", "1");
             localStorage.removeItem("openedMapName");
             localStorage.removeItem("openedMapId");
             localStorage.setItem("mapTemplate", content);
@@ -233,7 +233,13 @@ const SubTemplateList = () => {
                 name: name,
                 content: content,
                 backgroundName: backgroundName,
-                templateId: id
+                templateId: id,
+                isPublic: false,
+                isDownloadable: true,
+                isCopiable: true,
+                isShareable: true,
+                languageId: 1,
+                mapPermissionId: 1
             };
             
             // Call the createMindMap API directly

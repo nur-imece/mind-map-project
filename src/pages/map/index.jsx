@@ -417,12 +417,6 @@ const MindMapContent = () => {
   
   // Handler to download the mind map
   const handleDownloadMap = async (format) => {
-    // Check if the mind map is downloadable
-    if (!mindMapData || !mindMapData.isDownloadable) {
-      message.warning('Bu harita indirilebilir değil');
-      return;
-    }
-    
     try {
       if (!isPdfGenerationSupported()) {
         message.error('PDF indirme işlevi bu tarayıcıda desteklenmiyor');
@@ -433,14 +427,24 @@ const MindMapContent = () => {
         content: `Harita ${format} formatında hazırlanıyor...`,
         key: 'download'
       });
+
+      // Hide controls and buttons temporarily
+      const controls = document.querySelector('.react-flow__controls');
+      const minimap = document.querySelector('.react-flow__minimap');
+      if (controls) controls.style.display = 'none';
+      if (minimap) minimap.style.display = 'none';
       
-      // Use the react-flow container as the source
+      // Use only the canvas element for capture
       const success = await downloadMindMapAsPDF(
-        '.react-flow-wrapper', 
+        '.react-flow__viewport', 
         `${mindMapData.name || 'Harita'}_${format}`,
         format,
         true
       );
+
+      // Show controls and buttons again
+      if (controls) controls.style.display = 'block';
+      if (minimap) minimap.style.display = 'block';
       
       if (success) {
         message.success({
