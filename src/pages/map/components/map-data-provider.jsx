@@ -1,10 +1,24 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { message } from 'antd';
 import mindMapService from '../../../services/api/mindmap';
 import { convertMindMapToReactFlow } from './mapUtils';
 import useMindMapConverter from './mind-map-converter';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
-const useMapDataProvider = (mapId) => {
+const MapDataContext = createContext();
+
+export const useMapDataProvider = () => {
+  const context = useContext(MapDataContext);
+  if (!context) {
+    throw new Error('useMapDataProvider must be used within a MapDataProvider');
+  }
+  return context;
+};
+
+const MapDataProvider = ({ children }) => {
+  const [searchParams] = useSearchParams();
+  const mapId = searchParams.get('mapId');
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mindMapData, setMindMapData] = useState(null);
@@ -153,7 +167,8 @@ const useMapDataProvider = (mapId) => {
         updatedDate: mindMap.modifiedDate,
         isPublic: mindMap.isPublicMap,
         isDownloadable: mindMap.isDownloadable ?? false,
-        userId: mindMap.createdBy
+        userId: mindMap.createdBy,
+        isFavorite: mindMap.isFavorite ?? false
       });
 
       // Harita dönüştür
@@ -187,7 +202,32 @@ const useMapDataProvider = (mapId) => {
     }
   }, [mapId, fetchMindMap]);
 
-  return {
+  const toggleFavorite = async (isFavorite) => {
+    if (!mindMapData || !userId) return;
+    
+    try {
+      const response = await mindMapService.setFavoriteMapStatus({
+        isFavorite: isFavorite,
+        mindMapId: mindMapData.id,
+        userId: userId
+      });
+      
+      if (response && !response.error) {
+        setMindMapData(prev => ({
+          ...prev,
+          isFavorite: isFavorite
+        }));
+        message.success(isFavorite ? 'Harita favorilere eklendi' : 'Harita favorilerden çıkarıldı');
+      } else {
+        message.error('Favori durumu değiştirilirken bir hata oluştu');
+      }
+    } catch (err) {
+      console.error('Favori durumu değiştirilirken hata:', err);
+      message.error('Favori durumu değiştirilirken bir hata oluştu');
+    }
+  };
+
+  const value = {
     loading,
     error,
     mindMapData,
@@ -198,8 +238,16 @@ const useMapDataProvider = (mapId) => {
     saveMindMapChanges,
     handleNameChange,
     handleBackgroundChange,
-    saveMapFnRef
+    saveMapFnRef,
+    toggleFavorite,
+    setMindMapData
   };
+
+  return (
+    <MapDataContext.Provider value={value}>
+      {children}
+    </MapDataContext.Provider>
+  );
 };
 
-export default useMapDataProvider; 
+export default MapDataProvider; 

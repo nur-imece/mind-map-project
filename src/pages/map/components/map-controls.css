@@ -1,0 +1,44 @@
+.map-controls-container {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  padding: 8px 16px;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+}
+
+.map-controls-container .control-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 4px;
+  background-color: #f0f2f5; /* soft gri-mavi */
+  border: 1px solid #d9d9d9; /* hafif bir sınır */
+  color: #595959; /* ikon rengi koyu gri */
+}
+
+.map-controls-container .control-button:hover {
+  background: rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.map-controls-container .control-button:active {
+  transform: translateY(0);
+}
+
+.map-controls-container .control-button .anticon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-controls-container .ant-space {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+} 

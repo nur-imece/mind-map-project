@@ -19,6 +19,7 @@
     "@microsoft/signalr": "^8.0.7",
     "antd": "^5.0.0",
     "emoji-mart": "^5.6.0",
+    "html2canvas": "^1.4.1",
     "i18next": "^23.2.3",
     "imask": "^7.6.1",
     "jspdf": "^3.0.1",
