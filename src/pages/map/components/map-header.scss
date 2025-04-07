@@ -1,6 +1,13 @@
 .map-header {
-  background-color: #fff;
-  padding: 12px 16px;
+  background-color: transparent;
+  padding: 6px 12px;
+  margin: 0;
+  box-sizing: border-box;
+  border-radius: 8px;
+  
+  .ant-row {
+    margin-bottom: 0;
+  }
   
   .map-name-display {
     display: flex;
@@ -17,7 +24,59 @@
     }
   }
   
+  .editable-title {
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s;
+    min-width: 40px;
+    max-width: 200px;
+    
+    &[contenteditable="true"] {
+      min-width: 100px;
+      background-color: #f5f5f5;
+      cursor: text;
+    }
+  }
+  
   .map-name-edit {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+  }
+  
+  .ant-divider {
+    margin: 4px 0;
+  }
+  
+  .ant-typography {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 170px;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+  
+  .ant-btn {
+    border-radius: 6px;
+    padding: 0 4px;
+    height: 24px;
+    min-width: 24px;
+  }
+  
+  .ant-input {
+    height: 28px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
+  }
+  
+  .ant-tag {
+    margin-right: 4px;
+    padding: 0 4px;
+    font-size: 11px;
+    line-height: 18px;
+    height: 20px;
   }
 } 

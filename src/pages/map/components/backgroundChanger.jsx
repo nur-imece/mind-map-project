@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Dropdown, Tooltip, message } from 'antd';
 import { BgColorsOutlined } from '@ant-design/icons';
 
@@ -14,7 +14,7 @@ import mapListBg05 from '../../../styles/img/map-list-bg-05.png';
 /**
  * Harita arkaplan resmini değiştirme komponenti
  */
-const BackgroundChanger = () => {
+const BackgroundChanger = ({ onBackgroundChange, initialBackgroundName }) => {
     const [currentBackground, setCurrentBackground] = useState('');
 
     // Arkaplan resimleri için sabit liste oluşturalım
@@ -28,30 +28,60 @@ const BackgroundChanger = () => {
         { path: mapListBg05, name: 'map-list-bg-05' }
     ];
 
-    // Arkaplan görüntüsünü değiştirme fonksiyonu
-    const changeBackground = (bgPath, bgName) => {
-        const container = document.querySelector('.react-flow__pane');
+    // Find background path by name
+    const getBackgroundPathByName = (bgName) => {
+        const bg = backgroundImages.find(bg => bg.name === bgName);
+        return bg ? bg.path : null;
+    };
+
+    // Set default background on component mount
+    useEffect(() => {
+        if (initialBackgroundName) {
+            const bgPath = getBackgroundPathByName(initialBackgroundName);
+            if (bgPath) {
+                applyBackground(bgPath, initialBackgroundName);
+            }
+        } else {
+            // Set default background to take-note_tiny
+            const defaultBg = backgroundImages.find(bg => bg.name === 'take-note_tiny');
+            if (defaultBg) {
+                applyBackground(defaultBg.path, defaultBg.name);
+            }
+        }
+    }, [initialBackgroundName]);
+
+    // Apply background CSS
+    const applyBackground = (bgPath, bgName) => {
+        const container = document.querySelector('.mind-map-page');
         if (container) {
-            container.style.backgroundImage = `url(${bgPath})`;
+            container.style.background = `#f2f2f2 url(${bgPath}) no-repeat`;
             container.style.backgroundSize = 'cover';
             container.style.backgroundPosition = 'center';
-            container.style.backgroundRepeat = 'no-repeat';
             setCurrentBackground(bgName);
-            message.success(`Arkaplan "${bgName}" olarak değiştirildi`);
-        } else {
-            message.error('Harita içeriği bulunamadı');
         }
+    };
+
+    // Arkaplan görüntüsünü değiştirme fonksiyonu
+    const changeBackground = (bgPath, bgName) => {
+        applyBackground(bgPath, bgName);
+        if (onBackgroundChange) {
+            onBackgroundChange(bgName);
+        }
+        message.success(`Arkaplan "${bgName}" olarak değiştirildi`);
     };
 
     // Arkaplanı sıfırlama fonksiyonu
     const resetBackground = () => {
-        const container = document.querySelector('.react-flow__pane');
+        const container = document.querySelector('.mind-map-page');
         if (container) {
             container.style.backgroundImage = 'none';
             container.style.backgroundSize = 'initial';
             container.style.backgroundPosition = 'initial';
             container.style.backgroundRepeat = 'initial';
             setCurrentBackground('');
+            if (onBackgroundChange) {
+                onBackgroundChange('');
+            }
             message.success('Arkaplan sıfırlandı');
         }
     };
@@ -93,12 +123,12 @@ const BackgroundChanger = () => {
     ];
 
     return (
-        <div className="background-changer-container" style={{ position: 'absolute', bottom: '20px', right: '20px', zIndex: 4 }}>
+        <div className="background-changer-container" style={{ position: 'absolute', top: '70px', right: '20px', left: 'auto', zIndex: 1000, pointerEvents: 'auto' }}>
             <Tooltip title="Arkaplan Değiştir" placement="left">
                 <Dropdown 
                     menu={{ items }} 
                     trigger={['click']}
-                    placement="topRight"
+                    placement="bottomLeft"
                 >
                     <Button 
                         type="primary" 

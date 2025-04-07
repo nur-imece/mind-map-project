@@ -1,10 +1,80 @@
 .mind-map-page {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 16px;
   background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  .map-header {
+    z-index: 100;
+    position: absolute;
+    background-color: white;
+    width: 300px;
+    height: auto;
+    border: none;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: visible;
+    top: 10px;
+    left: 10px;
+  }
+
+  .mind-map-content {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    height: 100vh; /* Tam sayfa yüksekliği */
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  .react-flow-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+  }
+  
+  .react-flow {
+    width: 100%;
+    height: 100%;
+    background: transparent; /* Background'ın görünmesini sağlar */
+  }
+  
+  /* ReactFlow arka plan ayarları */
+  .react-flow__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+  /* Background changer kontrolünün z-index'ini artırma */
+  .background-changer-container {
+    z-index: 100;
+  }
 }
 
 .content-wrapper {
@@ -45,7 +115,7 @@
 }
 
 .map-header {
-  padding: 16px 24px;
+  padding: 10px 0;
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   z-index: 5;
@@ -77,11 +147,6 @@
 }
 
 /* ReactFlow Container */
-.react-flow {
-  width: 100%;
-  height: 100%;
-}
-
 .react-flow__container {
   width: 100%;
   height: 100%;
@@ -125,7 +190,7 @@
   border-radius: 8px;
   min-width: 160px;
   max-width: 320px;
-  min-height: 40px;
+  min-height: 60px;
   border: 1px solid #ddd;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
   transition: box-shadow 0.2s ease, transform 0.1s ease;
@@ -183,6 +248,9 @@
   transition: stroke 0.3s ease, stroke-width 0.3s ease, stroke-dasharray 0.3s ease;
   cursor: pointer !important;
   pointer-events: all !important;
+}
+.react-flow__panel.bottom {
+  bottom: 40px;
 }
 
 /* Custom tooltip for edge type indicator */

@@ -18,46 +18,9 @@ import {
     SearchOutlined
 } from '@ant-design/icons';
 import { NODE_SHAPES, FONT_FAMILIES } from './utils';
-
-// Modern emojiler - daha güncel ve kategorize edilmiş
-const EMOJI_CATEGORIES = {
-    "Yüzler": [
-        "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😉", "😊", "😇", "😍", "🥰", "😘", "😗", "😚", "😙",
-        "😋", "😛", "😜", "😝", "🤑", "🤗", "🤭", "🤫", "🤔", "🤐", "🤨", "😐", "😑", "😶", "😏", "😒", "🙄", "😬", "🤥"
-    ],
-    "Duygular": [
-        "😌", "😔", "😪", "🤤", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "🤯", "🤠", "🥳", "😎",
-        "🤓", "🧐", "😕", "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🥺", "😦", "😧", "😨", "😰", "😥", "😢", "😭", "😱"
-    ],
-    "Eller": [
-        "👋", "🤚", "✋", "🖖", "👌", "🤌", "🤏", "✌️", "🤞", "🤟", "🤘", "🤙", "👈", "👉", "👆", "🖕", "👇", "☝️", "👍", 
-        "👎", "✊", "👊", "🤛", "🤜", "👏", "🙌", "👐", "🤲"
-    ],
-    "Kalpler": [
-        "❤️", "🧡", "💛", "💚", "💙", "💜", "🤎", "🖤", "🤍", "💔", "❤️‍🔥", "❤️‍🩹", "💌", "💕", "💞", "💓", "💗", "💖",
-        "💘", "💝", "💟", "♥️"
-    ],
-    "Hayvanlar": [
-        "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵", "🙈", "🙉", 
-        "🙊", "🐔", "🐧", "🐦", "🐤", "🦆", "🦅", "🦉", "🦇", "🐺", "🐗", "🐴", "🦄", "🐝", "🪱", "🐛", "🦋", "🐌"
-    ],
-    "Yiyecekler": [
-        "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑",
-        "🌮", "🌯", "🥪", "🍕", "🍔", "🍟", "🍖", "🍗", "🥩", "🍱", "🥡", "🍿", "🧂", "🥓", "🍳", "🥞", "🧇", "🥐", "🍞"
-    ],
-    "Aktiviteler": [
-        "⚽", "🏀", "🏈", "⚾", "🥎", "🎾", "🏐", "🏉", "🥏", "🎱", "🪀", "🏓", "🥅", "⛳", "🪁", "🎮", "👾", "🎲", "🧩", 
-        "♟️", "🎭", "🎨", "🎬", "🎤", "🎧", "🎼", "🎹", "🥁", "🪘", "🎷", "🎺", "🪗", "🎸", "🎻"
-    ],
-    "Objeler": [
-        "⌚", "📱", "💻", "⌨️", "🖥️", "🖱️", "💽", "📀", "💿", "📸", "📹", "🎥", "📽️", "🎞️", "📞", "☎️", "📟", "📠", "📺",
-        "📻", "🎙️", "🎚️", "🎛️", "⏱️", "⏲️", "⏰", "🕰️", "⌛", "⏳", "📡", "💡", "🔦", "🕯️", "🧯"
-    ],
-    "Semboller": [
-        "💯", "✅", "❌", "❓", "❗", "❕", "❔", "‼️", "⁉️", "💬", "🗯️", "💭", "🔴", "🟠", "🟡", "🟢", "🔵", "🟣", "⚫", "⚪",
-        "🟤", "🔺", "🔻", "🔸", "🔹", "🔶", "🔷", "🔳", "🔲"
-    ]
-};
+// Import emoji-mart components
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
 
 /**
  * Node düzenleme seçenekleri için düğmeler ve menüler.
@@ -76,9 +39,7 @@ const NodeEditOptions = ({
     onClose
 }) => {
     const [activeTab, setActiveTab] = useState('1');
-    const [emojiSearchText, setEmojiSearchText] = useState('');
-    const [selectedEmojiCategory, setSelectedEmojiCategory] = useState(Object.keys(EMOJI_CATEGORIES)[0]);
-
+    
     // Şekiller bölümü
     const renderShapeOptions = () => (
         <div className="shape-options">
@@ -204,52 +165,22 @@ const NodeEditOptions = ({
         </div>
     );
 
-    // Emoji seçim bölümü
-    const filteredEmojis = !emojiSearchText 
-        ? EMOJI_CATEGORIES[selectedEmojiCategory]
-        : Object.values(EMOJI_CATEGORIES).flat().filter(emoji => 
-            emoji.includes(emojiSearchText)
-        );
-
-    const emojiCategoryButtons = (
-        <div className="emoji-categories">
-            {Object.keys(EMOJI_CATEGORIES).map(category => (
-                <Button
-                    key={category}
-                    type={selectedEmojiCategory === category ? "primary" : "default"}
-                    size="small"
-                    onClick={() => setSelectedEmojiCategory(category)}
-                    className="category-button"
-                >
-                    {category}
-                </Button>
-            ))}
-        </div>
-    );
-
+    // Replace the custom emoji implementation with emoji-mart
     const emojiSelectContent = (
         <div className="emoji-select-content">
-            <Input
-                placeholder="Emoji ara..."
-                value={emojiSearchText}
-                onChange={(e) => setEmojiSearchText(e.target.value)}
-                prefix={<SearchOutlined />}
-                allowClear
+            <Picker 
+                data={data} 
+                onEmojiSelect={(emoji) => {
+                    // Direkt emoji karakterini kullan (Unicode)
+                    if (onAddEmoji && emoji.native) {
+                        onAddEmoji(emoji.native);
+                    }
+                }}
+                previewPosition="none"
+                skinTonePosition="none"
+                theme="light"
+                locale="tr"
             />
-            
-            {!emojiSearchText && emojiCategoryButtons}
-            
-            <div className="emoji-grid">
-                {filteredEmojis.map((emoji, index) => (
-                    <div
-                        key={index}
-                        className="emoji-item"
-                        onClick={() => onAddEmoji && onAddEmoji(emoji)}
-                    >
-                        {emoji}
-                    </div>
-                ))}
-            </div>
         </div>
     );
 

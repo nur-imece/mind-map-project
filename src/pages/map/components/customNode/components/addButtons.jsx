@@ -16,7 +16,7 @@ const AddButtons = ({
 }) => {
 
     const iconStyle = {
-        fontSize: '16px',
+        fontSize: '14px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
@@ -75,7 +75,7 @@ const AddButtons = ({
         position: 'absolute',
         top: '50%',
         transform: 'translateY(-50%)',
-        height: '30px',
+        height: '24px',
         display: 'flex',
         alignItems: 'center',
         zIndex: 1000,
@@ -83,15 +83,15 @@ const AddButtons = ({
     };
 
     if (side === 'left') {
-        containerStyle.left = '-30px';
+        containerStyle.left = '-24px';
     } else if (side === 'right') {
-        containerStyle.right = '-30px';
+        containerStyle.right = '-24px';
     }
     
     // Edit butonu için stil
     const editButtonStyle = {
         position: 'absolute',
-        bottom: '-40px',
+        bottom: '-30px',
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 1000,
@@ -111,14 +111,19 @@ const AddButtons = ({
                     <Button
                         type="primary"
                         shape="circle"
-                        size="large"
+                        size="small"
                         style={{
                             backgroundColor: '#52c41a',
                             borderColor: '#52c41a',
                             boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
-                            zIndex: 1000
+                            zIndex: 1000,
+                            width: '24px',
+                            height: '24px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                         }}
-                        icon={<PlusOutlined />}
+                        icon={<PlusOutlined style={{ fontSize: '12px' }} />}
                         onClick={() => handleAddClick(side)}
                     />
                 </Dropdown>
@@ -130,14 +135,19 @@ const AddButtons = ({
                     <Button
                         type="primary"
                         shape="circle"
-                        size="large"
+                        size="small"
                         style={{
                             backgroundColor: '#1890ff',
                             borderColor: '#1890ff',
                             boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
-                            zIndex: 1000
+                            zIndex: 1000,
+                            width: '24px',
+                            height: '24px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                         }}
-                        icon={<EditOutlined />}
+                        icon={<EditOutlined style={{ fontSize: '12px' }} />}
                         onClick={handleEditClick}
                     />
                 </div>

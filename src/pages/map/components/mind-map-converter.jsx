@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 const useMindMapConverter = () => {
   // Convert nodes and edges to mind map content format
-  const convertToMindMapContent = useCallback((nodes, edges) => {
+  const convertToMindMapContent = useCallback((nodes, edges, backgroundName = 'take-note_tiny') => {
     // Kök node'u bul (genellikle id'si "1" veya sadece bir tane kök)
     const rootNode = nodes.find(node => !edges.some(edge => edge.target === node.id));
     
@@ -61,6 +61,7 @@ const useMindMapConverter = () => {
       root: rootTree,
       version: "1.0",
       edgeStyles: edgeStylesMap,
+      backgroundName: backgroundName,
       timestamp: new Date().toISOString()
     };
   }, []);

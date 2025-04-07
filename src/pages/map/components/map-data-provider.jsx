@@ -12,6 +12,7 @@ const useMapDataProvider = (mapId) => {
   const [userId, setUserId] = useState(null);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
+  const [backgroundName, setBackgroundName] = useState('take-note_tiny');
   
   const saveMapFnRef = useRef(null);
   const { convertToMindMapContent } = useMindMapConverter();
@@ -28,23 +29,49 @@ const useMapDataProvider = (mapId) => {
     }
   }, []);
 
+  // Background change handler
+  const handleBackgroundChange = useCallback((newBackgroundName) => {
+    setBackgroundName(newBackgroundName || 'take-note_tiny');
+    
+    // Save map with new background
+    if (saveMapFnRef.current && mindMapData) {
+      setTimeout(() => {
+        saveMapFnRef.current({
+          nodes,
+          edges,
+          name: mindMapData.name,
+          backgroundName: newBackgroundName || 'take-note_tiny'
+        });
+      }, 100);
+    }
+  }, [nodes, edges, mindMapData]);
+
   // Save mind map changes to the API
   const saveMindMapChanges = useCallback(async (params) => {
-    const { nodes: updatedNodes, edges: updatedEdges, name } = params;
+    const { nodes: updatedNodes, edges: updatedEdges, name, backgroundName: newBackgroundName } = params;
     
     if (!mindMapData || !userId || saveInProgress) return;
     
     try {
       setSaveInProgress(true);
       
+      // Update background if provided
+      if (newBackgroundName !== undefined) {
+        setBackgroundName(newBackgroundName);
+      }
+      
       // Mind map içeriğini oluştur
-      const contentData = convertToMindMapContent(updatedNodes || nodes, updatedEdges || edges);
+      const contentData = convertToMindMapContent(
+        updatedNodes || nodes, 
+        updatedEdges || edges,
+        newBackgroundName || backgroundName
+      );
       
       // API'ye gönderilecek veriyi hazırla
       const requestData = {
         id: mindMapData.id,
         name: name || mindMapData.name,
-        content: JSON.stringify(contentData),
+        content: JSON.stringify(contentData), // Use direct JSON stringify
         userId: userId,
         isPublic: mindMapData.isPublic,
         isDownloadable: mindMapData.isDownloadable,
@@ -72,7 +99,7 @@ const useMapDataProvider = (mapId) => {
     } finally {
       setSaveInProgress(false);
     }
-  }, [mindMapData, nodes, edges, convertToMindMapContent, userId, saveInProgress]);
+  }, [mindMapData, nodes, edges, convertToMindMapContent, userId, saveInProgress, backgroundName]);
 
   // Store the save function in a ref to avoid circular dependencies
   useEffect(() => {
@@ -85,10 +112,11 @@ const useMapDataProvider = (mapId) => {
       saveMapFnRef.current?.({
         nodes, 
         edges, 
-        name: newName.trim()
+        name: newName.trim(),
+        backgroundName
       });
     }
-  }, [nodes, edges, mindMapData]);
+  }, [nodes, edges, mindMapData, backgroundName]);
 
   // Fetch mind map data
   const fetchMindMap = useCallback(async () => {
@@ -107,8 +135,15 @@ const useMapDataProvider = (mapId) => {
       }
 
       const mindMap = response.data.mindMap;
+      
+      // Parse the content directly from the received string
       const parsedContent = JSON.parse(mindMap.content);
 
+      // Get background name from content if available
+      if (parsedContent.backgroundName) {
+        setBackgroundName(parsedContent.backgroundName);
+      }
+      
       // Header verisi
       setMindMapData({
         ...parsedContent,
@@ -159,8 +194,10 @@ const useMapDataProvider = (mapId) => {
     saveInProgress,
     nodes,
     edges,
+    backgroundName,
     saveMindMapChanges,
     handleNameChange,
+    handleBackgroundChange,
     saveMapFnRef
   };
 };

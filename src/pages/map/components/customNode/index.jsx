@@ -16,7 +16,7 @@ import {
 
 import './index.scss';
 
-const Index = memo(({ data, isConnectable, selected, id }) => {
+const Index = memo(({ data, isConnectable, selected, id, saveMapFnRef }) => {
     // ----------------------------------------------------------------
     // State ve Ref'ler
     // ----------------------------------------------------------------
@@ -96,7 +96,8 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
 
     // Tekst düzenleme başlat
     const startEditing = () => {
-        const plainText = getPlainTextFromHTML(data.label);
+        // HTML'den düz metni çıkar ve emojiyi kod adına dönüştür
+        let plainText = getPlainTextFromHTML(data.label);
         setEditableText(plainText);
         setIsEditing(true);
     };
@@ -110,6 +111,7 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
                     ...node,
                     data: {
                         ...node.data,
+                        // Emoji kodlarını içeren metni kaydet (Unicode olarak değil)
                         label: editableText
                     }
                 };
@@ -118,6 +120,16 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
         });
         setNodes(updatedNodes);
         setIsEditing(false);
+        
+        // Trigger save operation if saveMapFnRef is available
+        if (saveMapFnRef && saveMapFnRef.current) {
+            setTimeout(() => {
+                saveMapFnRef.current({
+                    nodes: updatedNodes,
+                    edges: getEdges()
+                });
+            }, 100);
+        }
     };
 
     // Metin değişikliğini state'e at
@@ -156,8 +168,12 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
             nodes
         );
 
-        // Node için rastgele yumuşak renk oluştur
-        const randomColor = getRandomSoftColor();
+        // Renk belirleme - sadece kök düğümden ekleniyorsa yeni renk oluştur
+        // Check if current node is a root node (has no incoming edges)
+        const isRootNode = !edges.some(edge => edge.target === id);
+        
+        // Renk belirleme - Sadece kök düğümden ekleniyorsa yeni renk oluştur, değilse parent'ın rengini kullan
+        const nodeColor = isRootNode ? getRandomSoftColor() : currentNode.data.bgColor;
 
         // Node verisi
         const newNode = {
@@ -165,8 +181,8 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
             position: newPosition,
             data: {
                 label: content,
-                bgColor: randomColor, // Rastgele yumuşak renk
-                color: currentNode.data.color,
+                bgColor: nodeColor, // Parent'ın rengini kullan veya kök ise yeni renk
+                color: nodeColor, // Metin rengi de aynı olsun
                 fontSize: currentNode.data.fontSize,
                 fontFamily: currentNode.data.fontFamily,
                 borderRadius: currentNode.data.borderRadius,
@@ -197,7 +213,7 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
             type: 'default',
             style: {
                 strokeWidth: 2,
-                stroke: currentNode.data.color || '#1890ff',
+                stroke: nodeColor, // Aynı rengi edge'e uygula
                 curvature: 0
             },
             animated: false
@@ -347,21 +363,40 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
 
     // İkon ekleme fonksiyonu yerine emoji ekleme fonksiyonu
     const handleAddEmoji = (emoji) => {
+        if (!emoji) return;
+        
         const nodes = getNodes();
-        // Düğümün mevcut metnine emoji ekleyelim
+        
         const updatedNodes = nodes.map(node => {
             if (node.id === id) {
+                // Emoji karakterini (Unicode) direkt olarak mevcut metne ekle
+                const updatedLabel = node.data.label + emoji;
                 return {
                     ...node,
                     data: {
                         ...node.data,
-                        label: node.data.label + emoji
+                        label: updatedLabel
                     }
                 };
             }
             return node;
         });
+        
+        // Set the updated nodes
         setNodes(updatedNodes);
+        
+        // Close the edit options modal after adding emoji
+        setShowEditOptions(false);
+        
+        // Trigger save operation if saveMapFnRef is available
+        if (saveMapFnRef && saveMapFnRef.current) {
+            setTimeout(() => {
+                saveMapFnRef.current({
+                    nodes: updatedNodes,
+                    edges: getEdges()
+                });
+            }, 100);
+        }
     };
 
     // Düğüm boyutunu değiştirme
@@ -538,7 +573,9 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
                 ) : (
                     <div
                         className="html-content"
-                        dangerouslySetInnerHTML={{ __html: data.label }}
+                        dangerouslySetInnerHTML={{ 
+                            __html: data.label || ''
+                        }}
                     />
                 )}
             </div>
@@ -580,7 +617,9 @@ const Index = memo(({ data, isConnectable, selected, id }) => {
                 ) : (
                     <div
                         className="html-content"
-                        dangerouslySetInnerHTML={{ __html: data.label }}
+                        dangerouslySetInnerHTML={{ 
+                            __html: data.label || ''
+                        }}
                     />
                 )}
 
