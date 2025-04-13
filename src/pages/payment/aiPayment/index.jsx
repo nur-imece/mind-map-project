@@ -12,6 +12,12 @@ import Header from "../../../components/header";
 import iyzicoLogo from "../../../styles/img/iyzico_logo_band_colored.png";
 import "./index.scss";
 
+// Import custom components
+import AgreementModal from "./components/agreementModal";
+import UserInfoForm from "./components/userInfoForm";
+import PackageList from "./components/packageList";
+import getCountryOptions from "./components/countryOptions";
+
 const { Title, Text } = Typography;
 
 const ChatGptPayment = () => {
@@ -388,68 +394,6 @@ const ChatGptPayment = () => {
     setIsModalVisible(false);
   };
 
-  const countryOptions = [
-    { label: t("turkiyeMsgTxt"), value: "TR" },
-    { label: t("abdMsgTxt"), value: "US" },
-    { label: t("arnavutlukMsgTxt"), value: "AL" },
-    { label: t("ermenistanMsgTxt"), value: "AM" },
-    { label: t("avustralyaMsgTxt"), value: "AU" },
-    { label: t("avusturyaMsgTxt"), value: "AT" },
-    { label: t("azerbaycanMsgTxt"), value: "AZ" },
-    { label: t("bahreynMsgTxt"), value: "BH" },
-    { label: t("belcikaMsgTxt"), value: "BE" },
-    { label: t("bosnaHersekMsgTxt"), value: "BA" },
-    { label: t("bulgaristanMsgTxt"), value: "BG" },
-    { label: t("kanadaMsgTxt"), value: "CA" },
-    { label: t("cinMsgTxt"), value: "CN" },
-    { label: t("hirvatistanMsgTxt"), value: "HR" },
-    { label: t("kibrisMsgTxt"), value: "CY" },
-    { label: t("cekCumhuriyetiMsgTxt"), value: "CZ" },
-    { label: t("danimarkaMsgTxt"), value: "DK" },
-    { label: t("misirMsgTxt"), value: "EG" },
-    { label: t("estonyaMsgTxt"), value: "EE" },
-    { label: t("finlandiyaMsgTxt"), value: "FI" },
-    { label: t("fransaMsgTxt"), value: "FR" },
-    { label: t("gurcistanMsgTxt"), value: "GE" },
-    { label: t("almanyaMsgTxt"), value: "DE" },
-    { label: t("yunanistanMsgTxt"), value: "GR" },
-    { label: t("hongKongMsgTxt"), value: "HK" },
-    { label: t("macaristanMsgTxt"), value: "HU" },
-    { label: t("hindistanMsgTxt"), value: "IN" },
-    { label: t("iranMsgTxt"), value: "IR" },
-    { label: t("irakMsgTxt"), value: "IQ" },
-    { label: t("irlandaMsgTxt"), value: "IE" },
-    { label: t("italyaMsgTxt"), value: "IT" },
-    { label: t("japonyaMsgTxt"), value: "JP" },
-    { label: t("kazakistanMsgTxt"), value: "KZ" },
-    { label: t("koreMsgTxt"), value: "KR" },
-    { label: t("kuveytMsgTxt"), value: "KW" },
-    { label: t("kirgizistanMsgTxt"), value: "KG" },
-    { label: t("letonyaMsgTxt"), value: "LV" },
-    { label: t("makedonyaMsgTxt"), value: "MK" },
-    { label: t("maltaMsgTxt"), value: "MT" },
-    { label: t("hollandaMsgTxt"), value: "NL" },
-    { label: t("yeniZelandaMsgTxt"), value: "NZ" },
-    { label: t("norvecMsgTxt"), value: "NO" },
-    { label: t("polonyaMsgTxt"), value: "PL" },
-    { label: t("portekizMsgTxt"), value: "PT" },
-    { label: t("katarMsgTxt"), value: "QA" },
-    { label: t("romanyaMsgTxt"), value: "RO" },
-    { label: t("rusyaMsgTxt"), value: "RU" },
-    { label: t("arabistanMsgTxt"), value: "SA" },
-    { label: t("sirbistanKaradagMsgTxt"), value: "CS" },
-    { label: t("ispanyaMsgTxt"), value: "ES" },
-    { label: t("isvecMsgTxt"), value: "SE" },
-    { label: t("isvicreMsgTxt"), value: "CH" },
-    { label: t("tacikistanMsgTxt"), value: "TJ" },
-    { label: t("taylandMsgTxt"), value: "TH" },
-    { label: t("turkmenistanMsgTxt"), value: "TM" },
-    { label: t("ukraynaMsgTxt"), value: "UA" },
-    { label: t("birlesikArapMsgTxt"), value: "AE" },
-    { label: t("birlesikKrallikMsgTxt"), value: "GB" },
-    { label: t("ozbekistanMsgTxt"), value: "UZ" }
-  ];
-
   const validatePhone = (_, value) => {
     if (!value) {
       return Promise.reject(new Error(t('phoneNumberRequiredError')));
@@ -480,20 +424,11 @@ const ChatGptPayment = () => {
   return (
     <>
       <Header />
-      <Modal
-        title={t("distantSalesContractTitleMsgTxt")}
-        open={isModalVisible}
+      <AgreementModal 
+        isVisible={isModalVisible} 
         onOk={handleModalOk}
         onCancel={handleModalCancel}
-        footer={[
-          <Button key="ok" type="primary" className="yellow-button" onClick={handleModalOk}>
-            {t("okMsgTxt")}
-          </Button>
-        ]}
-        width={800}
-      >
-        <div className="membership-agreement" dangerouslySetInnerHTML={{ __html: DistantSalesContractAgreements() }} />
-      </Modal>
+      />
       <div className="payment-container">
         <Card className="payment-card">
           <div className="payment-header">
@@ -504,196 +439,21 @@ const ChatGptPayment = () => {
           <Form form={form} layout="vertical" requiredMark={false} className="payment-form">
             <Row gutter={24}>
               <Col xs={24} md={12}>
-                <div className="form-section">
-                  <Title level={5} className="section-title">{t("personalInformationMsgTxt")}</Title>
-                  
-                  <Form.Item
-                    name="fullName"
-                    rules={[{ required: true, message: t('fieldRequiredError') }]}
-                  >
-                    <Input 
-                      id="fullName"
-                      className="form-input"
-                      readOnly
-                    />
-                  </Form.Item>
-                  
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <Form.Item
-                        name="phone"
-                        rules={[
-                          { required: true, message: t('fieldRequiredError') },
-                          { validator: validatePhone }
-                        ]}
-                      >
-                        <Input
-                          placeholder={t("phonenumberMsgTxt")}
-                          id="phone"
-                          className="form-input"
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item
-                        name="email"
-                        rules={[
-                          { required: true, message: t('fieldRequiredError') },
-                          { type: 'email', message: t('validEmailMsgTxt') }
-                        ]}
-                      >
-                        <Input
-                          id="email"
-                          className="form-input"
-                          readOnly
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  
-                  <Form.Item
-                    name="agreement"
-                    valuePropName="checked"
-                    rules={[
-                      {
-                        validator: (_, value) =>
-                          value
-                            ? Promise.resolve()
-                            : Promise.reject(new Error(t("agreementRequiredMessage"))),
-                      },
-                    ]}
-                  >
-                    <Checkbox className="agreement-checkbox">
-                      <a
-                        className="agreement-link"
-                        onClick={BuyAgreementModal}
-                      >
-                        {t("distantSalesContractMsgTxt")}
-                      </a>{" "}
-                      {t("iAgreeMsgTxt")}
-                    </Checkbox>
-                  </Form.Item>
-                  <p className="agreement-text">{t("chatGptAgreementTxt")}</p>
-                  
-                  <Title level={5} className="section-title">{t("bilingAdressMsgTXT")}</Title>
-                  
-                  <Form.Item
-                    name="line1"
-                    rules={[{ required: true, message: t('fieldRequiredError') }]}
-                  >
-                    <Input
-                      id="line1"
-                      placeholder={t("line1MsgTxt")}
-                      maxLength={60}
-                      className="form-input"
-                    />
-                  </Form.Item>
-                  
-                  <Form.Item
-                    name="line2"
-                    rules={[{ required: true, message: t('fieldRequiredError') }]}
-                  >
-                    <Input
-                      id="line2"
-                      placeholder={t("line2MsgTxt")}
-                      maxLength={60}
-                      className="form-input"
-                    />
-                  </Form.Item>
-                  
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <Form.Item
-                        name="city"
-                        rules={[
-                          { required: true, message: t('fieldRequiredError') },
-                          { validator: validateNameField }
-                        ]}
-                      >
-                        <Input
-                          id="city"
-                          placeholder={t("cityMsgTxt")}
-                          maxLength={50}
-                          className="form-input"
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item
-                        name="state"
-                        rules={[
-                          { required: true, message: t('fieldRequiredError') },
-                          { validator: validateNameField }
-                        ]}
-                      >
-                        <Input
-                          id="state"
-                          placeholder={t("state2MsgTxt")}
-                          maxLength={50}
-                          className="form-input"
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  
-                  <Form.Item
-                    name="country"
-                    rules={[{ required: true, message: t('fieldRequiredError') }]}
-                  >
-                    <Select
-                      id="country"
-                      className="form-select"
-                      options={countryOptions}
-                      placeholder={t("countryMsgTXT")}
-                    />
-                  </Form.Item>
-                </div>
+                <UserInfoForm 
+                  form={form} 
+                  onAgreementClick={BuyAgreementModal}
+                  validatePhone={validatePhone}
+                  validateNameField={validateNameField}
+                />
               </Col>
               
               <Col xs={24} md={12}>
-                <div className="package-section">
-                  {loading ? (
-                    <div className="loading-container">
-                      <Spin size="large" />
-                    </div>
-                  ) : (
-                    <Radio.Group 
-                      className="package-options"
-                      value={state.selectedPackageParam}
-                      onChange={(e) => selectPacketPricing(e.target.value)}
-                    >
-                      <Row gutter={[16, 16]}>
-                        {Array.isArray(state.products) && state.products.length > 0 ? (
-                          state.products.map((item, index) => (
-                            <Col xs={24} sm={12} key={item.id || index}>
-                              <Radio.Button value={index} className="package-option">
-                                <Card 
-                                  className={`package-card ${state.selectedPackageParam === index ? 'selected-package' : ''}`}
-                                  hoverable
-                                >
-                                  <div className="package-title">
-                                    {item.numberOfMaps} {t("chatGptNumberOfMaps")}
-                                  </div>
-                                  <div className="package-price">
-                                    {item.price}
-                                    <span className="currency">
-                                      {localStorage.getItem("countryInfo") === "TR" ? "₺" : "$"}
-                                    </span>
-                                  </div>
-                                  <div className="package-name">{item.name}</div>
-                                </Card>
-                              </Radio.Button>
-                            </Col>
-                          ))
-                        ) : (
-                          <Col span={24}>
-                            <div className="no-packages">{t("noProductsAvailable")}</div>
-                          </Col>
-                        )}
-                      </Row>
-                    </Radio.Group>
-                  )}
-                </div>
+                <PackageList 
+                  loading={loading}
+                  products={state.products}
+                  selectedPackageParam={state.selectedPackageParam}
+                  onSelectPackage={selectPacketPricing}
+                />
               </Col>
             </Row>
             

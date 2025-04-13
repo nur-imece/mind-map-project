@@ -2,16 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from "react-i18next";
-import { Modal, message, Spin, Button, Input, Tooltip, Typography } from "antd";
-import { 
-    HeartOutlined, 
-    HeartFilled, 
-    UnorderedListOutlined, 
-    AppstoreOutlined, 
-    ShareAltOutlined,
-    UserOutlined,
-    AppstoreAddOutlined
-} from '@ant-design/icons';
+import { message } from "antd";
 
 // Styles
 import './index.scss';
@@ -20,14 +11,12 @@ import './index.scss';
 import Header from '../../components/header';
 import PageContainer from "../../components/PageContainer";
 import MindMapContent from './components/content';
-import MindMapsIcon from '../../icons/mindMaps.svg';
+import Toolbar from './components/toolbar';
+import useMapActions from './components/actions';
 
 // Services
 import mindmapService from '../../services/api/mindmap';
 import Utils from '../../utils';
-import ChatGptMapListIcon from "@/styles/img/gpt-gray-icon.png";
-
-const { Title } = Typography;
 
 const MindMapList = () => {
     const { t } = useTranslation();
@@ -110,114 +99,10 @@ const MindMapList = () => {
         setFilteredData(filtered);
         setCurrentPage(1); // Reset to first page when filters change
     };
+
+    // Get map actions
+    const mapActions = useMapActions(getMindMap, setSpinLoading, setDeletedMapId);
     
-    // Actions
-    const deleteMindMap = async (id) => {
-        // Ensure id exists and is not null
-        if (!id) {
-            console.error("Map ID is missing");
-            message.error(t("errorDeletingMindMap"));
-            return;
-        }
-        
-        try {
-            await mindmapService.deleteMindMap(id);
-            getMindMap();
-            message.success(t("mindMapDeletedSuccessfully"));
-        } catch (error) {
-            console.error("Error deleting mind map:", error);
-            message.error(t("errorDeletingMindMap"));
-        }
-    };
-
-    const deleteRow = (id) => {
-        // Check if ID is valid
-        if (!id) {
-            console.error("Invalid map ID for deletion");
-            message.error(t("errorDeletingMindMap"));
-            return;
-        }
-        
-        setDeletedMapId(id);
-        showDeleteConfirmModal(id);
-    };
-
-    const showDeleteConfirmModal = (id) => {
-        Modal.confirm({
-            title: t("areyousureMsgTxt"),
-            content: t('deleteMapApproveModalMsgTxt'),
-            okText: t("yesMsgTxt"),
-            cancelText: t("noMsgTxt"),
-            onOk: () => deleteMindMap(id)
-        });
-    };
-
-    const updateMapName = async (record, newName) => {
-        try {
-            if (newName && newName.trim() && newName !== record.name) {
-                setSpinLoading(true);
-                await mindmapService.updateMindMapSetting(record.id, newName);
-                await getMindMap();
-                message.success(t("mapNameUpdatedSuccessfully"));
-            }
-        } catch (error) {
-            console.error("Error updating map name:", error);
-            message.error(t("errorUpdatingMapName"));
-        } finally {
-            setSpinLoading(false);
-        }
-    };
-
-    const clickOpenUrl = (id, name) => {
-        localStorage.setItem('openedMapName', name);
-        localStorage.setItem('openedMapId', id);
-        window.open(`/map?mapId=${id}`, '_self', 'noopener,noreferrer');
-    };
-
-    const addRemoveFavorite = async (mapId, isFavStatus) => {
-        try {
-            setSpinLoading(true);
-            const userId = JSON.parse(localStorage.getItem('userInformation')).id;
-            const favData = {
-                mindMapId: mapId,
-                userId: userId,
-                isFavorite: isFavStatus
-            };
-            
-            await mindmapService.setFavoriteMapStatus(favData);
-            await getMindMap();
-            message.success(isFavStatus ? 
-                t("addedToFavoritesSuccessfully") : 
-                t("removedFromFavoritesSuccessfully"));
-        } catch (error) {
-            console.error("Error updating favorite status:", error);
-            message.error(t("errorUpdatingFavoriteStatus"));
-        } finally {
-            setSpinLoading(false);
-        }
-    };
-
-    const makePublicPrivate = async (mapId, isPublicStatus) => {
-        try {
-            setSpinLoading(true);
-            await mindmapService.setPublicOrPrivateMap(mapId, isPublicStatus);
-            await getMindMap();
-            message.success(isPublicStatus ? 
-                t("mapIsNowPublic") : 
-                t("mapIsNowPrivate"));
-        } catch (error) {
-            console.error("Error updating public/private status:", error);
-            message.error(t("errorUpdatingMapStatus"));
-        } finally {
-            setSpinLoading(false);
-        }
-    };
-    
-    const handleShareMap = (record) => {
-        // TODO: Implement share functionality
-        message.info(`Paylaşım modalı: ${record.name}`);
-    };
-
     // Handle search input changes
     const handleSearch = (value) => {
         setSearchText(value);
@@ -235,12 +120,12 @@ const MindMapList = () => {
 
     // Actions object to pass to content component
     const actions = {
-        clickOpenUrl,
-        deleteRow,
-        updateMapName,
-        makePublicPrivate,
-        addRemoveFavorite,
-        handleShareMap,
+        clickOpenUrl: mapActions.clickOpenUrl,
+        deleteRow: mapActions.deleteRow,
+        updateMapName: mapActions.updateMapName,
+        makePublicPrivate: mapActions.makePublicPrivate,
+        addRemoveFavorite: mapActions.addRemoveFavorite,
+        handleShareMap: mapActions.handleShareMap,
         getMindMap
     };
 
@@ -274,80 +159,14 @@ const MindMapList = () => {
         <>
             <Header/>
             <PageContainer>
-                <div className="title-wrapper">
-                    <div className="title-left">
-                        <div className="title-with-icon">
-                            <img src={MindMapsIcon} className="page-icon" alt="Mind Maps" />
-                            <Title level={3}>{t("mindMapsMsgTxt")}</Title>
-                        </div>
-                    </div>
-                    <div className="view-controls">
-                        <Tooltip title={t("allMapsMsgTxt")}>
-                            <Button
-                                type="text"
-                                icon={<AppstoreAddOutlined />}
-                                onClick={() => toggleFilterType("all")}
-                                className={`view-control-btn ${filterType === "all" ? 'active' : ''}`}
-                            />
-                        </Tooltip>
-                        <Tooltip title={t("favoriteMsgTxt")}>
-                            <Button
-                                type="text"
-                                icon={filterType === "favorites" ? <HeartFilled /> : <HeartOutlined />}
-                                onClick={() => toggleFilterType("favorites")}
-                                className={`view-control-btn ${filterType === "favorites" ? 'active' : ''}`}
-                            />
-                        </Tooltip>
-                        <Tooltip title={t("sharedMapsMsgTxt")}>
-                            <Button
-                                type="text"
-                                icon={<ShareAltOutlined />}
-                                onClick={() => toggleFilterType("shared")}
-                                className={`view-control-btn ${filterType === "shared" ? 'active' : ''}`}
-                            />
-                        </Tooltip>
-                        <Tooltip title={t("aiGeneratedMsgTxt")}>
-                            <Button
-                                type="text"
-                                icon={
-                                    <img
-                                        src={ChatGptMapListIcon}
-                                        alt="AI"
-                                        style={{ width: 20, height: 20 }}
-                                    />
-                                }
-                                onClick={() => toggleFilterType("ai-generated")}
-                                className={`view-control-btn ${filterType === "ai-generated" ? 'active' : ''}`}
-                            />
-                        </Tooltip>
-                        <Tooltip title={t("showAsListMsgTxt")}>
-                            <Button
-                                type="text"
-                                icon={<UnorderedListOutlined />}
-                                onClick={() => toggleViewType('list')}
-                                className={`view-control-btn ${viewType === 'list' ? 'active' : ''}`}
-                            />
-                        </Tooltip>
-                        <Tooltip title={t("showAsGridMsgTxt")}>
-                            <Button
-                                type="text"
-                                icon={<AppstoreOutlined />}
-                                onClick={() => toggleViewType('card')}
-                                className={`view-control-btn ${viewType === 'card' ? 'active' : ''}`}
-                            />
-                        </Tooltip>
-                    </div>
-                </div>
-
-                <div className="search-section">
-                    <Input
-                        placeholder={t("filterByTagOrNameMsgTxt")}
-                        value={searchText}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        className="search-input"
-                        allowClear
-                    />
-                </div>
+                <Toolbar 
+                    searchText={searchText}
+                    handleSearch={handleSearch}
+                    filterType={filterType}
+                    toggleFilterType={toggleFilterType}
+                    viewType={viewType}
+                    toggleViewType={toggleViewType}
+                />
 
                 <MindMapContent
                     viewType={viewType}

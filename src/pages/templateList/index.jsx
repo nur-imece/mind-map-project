@@ -20,9 +20,14 @@ import robotImage from "@/styles/img/Robot.png";
 import createNewMapIcon from "@/icons/createNewMap.svg";
 
 import "./index.scss";
-import { Button, Modal, Input, Card, Row, Col, Typography, Tag } from "antd";
+import { Button, Modal, Input, Card, Row, Col, Typography } from "antd";
 
-const { Title, Text } = Typography;
+// Import custom components
+import TemplateHeader from "./components/templateHeader";
+import TemplateCard from "./components/templateCard";
+import ActionCard from "./components/actionCard";
+
+const { Title } = Typography;
 
 const TemplateList = () => {
     const { t, i18n } = useTranslation();
@@ -306,139 +311,58 @@ const TemplateList = () => {
                     gptMapNumbers={gptMapNumbers}
                 />
 
-                <div className="template-header">
-                    <div className="icon-container">
-                        <img src={createNewMapIcon} alt="Create new map"/>
-                    </div>
-                    <Title level={3}>{t("createMindMapMsgTxt")}</Title>
-
-                    <div className="tag-filter-container">
-                        <div className="tags-wrapper">
-                            {tags.map(tag => (
-                                <Tag
-                                    key={tag}
-                                    closable
-                                    onClose={() => removeTag(tag)}
-                                >
-                                    {tag}
-                                </Tag>
-                            ))}
-                        </div>
-                        <Input
-                            className="custom-input"
-                            value={inputValue}
-                            onChange={handleInputChange}
-                            onKeyDown={handleInputKeyDown}
-                            placeholder={t("filterByTagOrNameMsgTxt")}
-                        />
-                    </div>
-                </div>
+                <TemplateHeader 
+                    icon={createNewMapIcon}
+                    title={t("createMindMapMsgTxt")}
+                    tags={tags}
+                    inputValue={inputValue}
+                    onInputChange={handleInputChange}
+                    onInputKeyDown={handleInputKeyDown}
+                    onRemoveTag={removeTag}
+                    t={t}
+                />
 
                 <div className="templates-grid">
                     <Row gutter={[16, 16]}>
                         <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-                            <Card 
-                                hoverable
-                                className="template-card"
-                                cover={
-                                    <div className="card-image-container" onClick={() => newMap("yeni")}>
-                                        <div className="plus-icon">+</div>
-                                    </div>
-                                }
-                            >
-                                <Card.Meta title={t("addBlankMapMsgTxt")} />
-                            </Card>
+                            <ActionCard 
+                                title={t("addBlankMapMsgTxt")}
+                                onClick={() => newMap("yeni")}
+                            />
                         </Col>
                         
                         {gptMapNumbers > 0 && (
                             <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-                                <Card 
-                                    hoverable
-                                    className="template-card"
-                                    cover={
-                                        <div className="card-image-container" onClick={openChatGptModal}>
-                                            <img alt={t("addChatGPTMsgTxt")} src={robotImage} />
-                                        </div>
-                                    }
-                                >
-                                    <Card.Meta title={t("addChatGPTMsgTxt")} />
-                                </Card>
+                                <ActionCard 
+                                    title={t("addChatGPTMsgTxt")}
+                                    onClick={openChatGptModal}
+                                    icon={robotImage}
+                                />
                             </Col>
                         )}
                         
                         {templateData
                             .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1)
-                            .map((catItem) => {
-                                const userInfo = JSON.parse(localStorage.getItem("userInformation") || "{}");
-                                const canEdit = isUserHasPermissionForOptions && userInfo.companyId === catItem.companyId;
-                                return (
-                                    <Col key={catItem.id} xs={24} sm={12} md={8} lg={6} xl={6}>
-                                        <Card 
-                                            hoverable
-                                            className="template-card"
-                                            cover={
-                                                <div 
-                                                    className="card-image-container" 
-                                                    onClick={() => goToSubTemplates(catItem.id, catItem.name)}
-                                                >
-                                                    <img alt={catItem.name} src={catItem.image} />
-                                                    {canEdit && (
-                                                        <div className="more-options">
-                                                            <Button 
-                                                                type="text" 
-                                                                className="more-options-btn"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    // Toggle dropdown
-                                                                }}
-                                                            >
-                                                                <img src={moreOptionsIcon} alt="options" />
-                                                            </Button>
-                                                            <div className="options-dropdown">
-                                                                <Button 
-                                                                    type="text" 
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        deleteTemplateCategoryWarning(catItem.id, catItem.name);
-                                                                    }}
-                                                                >
-                                                                    {t("deleteMsgTxt")}
-                                                                </Button>
-                                                                <Button 
-                                                                    type="text"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        openEditCategoryModal(catItem);
-                                                                    }}
-                                                                >
-                                                                    {t("editMsgTxt")}
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            }
-                                        >
-                                            <Card.Meta title={catItem.name} />
-                                        </Card>
-                                    </Col>
-                                );
-                            })}
+                            .map((catItem) => (
+                                <Col key={catItem.id} xs={24} sm={12} md={8} lg={6} xl={6}>
+                                    <TemplateCard 
+                                        template={catItem}
+                                        onClick={() => goToSubTemplates(catItem.id, catItem.name)}
+                                        isUserHasPermissionForOptions={isUserHasPermissionForOptions}
+                                        onDeleteClick={deleteTemplateCategoryWarning}
+                                        onEditClick={openEditCategoryModal}
+                                        t={t}
+                                    />
+                                </Col>
+                            ))}
                         
                         {isUserHasPermissionForOptions && (
                             <Col xs={24} sm={12} md={8} lg={6} xl={6}>
-                                <Card 
-                                    hoverable
-                                    className="template-card add-category-card"
+                                <ActionCard 
+                                    title={t("addNewCategoryMapMsgTxt")}
                                     onClick={openAddCategoryModal}
-                                    cover={
-                                        <div className="card-image-container">
-                                            <div className="plus-icon">+</div>
-                                        </div>
-                                    }
-                                >
-                                    <Card.Meta title={t("addNewCategoryMapMsgTxt")} />
-                                </Card>
+                                    className="add-category-card"
+                                />
                             </Col>
                         )}
                     </Row>

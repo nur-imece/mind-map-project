@@ -16,6 +16,12 @@ import request from "../../services/api/request";
 import { PATHS } from "../../services/api/paths";
 import "./index.scss";
 
+// import components
+import TagFilter from "./components/tagFilter";
+import TemplateCard from "./components/templateCard";
+import PreviewModal from "./components/previewModal";
+import AddTemplateCard from "./components/addTemplateCard";
+
 // images
 import blankTemplateLogo from "../../styles/img/plus-icon.png";
 import moreOptionsIcon from "../../styles/img/more-options-icon.png";
@@ -363,136 +369,38 @@ const SubTemplateList = () => {
                             </div>
                         </Col>
                         <Col lg={8} md={12} xs={24} className="d-flex justify-content-end">
-                            <div className="sub-template__tag-filter-container">
-                                <div className="sub-template__filter-row">
-                                    <div className="sub-template__tags-wrapper">
-                                        {tags.map(tag => (
-                                            <Tag
-                                                key={tag}
-                                                closable
-                                                onClose={() => removeTag(tag)}
-                                                className="sub-template__tag"
-                                            >
-                                                {tag}
-                                            </Tag>
-                                        ))}
-                                    </div>
-                                    <Input
-                                        className="sub-template__custom-input"
-                                        value={inputValue}
-                                        onChange={handleInputChange}
-                                        onKeyDown={handleInputKeyDown}
-                                        placeholder={t("filterByTagOrNameMsgTxt")}
-                                    />
-                                </div>
-                            </div>
+                            <TagFilter 
+                                tags={tags}
+                                inputValue={inputValue}
+                                handleInputChange={handleInputChange}
+                                handleInputKeyDown={handleInputKeyDown}
+                                removeTag={removeTag}
+                            />
                         </Col>
                     </Row>
                     
                     <Row gutter={[16, 16]} className="sub-template__grid">
                         {isUserHasPermissionForOptions || isTeacherUserHasPermissionForOptions ? (
                             <Col xxl={6} xl={8} lg={8} md={12} sm={12} xs={24}>
-                                <Card 
-                                    className="sub-template__add-card" 
-                                    onClick={() => {
-                                        setIsTemplateModalOpen(true);
-                                    }}
-                                >
-                                    <div className="sub-template__add-content">
-                                        <img
-                                            src={blankTemplateLogo}
-                                            alt={t("createTemplateMsgTxt")}
-                                            className="sub-template__add-icon"
-                                        />
-                                        <h3>{t("createTemplateMsgTxt")}</h3>
-                                    </div>
-                                </Card>
+                                <AddTemplateCard setIsTemplateModalOpen={setIsTemplateModalOpen} />
                             </Col>
                         ) : null}
                         
                         {filteredTemplates.length > 0 ? (
                             filteredTemplates.map((template) => (
                                 <Col xxl={6} xl={8} lg={8} md={12} sm={12} xs={24} key={template.id}>
-                                    <Card className="sub-template__card">
-                                        {(isUserHasPermissionForOptions &&
-                                            JSON.parse(localStorage.getItem("userInformation")).companyId === template.companyId) ||
-                                        (isTeacherUserHasPermissionForOptions &&
-                                            JSON.parse(localStorage.getItem("userInformation")).id === template.createdBy) ? (
-                                            <div className="sub-template__options">
-                                                <img
-                                                    src={moreOptionsIcon}
-                                                    alt={t("optionsMsgTxt")}
-                                                    className="sub-template__options-icon"
-                                                />
-                                                <div className="sub-template__options-menu">
-                                                    <div
-                                                        className="sub-template__option-item"
-                                                        onClick={() => deleteTemplateWarning(template.id, template.name)}
-                                                    >
-                                                        {t("deleteMsgTxt")}
-                                                    </div>
-                                                    <div
-                                                        className="sub-template__option-item"
-                                                        onClick={() => {
-                                                            setIsTemplateModalOpen(true);
-                                                            setIsUpdateProcess(true);
-                                                            setSelectedTemplate(template);
-                                                            setSelectedTemplateName(template.name);
-                                                        }}
-                                                    >
-                                                        {t("editMsgTxt")}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ) : null}
-                                        
-                                        <div className="sub-template__image-container">
-                                            <img
-                                                src={template.image}
-                                                alt={template.name}
-                                                className="sub-template__image"
-                                                onClick={() => createMapWithTemplateEvent(
-                                                    template.id,
-                                                    template.content,
-                                                    template.name
-                                                )}
-                                            />
-                                            <div className="sub-template__actions">
-                                                <button 
-                                                    className="sub-template__zoom-btn"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        showImagePreview(template.image, template.name);
-                                                    }}
-                                                    title={t("previewImageMsgTxt")}
-                                                >
-                                                    <ZoomInOutlined />
-                                                </button>
-                                                <button 
-                                                    className="sub-template__create-btn"
-                                                    onClick={() => createMapWithTemplateEvent(
-                                                        template.id,
-                                                        template.content,
-                                                        template.name
-                                                    )}
-                                                    title={t("createMsgTxt")}
-                                                >
-                                                    <img
-                                                        src={blankTemplateLogo}
-                                                        alt={t("createMsgTxt")}
-                                                        className="sub-template__create-icon"
-                                                    />
-                                                </button>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="sub-template__details">
-                                            <h3 className="sub-template__name">{template.name}</h3>
-                                            <p className="sub-template__count">
-                                                {template.generatedMapCount} {t("createdMsgTxt")}
-                                            </p>
-                                        </div>
-                                    </Card>
+                                    <TemplateCard 
+                                        template={template}
+                                        isUserHasPermissionForOptions={isUserHasPermissionForOptions}
+                                        isTeacherUserHasPermissionForOptions={isTeacherUserHasPermissionForOptions}
+                                        showImagePreview={showImagePreview}
+                                        createMapWithTemplateEvent={createMapWithTemplateEvent}
+                                        deleteTemplateWarning={deleteTemplateWarning}
+                                        setIsTemplateModalOpen={setIsTemplateModalOpen}
+                                        setIsUpdateProcess={setIsUpdateProcess}
+                                        setSelectedTemplate={setSelectedTemplate}
+                                        setSelectedTemplateName={setSelectedTemplateName}
+                                    />
                                 </Col>
                             ))
                         ) : (
@@ -506,23 +414,11 @@ const SubTemplateList = () => {
                 </div>
             </div>
 
-            {/* Image Preview Modal */}
-            <Modal 
-                visible={previewVisible} 
-                footer={null} 
-                onCancel={handleCancelPreview}
-                width={800}
-                centered
-                className="sub-template__preview-modal"
-            >
-                {previewImage && (
-                    <img 
-                        src={previewImage} 
-                        alt="Template Preview" 
-                        style={{ width: '100%' }} 
-                    />
-                )}
-            </Modal>
+            <PreviewModal 
+                previewVisible={previewVisible}
+                handleCancelPreview={handleCancelPreview}
+                previewImage={previewImage}
+            />
         </>
     );
 };

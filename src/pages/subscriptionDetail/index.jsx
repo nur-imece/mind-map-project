@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { message, Card, Typography, Row, Col, Divider, List, Avatar, Tag } from "antd";
+import { message, Card, Typography, Row, Col, Divider } from "antd";
 import { useTranslation } from "react-i18next";
-import { CheckCircleOutlined, RobotOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import Utils from "../../utils";
 import Header from "../../components/header";
 import accountService from "../../services/api/account";
 import paymentService from "../../services/api/payment";
 import SubscriptionInformationModal from "../../helpers/subscription-information-modal";
 
-// images
-import silverBadgeImg from "../../styles/img/free-badge.png";
-import goldBadgeImg from "../../styles/img/gold-badge.png";
+// Custom components
+import MembershipInfoSection from "./components/membershipInfoSection";
+import LinksSection from "./components/linksSection";
+import SubscriptionInfoSection from "./components/subscriptionInfoSection";
+import PackageInfoCard from "./components/packageInfoCard";
 
-const { Title, Text, Paragraph } = Typography;
+const { Title } = Typography;
 
 const SubscriptionDetail = () => {
     const [subscriptionData, setSubscriptionData] = useState(null);
@@ -188,165 +190,28 @@ const SubscriptionDetail = () => {
                     <Row gutter={24}>
                         <Col xs={24} md={16}>
                             {/* Membership Info Section */}
-                            <div style={{ marginBottom: 20 }}>
-                                <Paragraph>
-                                    <Text strong>{t("membershipInfoMsgTxt")}:</Text>{" "}
-                                    <Text type="secondary">{subscriptionData?.productModel?.id === 2 ? t("yearlyPackageMsgTxt") : t("paymentPageMothlyTitleMsgTxt")}</Text>
-                                </Paragraph>
-                                
-                                <Paragraph>
-                                    <Text strong>{t("membershipStartDateMsgTxt")}:</Text>{" "}
-                                    <Text type="secondary">
-                                        {subscriptionData && Utils.formatDateTimeWithoutTime(subscriptionData.userCreationDate)}
-                                    </Text>
-                                </Paragraph>
-
-                                {subscriptionData && subscriptionData.productModel !== null && (
-                                    <>
-                                        <Paragraph>
-                                            <Text strong>{t("subscriptionStartDateMsgTxt")}:</Text>{" "}
-                                            <Text type="secondary">
-                                                {Utils.formatDateTimeWithoutTime(subscriptionData.subscriptionStartDate)}
-                                            </Text>
-                                        </Paragraph>
-                                        
-                                        <Paragraph>
-                                            <Text strong>{t("subscriptionEndDateMsgTxt")}:</Text>{" "}
-                                            <Text type="secondary">
-                                                {Utils.formatDateTimeWithoutTime(subscriptionData.subscriptionExpireDate)}
-                                            </Text>
-                                        </Paragraph>
-                                    </>
-                                )}
-                            </div>
+                            <MembershipInfoSection subscriptionData={subscriptionData} />
                             
                             <Divider />
                             
                             {/* Links Section */}
                             {subscriptionData && subscriptionData.productModel !== null && (
                                 <>
-                                    <div style={{ marginBottom: 20 }}>
-                                        <Paragraph>
-                                            <Text strong>{t("forSubscriptionHistoryMsgTxt")}</Text>{" "}
-                                            <a href="/subscription-history">{t("clickMsgTxt")}.</a>
-                                        </Paragraph>
-                                        
-                                        <Paragraph>
-                                            <Text strong>{t("forCancellationOfMembershipMsgTxt")}</Text>{" "}
-                                            <a 
-                                                onClick={(e) => openInfosOnPopup(e)}
-                                                data-id="cancelMembership"
-                                            >
-                                                {t("clickMsgTxt")}.
-                                            </a>
-                                        </Paragraph>
-                                        
-                                        <Paragraph>
-                                            <Text strong>{t("forReturnPolicyMsgTxt")}</Text>{" "}
-                                            <a 
-                                                onClick={(e) => openInfosOnPopup(e)}
-                                                data-id="returnConditions"
-                                            >
-                                                {t("clickMsgTxt")}.
-                                            </a>
-                                        </Paragraph>
-                                        
-                                        <Paragraph>
-                                            <Text strong>{t("forHelpMsgTxt")}</Text>{" "}
-                                            <a 
-                                                onClick={(e) => openInfosOnPopup(e)}
-                                                data-id="helpCenter"
-                                            >
-                                                {t("clickMsgTxt")}.
-                                            </a>
-                                        </Paragraph>
-                                    </div>
-                                    
+                                    <LinksSection openInfosOnPopup={openInfosOnPopup} />
                                     <Divider />
                                 </>
                             )}
                             
                             {/* Subscription Info Section */}
-                            <div>
-                                {subscriptionData && (
-                                    <>
-                                        {subscriptionData.productModel === null ? (
-                                            <Paragraph>
-                                                Foramind {t("subscriptionPageBasicPackageNameMsgTxt")};{" "}
-                                                {t("subscriptionPageYourPackageTextMsgTxt")}{" "}
-                                                <a href="/payment">{t("subscribeMsgTxt")}</a>
-                                            </Paragraph>
-                                        ) : (
-                                            <>
-                                                <Paragraph>
-                                                    {t("yearlyPackageInfoMsgTxt")}{" "}
-                                                    <a href="/payment">{t("clickMsgTxt")}.</a>
-                                                </Paragraph>
-
-                                                <Divider />
-                                                
-                                                <Paragraph>
-                                                    <RobotOutlined style={{ marginRight: 8, fontSize: 18 }} />
-                                                    {t("toAccessYourAIPackageMsgTxt")}{" "}
-                                                    <a href="/ai-subscription-detail">{t("clickMsgTxt")}.</a>
-                                                </Paragraph>
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                            </div>
+                            <SubscriptionInfoSection subscriptionData={subscriptionData} />
                         </Col>
                         
                         {/* Package Info Card */}
                         <Col xs={24} md={8}>
-                            <Card>
-                                <div style={{ textAlign: "center", marginBottom: 16 }}>
-                                    <Title level={4} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                                        {subscriptionData && 
-                                            (subscriptionData.productModel === null
-                                                ? t("subscriptionPageBasicPackageNameMsgTxt")
-                                                : subscriptionData.productModel.id === 1
-                                                    ? t("paymentPageMothlyTitleMsgTxt")
-                                                    : t("yearlyPackageMsgTxt"))}
-                                            
-                                        {subscriptionData && subscriptionData.productModel !== null && (
-                                            <Avatar 
-                                                size={48} 
-                                                src={subscriptionData.productModel.id === 1 ? silverBadgeImg : goldBadgeImg}
-                                                style={{ marginLeft: '8px' }}
-                                            />
-                                        )}
-                                    </Title>
-                                </div>
-                                
-                                <div style={{ textAlign: "center", marginBottom: 24 }}>
-                                    <Text type="secondary">({t("vatIncludedMsgTxt")})</Text>
-                                    
-                                    {subscriptionData && subscriptionData.productModel !== null && (
-                                        <div style={{ margin: "16px 0" }}>
-                                            <Title level={2} style={{ color: "#1890ff", margin: 0 }}>
-                                                {subscriptionData.productModel.currency === "USD" && "$"}
-                                                {subscriptionData.productModel.price}
-                                                {subscriptionData.productModel.currency === "TRY" && "₺"}
-                                            </Title>
-                                            <Text>{t("yearly")}</Text>
-                                        </div>
-                                    )}
-                                </div>
-                                
-                                <List
-                                    itemLayout="horizontal"
-                                    dataSource={getFeatureList()}
-                                    renderItem={item => (
-                                        <List.Item>
-                                            <List.Item.Meta
-                                                avatar={item.icon}
-                                                title={item.title}
-                                            />
-                                        </List.Item>
-                                    )}
-                                />
-                            </Card>
+                            <PackageInfoCard 
+                                subscriptionData={subscriptionData} 
+                                getFeatureList={getFeatureList} 
+                            />
                         </Col>
                     </Row>
                 </Card>
